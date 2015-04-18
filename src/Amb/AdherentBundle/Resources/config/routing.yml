@@ -1,0 +1,163 @@
+ambadherent_accueil:
+    pattern:  /index.{format}
+    defaults:  { _controller: AmbAdherentBundle:Adherent:index, format: html }
+    requirements:
+        format: html
+
+ambadherent_contact:
+    pattern:  /contact
+    defaults:  { _controller: AmbAdherentBundle:Adherent:contact }
+
+ambadherent_ajouter:
+    pattern:  /ajouter
+    defaults:  { _controller: AmbAdherentBundle:Adherent:ajouter }
+
+ambadherent_voir:
+    pattern:  /voir/{id}.{format}
+    defaults:  { _controller: AmbAdherentBundle:Adherent:voir, format: html }
+    requirements:
+        id: \d*
+        format: html|pdf
+
+ambadherent_modifier:
+    pattern:  /modifier/{id}
+    defaults:  { _controller: AmbAdherentBundle:Adherent:modifier }
+    requirements:
+        id: \d*
+
+ambadherent_delete:
+    pattern:  /delete/{id}
+    defaults:  { _controller: AmbAdherentBundle:Adherent:delete_adherent }
+    requirements:
+        id: \d*
+
+ambadherent_addadhesion:
+    pattern:  /add-adhesion/{mode}/{id}
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:add_adhesion, mode: new }
+    requirements:
+        id: \d*
+        mode: new|res
+
+ambadherent_changeadhesion:
+    pattern:  /change-adhesion/{id_adhesion}
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:change_adhesion }
+    requirements:
+        id_adhesion: \d*
+
+ambadherent_updateadhesion:
+    pattern:  /update-adhesion/{id_adhesion}
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:update_adhesion }
+    requirements:
+        id_adhesion: \d*
+
+ambadherent_deleteadhesion:
+    pattern:  /delete-adhesion/{id}
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:delete_adhesion }
+    requirements:
+        id: \d*
+
+ambadherent_detailadhesion:
+    pattern:  /detail-adhesion/{id}.{format}
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:detail_adhesion, format: html }
+    requirements:
+        id: \d*
+        format: html|pdf
+
+ambadherent_listadhesion:
+    pattern:  /list-adhesion-{type}/{id}
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:list_adhesion, id: 0, type: nor }
+    requirements:
+        id: \d*
+        type: nor|rec
+
+ambadherent_listprintadhesion:
+    pattern:  /list-adhesion-{type}/{print}/{id}
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:list_adhesion, id: 0, type: nor, print: 0 }
+    requirements:
+        id: \d*
+        print: print
+        type: nor|rec
+
+ambadherent_listdossierincomplet:
+    pattern:  /list-adhesion/incomplet
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:list_adhesion, id: 0, dossier: incomplet }
+    requirements:
+        id: \d*
+
+ambadherent_listapptlibre:
+    pattern:  /list-appts-libre/
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:list_apptlibre }
+
+ambadherent_reserverapptlibre:
+    pattern:  /reserver-appt-libre/{id_adhesion}
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:reserver_apptlibre }
+    requirements:
+        id_adhesion: \d*
+
+ambadherent_listreservation:
+    pattern:  /list-reservation.{format}
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:list_reservation, format: html}
+    requirements:
+        format: html|pdf
+
+ambadherent_updateappt:
+    pattern:  /update-appt/{id}
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:update_appt }
+    requirements:
+        id: \d*
+
+ambadherent_confirmreservation:
+    pattern:  /confirm-reservation/{id}
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:confirm_reservation }
+    requirements:
+        id: \d*
+
+ambadherent_cancelreservation:
+    pattern:  /cancel-reservation/{id}
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:cancel_reservation }
+    requirements:
+        id: \d*
+
+ambadherent_addecheance:
+    pattern:  /add-echeance/{id}
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:add_echeance }
+    requirements:
+        id: \d*
+
+ambadherent_listdesistement:
+    pattern:  /list-desistement.{format}
+    defaults:  { _controller: AmbAdherentBundle:Desistement:list_desistement, format: html }
+    requirements:
+        format: html|pdf
+
+ambadherent_adddesistement:
+    pattern:  /desistement-{type}/{id}/{idtrans}
+    defaults:  { _controller: AmbAdherentBundle:Desistement:add_desistement, type: amb, idtrans: null }
+    requirements:
+        format: amb|transarg|transappt|sans
+        id: \d*
+        idtrans: \d*
+
+ambadherent_detaildesistement:
+    pattern:  /detail-desistement/{id}.{format}
+    defaults:  { _controller: AmbAdherentBundle:Desistement:detail_desistement, format: html}
+    requirements:
+        format: html|pdf
+        id: \d*
+
+ambadherent_changedatedesistement:
+    pattern:  /update-date-desistement/{type}/{id}
+    defaults:  { _controller: AmbAdherentBundle:Desistement:change_date, type: new }
+    requirements:
+        id: \d*
+        type: new|update
+
+ajax:
+    pattern:  /ajax
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:ajax }
+
+ambadherent_grandlivre:
+    pattern:  /gl-adhesions.{format}
+    defaults:  { _controller: AmbAdherentBundle:Adhesion:grandlivre, format: html }
+    requirements:
+        format: html|pdf

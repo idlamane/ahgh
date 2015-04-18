@@ -1,0 +1,323 @@
+<?php
+
+namespace Amb\ContratBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+/**
+ * Amb\ContratBundle\Entity\Contrat
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Amb\ContratBundle\Entity\ContratRepository")
+ */
+class Contrat
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var integer $reference
+     *
+     * @ORM\Column(name="reference", type="string", length=255, nullable=true)
+     * 
+     */
+    private $reference;
+
+    /**
+     * @var \DateTime $date_debut
+     *
+     * @ORM\Column(name="date_debut", type="date", nullable=true)
+     */
+    private $date_debut;
+
+    /**
+     * @var integer $montant
+     *
+     * @ORM\Column(name="montant", type="float")
+     * @Assert\NotBlank()
+     */
+    private $montant;
+
+
+    /**
+     * @var string $commentaire
+     *
+     * @ORM\Column(name="commentaire", type="text", nullable=true)
+     */
+    private $commentaire;
+
+    /**
+     * @var \DateTime $date_resiliation
+     *
+     * @ORM\Column(name="date_resiliation", type="date", nullable=true)
+     */
+    private $date_resiliation;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Amb\DebitBundle\Entity\Fournisseur", inversedBy="contrats")
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
+     */
+    private $fournisseur;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Amb\DebitBundle\Entity\Depense", mappedBy="contrat")
+     */
+    private $depenses;
+    
+    /**
+     * @var \DateTime $created_at
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created_at", type="datetime", nullable=true)
+     */
+    private $created_at;
+    
+    /**
+     * @var \DateTime $updated_at
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updated_at;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set reference
+     *
+     * @param string $reference
+     * @return Contrat
+     */
+    public function setReference($reference)
+    {
+        $this->reference = $reference;
+    
+        return $this;
+    }
+
+    /**
+     * Get reference
+     *
+     * @return string 
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    /**
+     * Set date_debut
+     *
+     * @param \DateTime $dateDebut
+     * @return Contrat
+     */
+    public function setDateDebut($dateDebut)
+    {
+        $this->date_debut = $dateDebut;
+    
+        return $this;
+    }
+
+    /**
+     * Get date_debut
+     *
+     * @return \DateTime 
+     */
+    public function getDateDebut()
+    {
+        return $this->date_debut;
+    }
+
+    /**
+     * Set montant
+     *
+     * @param float $montant
+     * @return Contrat
+     */
+    public function setMontant($montant)
+    {
+        $this->montant = $montant;
+    
+        return $this;
+    }
+
+    /**
+     * Get montant
+     *
+     * @return float 
+     */
+    public function getMontant()
+    {
+        return $this->montant;
+    }
+
+    /**
+     * Set commentaire
+     *
+     * @param string $commentaire
+     * @return Contrat
+     */
+    public function setCommentaire($commentaire)
+    {
+        $this->commentaire = $commentaire;
+    
+        return $this;
+    }
+
+    /**
+     * Get commentaire
+     *
+     * @return string 
+     */
+    public function getCommentaire()
+    {
+        return $this->commentaire;
+    }
+
+    /**
+     * Set date_resiliation
+     *
+     * @param \DateTime $dateResiliation
+     * @return Contrat
+     */
+    public function setDateResiliation($dateResiliation)
+    {
+        $this->date_resiliation = $dateResiliation;
+    
+        return $this;
+    }
+
+    /**
+     * Get date_resiliation
+     *
+     * @return \DateTime 
+     */
+    public function getDateResiliation()
+    {
+        return $this->date_resiliation;
+    }
+
+    /**
+     * Set fournisseur
+     *
+     * @param \Amb\DebitBundle\Entity\Fournisseur $fournisseur
+     * @return Contrat
+     */
+    public function setFournisseur(\Amb\DebitBundle\Entity\Fournisseur $fournisseur = null)
+    {
+        $this->fournisseur = $fournisseur;
+    
+        return $this;
+    }
+
+    /**
+     * Get fournisseur
+     *
+     * @return \Amb\DebitBundle\Entity\Fournisseur 
+     */
+    public function getFournisseur()
+    {
+        return $this->fournisseur;
+    }
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Contrat
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Set updated_at
+     *
+     * @param \DateTime $updatedAt
+     * @return Contrat
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updated_at = $updatedAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get updated_at
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->depenses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add depenses
+     *
+     * @param \Amb\DebitBundle\Entity\Depense $depenses
+     * @return Contrat
+     */
+    public function addDepense(\Amb\DebitBundle\Entity\Depense $depenses)
+    {
+        $this->depenses[] = $depenses;
+        $depenses->setContrat($this);
+        return $this;
+    }
+
+    /**
+     * Remove depenses
+     *
+     * @param \Amb\DebitBundle\Entity\Depense $depenses
+     */
+    public function removeDepense(\Amb\DebitBundle\Entity\Depense $depenses)
+    {
+        $this->depenses->removeElement($depenses);
+    }
+
+    /**
+     * Get depenses
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDepenses()
+    {
+        return $this->depenses;
+    }
+}

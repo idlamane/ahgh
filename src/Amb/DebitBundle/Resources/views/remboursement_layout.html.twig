@@ -1,0 +1,28 @@
+{# src/Amb/DebitBundle/Resources/views/layout.html.twig #}
+
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+    Gestion des remboursements - {{ parent() }}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" charset="utf-8">
+	    $(document).ready(function() {
+	        $('.date').datepicker({ dateFormat: 'dd-mm-yy' }) ;
+	    } );
+    </script>
+{% endblock %}
+{% block masthead %}
+    <h2>Gestion des remboursements</h2>
+{% endblock %}
+
+{% block body %}
+
+<div class="row">
+	<div class="span12">
+	    {% block ambdebit_body %}
+	    {% endblock %}
+    </div>
+</div>
+{% endblock %}

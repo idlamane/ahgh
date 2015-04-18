@@ -1,0 +1,189 @@
+<div class="well">
+	<h3>Formulaire de fournisseur</h3>
+
+	<form method="post" {{ form_enctype(form) }}>
+	{{ form_errors(form) }}
+	<div class="well">
+		<div class="row">
+			<div class="span5">
+				<div>
+				    {{ form_label(form.raison_social, "RAISON SOCIAL") }}
+				    {{ form_errors(form.raison_social) }}
+				    {{ form_widget(form.raison_social) }}
+				</div>
+				<div>
+				    {{ form_label(form.is_intervenant, "INTERVENANT DANS LE PROJET A.M.B ?") }}
+				    {{ form_errors(form.is_intervenant) }}
+				    {{ form_widget(form.is_intervenant) }}
+				</div>
+				<div>
+				    {{ form_label(form.identifiant_fiscal, "IF") }}
+				    {{ form_errors(form.identifiant_fiscal) }}
+				    {{ form_widget(form.identifiant_fiscal) }}
+				</div>
+				<div>
+				    {{ form_label(form.patente, "PATENTE") }}
+				    {{ form_errors(form.patente) }}
+				    {{ form_widget(form.patente) }}
+				</div>
+				<div>
+				    {{ form_label(form.rc, "RC") }}
+				    {{ form_errors(form.rc) }}
+				    {{ form_widget(form.rc) }}
+				</div>
+				<div>
+				    {{ form_label(form.rib, "R.I.B") }}
+				    {{ form_errors(form.rib) }}
+				    {{ form_widget(form.rib) }}
+				</div>
+				<div>
+				    {{ form_label(form.mission, "MISSION") }}
+				    {{ form_errors(form.mission) }}
+				    {{ form_widget(form.mission) }}
+				</div>
+			</div>
+
+			<div class="span5">
+				<div>
+				    {{ form_label(form.adress, "ADRESSE") }}
+				    {{ form_errors(form.adress) }}
+				    {{ form_widget(form.adress) }}
+				</div>
+				<div>
+				    {{ form_label(form.ville, "VILLE") }}
+				    {{ form_errors(form.ville) }}
+				    {{ form_widget(form.ville) }}
+				</div>
+				<div>
+				    {{ form_label(form.tel, "TEL") }}
+				    {{ form_errors(form.tel) }}
+				    {{ form_widget(form.tel) }}
+				</div>
+				<div>
+				    {{ form_label(form.fax, "FAX") }}
+				    {{ form_errors(form.fax) }}
+				    {{ form_widget(form.fax) }}
+				</div>
+				<div>
+				    {{ form_label(form.email, "EMAIL") }}
+				    {{ form_errors(form.email) }}
+				    {{ form_widget(form.email) }}
+				</div>
+			</div>
+		</div>	
+	</div>
+	<div class="well">
+		<div class="row">
+			<div class="span4">
+				
+				<div>
+				    {{ form_label(form.contact1, "CONTACT 1") }}
+				    {{ form_errors(form.contact1) }}
+				    {{ form_widget(form.contact1) }}
+				</div>
+				<div>
+				    {{ form_label(form.fonction1, "FONCTION") }}
+				    {{ form_errors(form.fonction1) }}
+				    {{ form_widget(form.fonction1) }}
+				</div>
+				<div>
+				    {{ form_label(form.mobile1, "MOBILE") }}
+				    {{ form_errors(form.mobile1) }}
+				    {{ form_widget(form.mobile1) }}
+				</div>
+				<div>
+				    {{ form_label(form.email1, "EMAIL") }}
+				    {{ form_errors(form.email1) }}
+				    {{ form_widget(form.email1) }}
+				</div>
+			</div>
+			<div class="span4">
+				
+				<div>
+				    {{ form_label(form.contact2, "CONTACT 2") }}
+				    {{ form_errors(form.contact2) }}
+				    {{ form_widget(form.contact2) }}
+				</div>
+				<div>
+				    {{ form_label(form.fonction2, "FONCTION") }}
+				    {{ form_errors(form.fonction2) }}
+				    {{ form_widget(form.fonction2) }}
+				</div>
+				<div>
+				    {{ form_label(form.mobile2, "MOBILE") }}
+				    {{ form_errors(form.mobile2) }}
+				    {{ form_widget(form.mobile2) }}
+				</div>
+				<div>
+				    {{ form_label(form.email2, "EMAIL") }}
+				    {{ form_errors(form.email2) }}
+				    {{ form_widget(form.email2) }}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span4">
+				
+				<div>
+				    {{ form_label(form.contact3, "CONTACT 3") }}
+				    {{ form_errors(form.contact3) }}
+				    {{ form_widget(form.contact3) }}
+				</div>
+				<div>
+				    {{ form_label(form.fonction3, "FONCTION") }}
+				    {{ form_errors(form.fonction3) }}
+				    {{ form_widget(form.fonction3) }}
+				</div>
+				<div>
+				    {{ form_label(form.mobile3, "MOBILE") }}
+				    {{ form_errors(form.mobile3) }}
+				    {{ form_widget(form.mobile3) }}
+				</div>
+				<div>
+				    {{ form_label(form.email3, "EMAIL") }}
+				    {{ form_errors(form.email3) }}
+				    {{ form_widget(form.email3) }}
+				</div>
+			</div>
+			<div class="span4">
+				
+				<div>
+				    {{ form_label(form.contact4, "CONTACT 4") }}
+				    {{ form_errors(form.contact4) }}
+				    {{ form_widget(form.contact4) }}
+				</div>
+				<div>
+				    {{ form_label(form.fonction4, "FONCTION") }}
+				    {{ form_errors(form.fonction4) }}
+				    {{ form_widget(form.fonction4) }}
+				</div>
+				<div>
+				    {{ form_label(form.mobile4, "MOBILE") }}
+				    {{ form_errors(form.mobile4) }}
+				    {{ form_widget(form.mobile4) }}
+				</div>
+				<div>
+				    {{ form_label(form.email4, "EMAIL") }}
+				    {{ form_errors(form.email4) }}
+				    {{ form_widget(form.email4) }}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="well">
+		<div class="row">
+			<div class="span11">				
+				<div>
+				    {{ form_label(form.commentaire, "COMMENTAIRE") }}
+				    {{ form_errors(form.commentaire) }}
+				    {{ form_widget(form.commentaire) }}
+				</div>
+				
+					{{ form_rest(form) }}
+			</div>
+		</div>
+	</div>
+
+	<input type="submit" class="btn btn-primary" value="Enregistrer" />	
+    </form>
+</div>

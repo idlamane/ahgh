@@ -1,0 +1,79 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+<style>
+table {margin:10px auto; width:100%}
+table.adhesion td,table.versement td,table.versement th{border:solid 1px #000}
+table.adhesion td.titre,table.versement th{text-weight:bold; background:#EEE}
+table.versement td,table.versement th{
+    border:solid 1px #000;
+    padding: 0 2mm;
+}
+table.versement th{
+    text-weight:bold; 
+    background:#EEE;
+    padding: 0 2mm;
+    text-align:center
+}table th{
+    text-weight:bold; 
+    padding: 0 2mm;
+    text-align:center
+}
+h4{margin:3px 0}
+</style>
+<table class="adhesion">
+  <tr>
+    <td class="titre">Reçu N°</td>
+    <td  style="width:100px">{{quitance.NQuitance }}</td>
+  </tr>
+  <tr>
+    <td class="titre">Date remise</td>
+    <td>{{ quitance.DateOperation|date('d/m/Y') }}</td>
+  </tr>
+  <tr>
+    <td class="titre">Nom et Prenom</td>
+    <td>{{ quitance.adherent|upper }}</td>
+  </tr>
+  <tr>
+    <td class="titre">N° d'adhesion</td>
+    <td>{{quitance.matricule}}</td>
+  </tr>
+  <tr>
+    <td class="titre">Appartement</td>
+    <td>{{quitance.appartement}}</td>
+  </tr>
+</table>
+<table class="versement" >
+  <thead>
+  <tr>
+    <th>DATE</th>
+    <th style="width:100px">MODE</th>
+    <th style="width:100px">PIECE N°</th>
+    <th style="width:100px">MONTANT</th>
+    <th >MONTANT EN LETTRE</th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>{{ quitance.DateOperation|date('d/m/Y') }}</td>
+    <td>{{ quitance.ModeEncaissement }}</td>
+    <td>{{ quitance.NumPiece }}</td>
+    <td style="text-align:right">{{ quitance.Montant|number_format(2, ',', ' ')  }} DH</td>
+    <td   style="width:230px;word-wrap: break-word;font-size:11px" >{{ enlettre|upper }}</td>
+    </tr>
+  </tbody>
+</table>
+<table >
+  <thead>
+    <tr>
+      <th style="width:300px">Cachet & Signature A.H.G.H</th>
+      <th style="width:300px">Signature d'adhérent</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border:1px solid #000; height:90px"></td>
+      <td style="border:1px solid #000; height:90px"></td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}

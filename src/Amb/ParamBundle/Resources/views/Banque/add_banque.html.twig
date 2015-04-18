@@ -1,0 +1,12 @@
+{% extends "AmbParamBundle::layout.html.twig" %}
+
+{% block title %}
+    Ajouter - {{ parent() }}
+{% endblock %}
+
+{% block ambparam_body %}
+
+    <h2>Ajouter un compte bancaire</h2>
+    {% include "AmbParamBundle:Banque:form_banque.html.twig" %}
+
+{% endblock %}

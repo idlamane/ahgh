@@ -1,0 +1,12 @@
+{% extends "AmbDebitBundle::layout_fournisseur.html.twig" %}
+
+{% block title %}
+    Modifier Fournisseur - {{ parent() }}
+{% endblock %}
+
+{% block ambfrs_body %}
+
+    <h2>Modifier un fournisseur</h2>
+    {% include "AmbDebitBundle:Fournisseur:form_fournisseur.html.twig" %}
+
+{% endblock %}

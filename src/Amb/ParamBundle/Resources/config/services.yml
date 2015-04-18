@@ -1,0 +1,7 @@
+parameters:
+#    amb_param.example.class: Amb\ParamBundle\Example
+
+services:
+#    amb_param.example:
+#        class: %amb_param.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

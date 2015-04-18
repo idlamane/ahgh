@@ -1,0 +1,184 @@
+{# src/Amb/AdherentBundle/Resources/views/Adherent/index.html.twig #}
+
+{% extends "AmbAdherentBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Liste des adhérents
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ZeroClipboard.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/TableTools.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ColVis.js') }}" type="text/javascript" /></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            oTable = $('#DatatableAherent').dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "sDom": '<"H"TCfr>t<"F"ip>',
+                "oTableTools": {
+                    "sSwfPath": "{{ asset('swf/copy_csv_xls_pdf.swf') }}",
+                    "aButtons": [
+                        "copy", "csv", "xls", "pdf",
+                        {
+                            "sExtends":    "collection",
+                            "sButtonText": "Save",
+                            "aButtons":    [ "csv", "xls", "pdf" ]
+                        }
+                    ]
+                },
+                "oColVis": {
+                    "buttonText": "Changer les colonnes"
+                }                   
+            });
+        } );
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/demo_table_jui.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.8.4.custom.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/TableTools_JUI.css') }}" type="text/css" />
+{% endblock %}
+
+{% block ambadherent_body %} 
+    <h2>Liste des adherents</h2>
+    <table class="gl">
+
+        <tr>
+            <td class="titre" colspan="6">Nom Prenom</td>
+        </tr>
+
+        <tr>
+            <td class="titre">N° adh</td>
+            <td class="titre" >Appt</td>
+            <td class="titre" colspan="2">Montant</td>
+            <td class="titre" colspan="2">A nouveau</td>
+        </tr>
+
+        <tr>
+            <td class="titre">Date Op</td>
+            <td class="titre">Mode</td>
+            <td class="titre">N° piece</td>
+            <td class="titre">Type</td>
+            <td class="titre">Statut</td>
+            <td class="titre">Montant</td>
+        </tr>
+        
+    {% set inc = 1 %}
+    {% set totalencs = 0 %}
+    {% set restes = 0 %}
+
+    <!-- adherent list begin -->
+    {% for adherent in adherents %}
+
+        <!-- adhesions list begin -->
+        {% for adhesion in adherent.adhesions %}
+            {% set totalenc = 0 %}
+            {% set novo = 0 %}
+            {% set CoutAppt = (CoutGlobal(adhesion.surfaceAppt, adhesion.surfaceTerrace, adhesion.surfaceJardin,adhesion.cout )) %}
+                {% for enc in adhesion.encaissements %}
+                    {% if enc.dateOperation < start %}
+                        {% set novo = novo+enc.montant %}
+                    {% else %}
+                        {% set totalenc = totalenc+enc.montant %}
+                    {% endif %}
+                {% endfor %}
+                <tr>
+                    <td class="titre" colspan="6">{{inc}} ) {{ adhesion.adherent.NomPrenom}}</td>
+                </tr> 
+                <tr>
+                    <td >{{ adhesion.matricule}}</td>
+                    <td class="number" >{{ adhesion.immGroup }} | {{ adhesion.immeuble }} | {{ adhesion.etage }} | N°{{ adhesion.appartement }} </td>
+                    <td colspan="2"> {{ CoutAppt|number_format(2, ',', ' ') }}</td>
+                    <td colspan="2"> {{novo|number_format(2, ',', ' ')}} </td>
+                </tr> 
+                {% for encaissement in adhesion.encaissements %}
+                    {% if encaissement.dateOperation >= start %}
+                        <tr>
+                            <td >{{ encaissement.dateOperation|date('d/m/Y') }}</td>
+                            <td >{{ encaissement.modeEncaissement }}</td>
+                            <td >{{ encaissement.numPiece }}</td>
+                            <td >{{ encaissement.typeEncaissment }}</td>
+                            <td >{{ encaissement.statut }}</td>
+                            <td >{{ encaissement.montant|number_format(2, ',', ' ') }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                <tr>
+                    <td class="titre" colspan="5">TOTAL ENCAISSEMENT</td>
+                    <td class="number" >{{ totalenc|number_format(2, ',', ' ') }} </td>
+                </tr> 
+                <tr>
+                    <td class="titre" colspan="5" >RESTE A PAYER</td>
+                    <td class="number" >{{ (CoutAppt-(totalenc+novo))|number_format(2, ',', ' ') }} </td>
+                </tr> 
+            {% set inc = inc+1 %}
+            {% set totalencs = totalencs+totalenc %}
+            {% set restes = restes+(CoutAppt-(totalenc+novo)) %}
+        {% endfor %} 
+        <!-- adhesions list end --><!-- desistements list begin -->
+        {% for desistement in adherent.desistements %}
+            {% if desistement.datedesistement < start %}
+                {% set totalenc = 0 %}
+                {% set novo = 0 %}
+                {% set CoutAppt = (CoutGlobal(desistement.surfaceAppt, desistement.surfaceTerrace, desistement.surfaceJardin,desistement.cout )) %}
+                    {% for enc in desistement.adhesion.encaissements %}
+                        {% if enc.dateOperation < start %}
+                            {% set novo = novo+enc.montant %}
+                        {% else %}
+                            {% set totalenc = totalenc+enc.montant %}
+                        {% endif %}
+                    {% endfor %}
+                    <tr>
+                        <td class="titre" colspan="6">{{inc}} ) {{ desistement.adherent.NomPrenom}}</td>
+                    </tr> 
+                    <tr>
+                        <td >{{ desistement.matricule}}</td>
+                        <td class="number" >{{ desistement.immGroup }} | {{ desistement.immeuble }} | {{ desistement.etage }} | N°{{ desistement.appartement }} </td>
+                        <td colspan="2"> {{ CoutAppt|number_format(2, ',', ' ') }}</td>
+                        <td colspan="2"> {{novo|number_format(2, ',', ' ')}} </td>
+                    </tr> 
+                    {% for encaissement in desistement.adhesion.encaissements %}
+                        {% if encaissement.dateOperation >= start %}
+                            <tr>
+                                <td >{{ encaissement.dateOperation|date('d/m/Y') }}</td>
+                                <td >{{ encaissement.modeEncaissement }}</td>
+                                <td >{{ encaissement.numPiece }}</td>
+                                <td >{{ encaissement.typeEncaissment }}</td>
+                                <td >{{ encaissement.statut }}</td>
+                                <td >{{ encaissement.montant|number_format(2, ',', ' ') }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    <tr>
+                        <td class="titre" colspan="5">TOTAL ENCAISSEMENT</td>
+                        <td class="number" >{{ totalenc|number_format(2, ',', ' ') }} </td>
+                    </tr> 
+                    <tr>
+                        <td class="titre" colspan="5" >RESTE A PAYER</td>
+                        <td class="number" >{{ (CoutAppt-(totalenc+novo))|number_format(2, ',', ' ') }} </td>
+                    </tr> 
+                {% set inc = inc+1 %}
+                {% set totalencs = totalencs+totalenc %}
+                {% set restes = restes+(CoutAppt-(totalenc+novo)) %}    
+            {% endif %}
+        {% endfor %} 
+        <!-- desistements list end -->
+
+    {% endfor %}
+    <!-- adherent list end -->
+
+    <tr>
+        <td class="titre" colspan="5">GRAND TOTAL ENCAISSEMENT</td>
+        <td class="number" >{{ totalencs|number_format(2, ',', ' ') }} </td>
+    </tr> 
+    <tr>
+        <td class="titre" colspan="5" >TOTAL RESTE A PAYER</td>
+        <td class="number" >{{ restes|number_format(2, ',', ' ') }} </td>
+    </tr> 
+    </table>
+{% endblock %}

@@ -1,0 +1,21 @@
+{# src/Amb/DebitBundle/Resources/views/layout.html.twig #}
+
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+    Désistement - {{ parent() }}
+{% endblock %}
+
+{% block masthead %}
+    <h2>Gestion des Désistement</h2>
+{% endblock %}
+
+{% block body %}
+
+<div class="row">
+	<div class="span12">
+	    {% block ambdesistement_body %}
+	    {% endblock %}
+    </div>
+</div>
+{% endblock %}

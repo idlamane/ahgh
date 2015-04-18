@@ -1,0 +1,173 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+<style>
+table.adhesion,table.versement {margin:10px auto; width:700px}
+table.adhesion td,table.versement td,table.versement th{border:solid 1px #000}
+table.adhesion td.titre,table.versement th{text-weight:bold; background:#EEE}
+h4{margin:3px 0}
+</style>
+<h2>SITUATION D'APPARTEMENT</h2>
+<table>
+	<tr>
+		<td><h4>Dossier N°</h4></td>
+		<td><h4>: {{ adhesion.matricule}}</h4></td>
+	</tr>
+	<tr>
+		<td><h4>Nom et Prénom</h4></td>
+		<td><h4>: {{ adhesion.nom_prenom}}</h4></td>
+	</tr>
+</table>
+
+<table class="adhesion">
+<tr>
+	<td class="titre">NOM D'IMMEUBLE</td>
+	<td  style="width:100px">{{adhesion.imm_group}}</td>
+	<td class="titre">COUT DU m² </td>
+	<td style="text-align:right;width:100px">{{adhesion.cout|number_format(2, ',', ' ')}} DH</td>
+	<td class="titre">AVANCE OBLIGATOIRE </td>
+	<td style="text-align:right;width:100px">{{adhesion.avance|number_format(2, ',', ' ') }} DH</td>
+</tr>
+<tr>
+	<td class="titre">TYPE D'IMMEUBLE</td>
+	<td>{{adhesion.type_immeuble}}</td>
+	<td class="titre">COUT GLOBAL</td>
+	<td style="text-align:right">{{adhesion.cout_global|number_format(2, ',', ' ')}} DH</td>
+	<td class="titre">TYPE D'ECHEANCE </td>
+	<td>{{adhesion.type_echeance }} mois</td>
+</tr>
+<tr>
+	<td class="titre">IMMEUBLE</td>
+	<td>{{adhesion.immeuble}}</td>
+	<td class="titre">PORTE-FEUILLE</td>
+	<td style="text-align:right">{{adhesion.invalid|number_format(2, ',', ' ')}} DH</td>
+	<td class="titre">NOMBRE D'ECHEANCE </td>
+	<td>
+		{% if adhesion.nb_mois != null and adhesion.type_echeance != null  %}
+			{{ adhesion.nb_mois/adhesion.type_echeance }}
+		{% endif %}
+	</td>
+</tr>
+<tr>
+	<td class="titre">ETAGE</td>
+	<td>{{adhesion.etage}}</td>
+	<td class="titre">TOTAL IMPAYEES </td>
+	<td style="text-align:right">{{adhesion.impayee|number_format(2, ',', ' ')}} DH</td>
+	<td class="titre">MONTANT/ECHEANCE </td>
+	<td style="text-align:right">{{adhesion.echeance|number_format(2, ',', ' ') }} DH</td>
+</tr>
+<tr>
+	<td class="titre">APPARTEMENT N°</td>
+	<td>{{adhesion.appartement}}</td>
+	<td class="titre">TOTAL DES VERSEMENTS </td>
+	<td style="text-align:right">{{adhesion.versement|number_format(2, ',', ' ')}} DH</td>
+	<td class="titre">DATE DEBUT </td>
+	<td>{{adhesion.date_debut|date('d/m/Y') }}</td>
+</tr>
+<tr>
+	<td class="titre">TYPE D'APPARTEMENT</td>
+	<td>{{adhesion.type_appartement}}</td>
+	<td class="titre">ECHEANCE PASSÉ</td>
+	<td>{% if echeance > 0 %}{{echeance}} ECHEANCES{% else %} 0 ECHEANCES{% endif %}</td>
+	<td class="titre"></td>
+	<td></td>
+</tr>
+<tr>
+	<td class="titre">SURFACE HABITABLE</td>
+	<td style="text-align:right">{{adhesion.surface_appt}} m²</td>
+	<td class="titre">ECHEANCE IMPAYÉE </td>
+	<td>
+	{% if adhesion.echeance >0 %}
+		{% set nb_echeance_impayee = (((echeance*adhesion.echeance)-(adhesion.versement-adhesion.avance))/adhesion.echeance)|number_format(0, ',', ' ') %} 
+		{% if nb_echeance_impayee > 0 %} 
+			{{nb_echeance_impayee}} ECHEANCES
+		{%else%} 
+			0 ECHEANCES
+		{%endif%}
+	{% else %}!ERROR SYS!{% endif %}
+	</td>
+	<td class="titre"></td>
+	<td></td>
+</tr>
+<tr>
+	<td class="titre">SURFACE TERRASSE</td>
+	<td style="text-align:right">{{adhesion.surface_terrace}} m²</td>
+	<td class="titre"></td>
+	<td>
+	{% if adhesion.echeance >0 %}
+		{% if nb_echeance_impayee > 0 %} 
+			{{(nb_echeance_impayee*adhesion.echeance)|number_format(2, ',', ' ')}} DH 
+		{%endif%} 
+	{% else %}!ERROR SYS!{% endif %}
+	</td>
+	<td class="titre"></td>
+	<td></td>
+</tr>
+<tr>
+	<td class="titre">SURFACE JARDIN</td>
+	<td style="text-align:right">{{adhesion.surface_jardin}} m²</td>
+	<td class="titre">RESTE A PAYEE</td>
+	<td style="text-align:right">{{ (adhesion.cout_global - adhesion.versement)|number_format(2, ',', ' ') }} DH</td>
+	<td class="titre"></td>
+	<td></td>
+</tr>
+</table>
+<h2>LES VERSEMENTS </h2>
+<table class="versement" >
+	<thead>
+	<tr>
+		<th>DATE</th>
+		<th style="width:150px">PIECE N°</th>
+		<th style="width:150px">MODE</th>
+		<th style="width:150px">DESIGNATION</th>
+		<th style="width:150px">MONTANT</th>
+		<th>STATUT</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for encaissement in encaissements %}
+				<tr>
+					<td>{{encaissement.dateOperation|date('d/m/Y')}}</td>
+					<td>{{encaissement.NumPiece}}</td>
+					<td>{{encaissement.ModeEncaissement}}</td>
+					<td>
+						{%if encaissement.TypeEncaissment == 'FRAIS DE GESTION' %}
+                            {{ encaissement.TypeEncaissment }} {{ encaissement.AnneeGestion }}
+                            {%else%}{{ encaissement.TypeEncaissment }} {%endif%}
+					</td>
+					<td style="text-align:right">{{encaissement.Montant|number_format(2, ',', ' ') }} DH</td>
+					<td>{{encaissement.Statut}}</td>
+				</tr>
+	{%endfor%}	
+	</tbody>
+</table>
+
+{%if depenses|length > 0 %}
+<h2>LES RESTITUTIONS </h2>
+<table class="versement" >
+	<thead>
+	<tr>
+		<th>DATE</th>
+		<th style="width:150px">PIECE N°</th>
+		<th style="width:150px">MODE</th>
+		<th style="width:150px">DESIGNATION</th>
+		<th style="width:150px">MONTANT</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for depense in depenses %}
+				<tr>
+					<td>{{depense.dateOperation|date('d/m/Y')}}</td>
+					<td>{{depense.NPiece}}</td>
+					<td>{{depense.ModeRetrait}}</td>
+					<td>
+						{%if depense.TypeRemboursement == 'FRAIS DE GESTION' %}
+                            {{ depense.TypeRemboursement }} {{ depense.AnneeGestion }}
+                            {%else%}{{ depense.TypeRemboursement }} {%endif%}
+					</td>
+					<td style="text-align:right">{{depense.Montant|number_format(2, ',', ' ') }} DH</td>
+				</tr>
+	{%endfor%}	
+	</tbody>
+</table>
+{%endif%}
+{% endblock %}

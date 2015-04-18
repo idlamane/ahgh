@@ -1,0 +1,82 @@
+{% extends "::print_layout.html.twig" %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ZeroClipboard.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/TableTools.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ColVis.js') }}" type="text/javascript" /></script>
+    <script type="text/javascript" charset="utf-8">
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/demo_table_jui.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.8.4.custom.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/TableTools_JUI.css') }}" type="text/css" />
+{% endblock %}
+
+
+{% block body %}
+
+    <div class="row">
+    <div class="span12">
+    <h2 style="width:500px; margin:0 auto;text-align:center">Situation des versements</h2>
+    <h3>Adhérent : {{adherent.NomPrenom|upper}} </h3>
+    <h3>Appartement : {{ adhesion.ImmGroup}} ({{ adhesion.Immeuble}}) - {{ adhesion.Etage}} - N°{{ adhesion.Appartement}}</h3>
+    <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Piece N° </th>
+            <th>Mode de paiment</th>
+            <th>Type d'encaissement</th>
+            <th>Montant</th>
+            <th>Date d'opération</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for encaissement in encaissements %}
+            <tr>
+                <td>{{ encaissement.NumPiece }}</td>
+                <td>{{ encaissement.ModeEncaissement }}</td>
+                <td >
+                    {%if encaissement.TypeEncaissment == 'FRAIS DE GESTION' %}
+                        {{ encaissement.TypeEncaissment }} {{ encaissement.AnneeGestion }}
+                    {%else%}{{ encaissement.TypeEncaissment }} {%endif%}
+                </td>
+                <td style="text-align:right">{{ encaissement.Montant|number_format(2, ',', ' ')  }} DH</td>
+                <td>{{ encaissement.DateOperation|date('d/m/Y') }}</td>
+                <td>{{ encaissement.Statut }}</td>
+            </tr>
+        {% else %}
+            <tr>
+            <td clospan="4">Pas (encore !) de dépense</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</div>
+<div class="row">
+    <div class="span6 offset6">
+
+        <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Total Versement</th>
+                <th>Total Portfeuille</th>
+                <th>Total Impayée</th
+              </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align:right">{{ valid|number_format(2, ',', ' ')  }} DH</td>
+                    <td style="text-align:right">{{ invalid|number_format(2, ',', ' ')  }} DH</td>
+                    <td style="text-align:right">{{ impayee|number_format(2, ',', ' ')  }} DH</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

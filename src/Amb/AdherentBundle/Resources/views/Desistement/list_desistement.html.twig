@@ -1,0 +1,150 @@
+{% extends "AmbAdherentBundle::layout_desistement.html.twig" %}
+
+{% block title %}
+    Liste - {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ZeroClipboard.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/TableTools.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ColVis.js') }}" type="text/javascript" /></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            oTable = $('#DatatableAherent').dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "sDom": '<"H"TCfr>t<"F"ip>',
+                "oTableTools": {
+                    "sSwfPath": "{{ asset('swf/copy_csv_xls_pdf.swf') }}",
+                    "aButtons": [
+                        "copy", "csv", "xls", "pdf",
+                        {
+                            "sExtends":    "collection",
+                            "sButtonText": "Save",
+                            "aButtons":    [ "csv", "xls", "pdf" ]
+                        }
+                    ]
+                },
+                "oColVis": {
+                    "buttonText": "Changer les colonnes"
+                }                   
+            });
+
+            $('.date').datepicker({ dateFormat: 'dd-mm-yy' }) ;
+        } );
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/demo_table_jui.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.8.4.custom.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/TableTools_JUI.css') }}" type="text/css" />
+{% endblock %}
+
+{% block ambdesistement_body %}
+    
+<h2>Liste des désistements</h2>
+<form method="post" {{ form_enctype(form) }} name="searchform" action="{{ path('ambadherent_listdesistement') }}">
+    {{ form_errors(form) }}
+    <div class="well">
+        <div class="row">
+            <div class="span3">
+                {{ form_label(form.date_debut, "DATE DEBUT") }}
+                {{ form_errors(form.date_debut) }}
+                {{ form_widget(form.date_debut) }}
+            </div>
+            <div class="span3">
+                {{ form_label(form.date_fin, "DATE FIN") }}
+                {{ form_errors(form.date_fin) }}
+                {{ form_widget(form.date_fin) }}
+            </div>
+        </div>
+    <input type="submit" class="btn" value="Rechercher" onclick="search('show')" />  
+    <input type="submit" class="btn" value="Rechercher & Imprimer" onclick="search('pdf')" /> 
+    </div>
+    {{ form_rest(form) }}
+</form>
+        <table cellpadding="0" cellspacing="0" border="0" id="DatatableAherent" class="display">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Adherent</th>
+                    <th>Dossier N°</th>
+                    <th>Appartement</th>
+                    <th>Versement</th>
+                    <th>Remboursement</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for desistement in desistements %}
+                    <tr  class="gradeA">
+                        <td>{{ desistement.detail.DateDesistement|date('Y/m/d') }}</td>
+                        <td>{{ desistement.detail.Adherent.NomPrenom}} </td>
+                        <td>{{ desistement.detail.matricule}} </td>
+                        <td>{{ desistement.detail.ImmGroup}} ({{ desistement.detail.Immeuble}}) - {{ desistement.detail.Etage}} - N°{{ desistement.detail.Appartement}}  </td>
+                        <td  style="text-align:right">
+                            {{ desistement.versement|number_format(2, ',', ' ') }} DH
+                        </td>
+                        <td  style="text-align:right">
+                            {{ desistement.montant|number_format(2, ',', ' ') }} DH
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
+                                Actions
+                                <span class="caret"></span>
+                                </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                        <a target="_blank"  href="{{ path('ambadherent_detaildesistement', {'id': desistement.detail.id, 'format':'html'}) }}" ><i class="icon-hand-right icon-small"></i>Consultation</a></li>
+                                        <li>
+                                        <li>
+                                        <a target="_blank"  href="{{ path('ambadherent_detaildesistement', {'id': desistement.detail.id, 'format':'pdf'}) }}" ><i class="icon-hand-right icon-small"></i>Etat</a></li>
+                                        <li>
+                                        <a  href="{{ path('ambremboursement_ajouter', {'id': desistement.detail.id, 'type':'desist'}) }}" ><i class="icon-hand-right icon-small"></i>Rembourser</a></li>
+                                        <li>
+                                        <a  href="{{ path('ambremboursement_list', {'id': desistement.detail.id}) }}" ><i class="icon-hand-right icon-small"></i>Remboursements</a></li>
+
+                                        <li><a href="{{ path('ambcredit_listversement', {'appt': desistement.detail.id, type:'desist'}) }}"><i class="icon-pencil icon-small"></i>Versements</a></li>
+
+                                        <li><a href="{{ path('ambadherent_changedatedesistement', {'id': desistement.detail.id, type:'update'}) }}"><i class="icon-pencil icon-small"></i>Modifier Date</a></li>
+                                    </ul>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                    <td clospan="4">Pas (encore !) de désistement</td></tr>
+                {% endfor %}
+            </tbody>
+</table><div class="row">
+    <div class="span4 offset8">
+
+        <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Total des remboursement </th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align:right; font-size:16px;">{{ total|number_format(2, ',', ' ')  }} DH</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+        <SCRIPT LANGUAGE="JavaScript">
+        function search(option){
+            if(option == 'pdf'){
+                document.searchform.action = "{{ path('ambadherent_listdesistement', {'format': 'pdf'}) }}";
+            }else{
+                document.searchform.action = "{{ path('ambadherent_listdesistement') }}";
+            }
+        }
+        </SCRIPT>
+{% endblock %}

@@ -1,0 +1,7 @@
+parameters:
+#    amb_debit.example.class: Amb\DebitBundle\Example
+
+services:
+#    amb_debit.example:
+#        class: %amb_debit.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

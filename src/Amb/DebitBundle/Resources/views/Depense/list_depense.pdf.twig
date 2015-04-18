@@ -1,0 +1,80 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+<style>
+table.versement {margin:10px auto; width:700px;border-collapse:collapse;}
+table.versement td,table.versement th{
+    border:solid 1px #000;
+    padding: 0 2mm;
+    font-size:11px;
+}
+table.versement th{
+    text-weight:bold; 
+    background:#EEE;
+    padding: 0 2mm;
+    text-align:center
+}
+.date{width:45px;}
+.adh{width:10px}
+.nom{width:200px}
+.mode{width:135px}
+.piece{width:85px}
+.type{width:300px;}
+.libelle{width:170px;}
+.frs{width:130px}
+h4{margin:3px 0}
+</style>
+<h2>List des depenses ({%if type != 'all'%} {{type}} {%endif%}) : du {{date_debut|date('d/m/Y')}} au {{date_fin|date('d/m/Y')}}</h2>
+
+<table class="versement" >
+    <thead>
+          <tr>
+            <th>Date</th>
+            <th>Mode</th>
+            <th>Frs/Libellé</th>
+            <th>Piece</th>
+            <th>Montant</th>
+            <th>Nature de dépense</th>
+          </tr>
+    </thead>
+    <tbody>
+        {% for depense in depenses %}
+            <tr  class="gradeA">
+                <td class="date">{{ depense.0.DateOperation|date('d/m/Y') }}</td>
+                <td class="mode">
+                    {{ depense.0.ModeRetrait }}
+                    {%if depense.0.NPiece is not null%}
+                        : {{ depense.0.NPiece }}
+                    {%endif%}
+                </td>
+                <td class="libelle">
+                    {% if depense.0.fournisseur is not null %}
+                        {{ (depense.raison_social)|truncate(30, true, '..') }}
+                    {% else %}
+                        {{ (depense.0.libelle) }}    
+                    {%endif%} 
+                </td>
+                <td class="frs">
+                    {{ (depense.0.facture)|truncate(15, true, '..') }}
+                </td>
+                <td style="text-align:right">{{ depense.0.montant|number_format(2, ',', ' ')  }}</td>
+                <td class="type">
+                    {% if depense.0.TypeDepense.libelle is defined %}
+                        {{ depense.0.TypeDepense.libelle }}
+                    {% elseif depense.0.Desistement != NULL %} DESISTEMENT
+                    {% elseif depense.0.Caisse != NULL %} CAISSE{%endif%}
+                </td>
+            </tr>
+        {% endfor %} 
+
+        <tr>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none;border-right:solid 1px #000;"></td>
+            <td >TOTAL</td>
+            <td style="text-align:right; background:#EEE">{{ sum_depense|number_format(2, ',', ' ')  }}</td>
+            <td style="border:none"></td>
+            
+        </tr> 
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,259 @@
+{% extends "AmbCreditBundle::layout.html.twig" %}
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ZeroClipboard.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/TableTools.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ColVis.js') }}" type="text/javascript" /></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            oTable = $('#DatatableEncaissement').dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "sDom": '<"H"TCfr>t<"F"ip>',
+                "oTableTools": 
+                    {
+                        "sSwfPath": "{{ asset('swf/copy_csv_xls_pdf.swf') }}",
+                        "aButtons": [
+                            "copy", "csv", "xls", "pdf",
+                            {
+                                "sExtends":    "collection",
+                                "sButtonText": "Save",
+                                "aButtons":    [ "csv", "xls", "pdf" ]
+                            }
+                        ]
+                    },
+                "oColVis": {
+                    "buttonText": "Changer les colonnes"
+                }                 
+            });
+
+            $('[data-toggle="modal"]').click(function(e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                if (url.indexOf('#') == 0) {
+                    $(url).modal('open');
+                } else {
+                    $.get(url, function(data) {
+                        $('<div class="modal hide fade">' + data + '</div>').modal();
+                    }).success(function() { $('input:text:visible:first').focus(); });
+                }
+            });
+            $('.date').datepicker({ dateFormat: 'dd-mm-yy' }) ;
+
+        } );
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/demo_table_jui.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.8.4.custom.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/TableTools_JUI.css') }}" type="text/css" />
+{% endblock %}
+
+
+{% block ambcredit_body %}
+    <form method="post" {{ form_enctype(form) }} name="searchform" action="{{ path('ambcredit_listallencaissement') }}"> 
+        {{ form_errors(form) }}
+        <div class="well">
+            <div class="row">
+                <div class="span3">
+                    {{ form_label(form.date_debut, "DATE DEBUT") }}
+                    {{ form_errors(form.date_debut) }}
+                    {{ form_widget(form.date_debut) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.date_fin, "DATE FIN") }}
+                    {{ form_errors(form.date_fin) }}
+                    {{ form_widget(form.date_fin) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.mode_encaissement, "BANQUE") }}
+                    {{ form_errors(form.banque) }}
+                    {{ form_widget(form.banque) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.mode_encaissement, "MODE") }}
+                    {{ form_errors(form.mode_encaissement) }}
+                    {{ form_widget(form.mode_encaissement) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.mot_cle, "PIECE") }}
+                    {{ form_errors(form.mot_cle) }}
+                    {{ form_widget(form.mot_cle) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.type_encaissment, "TYPE ENCAISSEMENT") }}
+                    {{ form_errors(form.type_encaissment) }}
+                    {{ form_widget(form.type_encaissment) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.annee_gestion, "ANNEE DE GESTION") }}
+                    {{ form_errors(form.annee_gestion) }}
+                    {{ form_widget(form.annee_gestion) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.statut, "STATUT") }}
+                    {{ form_errors(form.statut) }}
+                    {{ form_widget(form.statut) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.matricule, "MATRICULE") }}
+                    {{ form_errors(form.matricule) }}
+                    {{ form_widget(form.matricule) }}
+                </div>
+            </div>
+        <input type="submit" class="btn" value="Rechercher" onclick="search('show')" />  
+        <input type="submit" class="btn" value="Rechercher & Imprimer" onclick="search('print')" /> 
+        </div>
+        {{ form_rest(form) }}
+    </form>
+        <table id="DatatableEncaissement"  class="display">
+            <thead>
+                <tr>
+                    <th>Date d'opération</th>
+                    <th>Adhérent </th>
+                    <th>Adhesions N° </th>
+                    <th>Piece N° </th>
+                    <th>Mode de paiment</th>
+                    <th>Type d'encaissement</th>
+                    <th>Montant</th>
+                    <th>Statut</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for encaissement in encaissements %}
+                    <tr class="{% if encaissement.Statut == 'invalid' %}gradeC{% elseif encaissement.Statut == 'valid'%}gradeA{% elseif encaissement.Statut == 'unpaid'%}gradeX{% endif %}">
+                        <td>{{ encaissement.DateOperation|date('Y/m/d') }}</td>
+                        <td>{% if encaissement.adherent.NomPrenom is defined %}{{ encaissement.adherent.NomPrenom }}{% endif %}</td>
+                        <td>
+                            {{ encaissement.matricule }}
+                        </td>
+                        <td>{{ encaissement.NumPiece }}</td>
+                        <td>{{ encaissement.ModeEncaissement }}</td>
+                        <td>
+                        {%if encaissement.TypeEncaissment == 'FRAIS DE GESTION' %}
+                            {{ encaissement.TypeEncaissment }} {{ encaissement.AnneeGestion }}
+                            {%else%}{{ encaissement.TypeEncaissment }} {%endif%}
+                        </td>
+                        <td class="pull-right">{{ encaissement.Montant|number_format(2, ',', ' ')  }} DH</td>
+                        <td>{{ encaissement.Statut }}</td>
+                        <td>
+                            {% if is_granted('ROLE_OPERATOR') %}
+                            <a href="#" onclick="ConfirmAction('{{ path('ambcredit_transferversement', {'id': encaissement.id}) }}', 'le transfère de la somme {{ encaissement.montant|number_format(2, ',', ' ')  }} DH vers une autre appartement'); return false;" ><button class="btn btn-small btn-primary" type="button">Transfert</button></a> 
+
+                            <div class="btn-group" style="display:inline">
+                                <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
+                                Actions
+                                <span class="caret"></span>
+                                </a>
+                                    <ul class="dropdown-menu">
+                                        
+                                        {% if encaissement.quitance is null %}
+                                            {% if encaissement.statut == 'valid' %}
+                                                <li><a  href="#" onclick="ConfirmAction('{{ path('ambcredit_generatequitance', {'id': encaissement.id}) }}', 'la génération'); return false;" >Nouveau Quitance</a></li>
+                                            {% endif %}
+                                            <li>
+                                            <a href="{{ path('ambcredit_updateversement', {'id': encaissement.id}) }}">Modifier</a>
+                                            </li>
+
+                                                {% if is_granted('ROLE_OPERATOR') %}
+                                                <li><a  href="#" onclick="ConfirmDeleteMessage('{{ path('ambcredit_deleteversement', {'id': encaissement.Id}) }}'); return false;" >Supprimé</a></li>
+                                                {% endif %}
+                                        {% else %}
+                                            <li><a href="{{ path('ambcredit_generatequitance', {'id': encaissement.id}) }}"  target="_blank" >Imprimer Quitance</a></li>
+                                            <li>
+                                            <a href="{{ path('ambcredit_updateversement', {'id': encaissement.id}) }}">Modifier</a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                            </div> 
+                            {% if encaissement.Statut != 'valid' %}
+                            <div class="btn-group" style="display:inline">
+                                <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
+                                Statut
+                                <span class="caret"></span>
+                                </a>
+                                    <ul class="dropdown-menu">
+                                        {% if encaissement.Statut == 'unpaid' %}
+                                            {% if is_granted('ROLE_COMPTA') %}
+                                                <li><a  href="#" onclick="ConfirmAction('{{ path('ambcredit_updateversement', {'id': encaissement.id}) }}', 'la validation'); return false;" >Validé</a></li>
+                                            {% endif %}
+                                        {% else %}
+                                            <li><a  href="#" onclick="ConfirmAction('{{ path('ambcredit_validationencaissement', {'id': encaissement.id}) }}', 'la validation'); return false;" >Validé</a></li>
+                                        {% endif %}
+                                            
+                                        {% if encaissement.Statut != 'unpaid' %}    
+                                            <li><a  href="#" onclick="ConfirmAction('{{ path('ambcredit_unpaidencaissement', {'id': encaissement.id}) }}', 'de déclarer ce réglement impayée'); return false;" >Impayée</a></li>
+                                        {% endif %}    
+                                    </ul>
+                            </div> 
+                            {% endif %}
+                            {%endif%}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td>Pas (encore !) de versement</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+<div class="row">
+    <div class="span6 offset6">
+
+        <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Total Validé</th>
+                <th>Total Non-Validé </th>
+                <th>Total Impayée</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align:right">{{ valid|number_format(2, ',', ' ')  }} DH</td>
+                    <td style="text-align:right">{{ invalid|number_format(2, ',', ' ')  }} DH</td>
+                    <td style="text-align:right">{{ impayee|number_format(2, ',', ' ')  }} DH</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+        <SCRIPT LANGUAGE="JavaScript">
+        function affichage_popup(nom_de_la_page, nom_interne_de_la_fenetre)
+        {
+            window.open (nom_de_la_page, nom_interne_de_la_fenetre, config='height=600, width=400, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no')
+        }
+        function ConfirmDeleteMessage(URL)
+        {
+           if (confirm("Confirmez-vous la suppression ?"))
+           {
+               window.location = URL;
+           }
+        }
+        
+        function ConfirmAction(URL, action)
+        {
+           if (confirm("Confirmez-vous "+action+" ?"))
+           {
+               window.location = URL;
+           }
+        }
+        function search(option){
+            if(option == 'print'){
+                document.searchform.action = "{{ path('ambcredit_listallencaissement', {'print': 'print'}) }}";
+                document.searchform.submit();
+            }else{
+                document.searchform.action = "{{ path('ambcredit_listallencaissement') }}";
+                document.searchform.submit();
+            }
+        }
+        </SCRIPT>
+
+        
+{% endblock %}

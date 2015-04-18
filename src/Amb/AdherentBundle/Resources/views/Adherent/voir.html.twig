@@ -1,0 +1,103 @@
+{# src/Amb/AdherentBundle/Resources/views/Adherent/index.html.twig #}
+
+{% extends "AmbAdherentBundle::layout.html.twig" %}
+
+{% block title %}
+    Voir - {{ parent() }}
+{% endblock %}
+
+{% block ambadherent_body %}
+
+    <h2>Consultation d'adherent N°{{ adherent.id}} </h2>
+
+
+    {% for adhesion in adhesions %}
+    	<p>Situation des versement pour l'adhésion N° : {{adhesion.matricule}} d'une superficie de {{ adhesion.surface_appt }}m²</p>
+				{{adhesion.versement|number_format(2, ',', ' ')}} / {{adhesion.cout_global|number_format(2, ',', ' ')}} DH
+		<div class="progress progress-striped active">
+			<div class="bar" style="width: {{adhesion.pourcent}}%;"> 
+				{{adhesion.pourcent|number_format(2, ',', ' ')}} %
+			</div>
+		</div>
+		
+    {% else %}
+        <tr><td>Pas (encore !) d'appartement</td></tr>
+    {% endfor %}
+    <div class="row">
+		<div class="span6">
+			<dl class="dl-horizontal">
+				<dt>Nom et prénom </dt>
+				<dd>: {{ adherent.Civilite}} {{ adherent.NomPrenom}}</dd>
+
+				<dt>C.I.N</dt>
+				<dd>: {{ adherent.cin}}</dd>
+
+				<dt>Date de naissance</dt>
+				<dd>: {{ adherent.DateN|date('d/m/Y') }}</dd>
+
+				<dt>Profession</dt>
+				<dd>: {{ adherent.profession}}</dd>
+
+				<dt>Tél</dt>
+				<dd>: {{ adherent.tel}}</dd>
+
+				<dt>Mobile</dt>
+				<dd>: {{ adherent.mobile}}</dd>
+
+				<dt>Fax</dt>
+				<dd>: {{ adherent.fax}}</dd>
+
+				<dt>Email</dt>
+				<dd>: <a href="mailto:#">{{ adherent.email}}</a></dd>
+
+				<dt>Adresse</dt>
+				<dd>: {{ adherent.adress}}</dd>
+
+				<dt>Etat Civile</dt>
+				<dd>: {{ adherent.EtatCivile}}</dd>
+
+				<dt>Nom père</dt>
+				<dd>: {{ adherent.NomPere}}</dd>
+
+				<dt>Nom mère</dt>
+				<dd>: {{ adherent.NomMere}}</dd>
+
+				<dt>Nom de conjont</dt>
+				<dd>: {{ adherent.NomConjoint}}</dd>
+
+				<dt>C.I.N</dt>
+				<dd>: {{ adherent.CinConj}}</dd>
+
+				<dt>Date de naissance</dt>
+				<dd>: {{ adherent.DateNConj|date('d/m/Y') }}</dd>
+
+				<dt>Date de mariage</dt>
+				<dd>: {{ adherent.DateMariage|date('d/m/Y') }}</dd>
+
+				<dt>Nombre d'enfant</dt>
+				<dd>: {{ adherent.NbEnfant}}</dd>
+
+				<dt>Prénom des enfants</dt>
+				<dd>: {{ adherent.PrenomEnf}}</dd>
+			</dl>
+		</div>
+		<div class="span6">
+			<dl class="dl-horizontal">
+
+				<dt>Banque</dt>
+				<dd>: {{ adherent.Banque}}</dd>
+
+				<dt>N° de compte</dt>
+				<dd>: {{ adherent.NCompteBq}}</dd>
+
+				<dt>Attestation de RIB</dt>
+				<dd>: {{ adherent.AttestRib}}</dd>
+			</dl>	
+		</div>
+	</div>
+	<blockquote>
+		<small>Commentaire</small>
+		<p>{{ adherent.commentaire}}</p>
+	</blockquote>
+
+{% endblock %}

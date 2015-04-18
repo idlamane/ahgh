@@ -1,0 +1,114 @@
+{# src/Amb/AdherentBundle/Resources/views/Adherent/index.html.twig #}
+
+{% extends "AmbAdherentBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Liste des adhérents
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ZeroClipboard.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/TableTools.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ColVis.js') }}" type="text/javascript" /></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            oTable = $('#DatatableAherent').dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "sDom": '<"H"TCfr>t<"F"ip>',
+                "oTableTools": {
+                    "sSwfPath": "{{ asset('swf/copy_csv_xls_pdf.swf') }}",
+                    "aButtons": [
+                        "copy", "csv", "xls", "pdf",
+                        {
+                            "sExtends":    "collection",
+                            "sButtonText": "Save",
+                            "aButtons":    [ "csv", "xls", "pdf" ]
+                        }
+                    ]
+                },
+                "oColVis": {
+                    "buttonText": "Changer les colonnes"
+                }                   
+            });
+        } );
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/demo_table_jui.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.8.4.custom.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/TableTools_JUI.css') }}" type="text/css" />
+{% endblock %}
+
+{% block ambadherent_body %}
+ {% if form is defined %}
+    <form method="post" {{ form_enctype(form) }} name="searchform" action="{{ path('ambadherent_accueil') }}"> 
+        {{ form_errors(form) }}
+        <div class="well">
+            <div class="row">
+                <div class="span3">
+                    {{ form_label(form.statut, "STATUT") }}
+                    {{ form_errors(form.statut) }}
+                    {{ form_widget(form.statut) }}
+                </div>
+            </div>
+        <input type="submit" class="btn" value="Rechercher" onclick="search('show')" />  
+        </div>
+        {{ form_rest(form) }}
+    </form>
+{% endif %}   
+    <h2>Liste des adherents</h2>
+        {% if is_granted('ROLE_OPERATOR') %}
+            <a href="{{ path('ambadherent_ajouter') }}"><button class="btn btn-small" type="button">Ajouter nouveau adhérent</button></a>
+        {% endif %}    
+        <table cellpadding="0" cellspacing="0" border="0" id="DatatableAherent" class="display">
+            <thead>
+                <tr>
+                    <th>Nom et prénom</th>
+                    <th>Nb appts</th>
+                    <th>Date d'adhésion</th>
+                    <th>Opérations</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for adherent in adherents %}
+                    <tr  class="gradeA">
+                        <td>{{ adherent.adh.NomPrenom }}</td>
+                        <td>{{ adherent.nbappt }}</td>
+                        <td>{{ adherent.adh.dateInscription|date('d/m/Y') }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
+                                Fiche adhérent
+                                <span class="caret"></span>
+                                </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('ambadherent_voir', {'id': adherent.adh.id, 'format':'html'}) }}"><i class="icon-eye-open icon-small"></i>consulter</a></li>
+                                        <li><a href="{{ path('ambadherent_voir', {'id': adherent.adh.id, 'format':'pdf'}) }}" target="_blank"><i class="icon-print icon-small"></i>imprimer</a></li>
+                                    </ul>
+                            </div> 
+                            {% if is_granted('ROLE_OPERATOR') %}
+                            <a href="{{ path('ambadherent_modifier', {'id': adherent.adh.id}) }}"><button class="btn btn-small" type="button">Modifier adhérent</button></a>
+                            {% endif %}
+                            <a href="{{ path('ambadherent_listadhesion', {'id': adherent.adh.id}) }}"><button class="btn btn-small btn-primary" type="button">Appartements</button></a></td>
+                    </tr>
+                {% else %}
+                    <tr><td>Pas (encore !) d'adherents</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <SCRIPT LANGUAGE="JavaScript">
+        function ConfirmDeleteMessage(URL)
+        {
+           if (confirm("Confirmez-vous la suppression ?"))
+           {
+               window.location = URL;
+           }
+        }
+        </SCRIPT>
+{% endblock %}

@@ -1,0 +1,77 @@
+<div class="well">
+	<h3>Formulaire des encaissements</h3>
+
+    <form method="post" {{ form_enctype(form) }}>
+	<div class="well">
+			<!-- Les erreurs générales du formulaire. -->
+			{{ form_errors(form) }}
+
+			<div class="row">
+				<div class="span3">
+					<div>
+					    {{ form_label(form.compte, "COMPTE") }}
+					    {{ form_errors(form.compte) }}
+					    {{ form_widget(form.compte) }}
+					</div>
+				</div>
+				<div class="span3">
+					<div>
+					    {{ form_label(form.source, "SOURCE") }}
+					    {{ form_errors(form.source) }}
+					    {{ form_widget(form.source) }}
+					</div>
+				</div>
+				<div class="span3">
+					<div>
+					    {{ form_label(form.mode_encaissement, "MODE D'ENCAISSEMENT") }}
+					    {{ form_errors(form.mode_encaissement) }}
+					    {{ form_widget(form.mode_encaissement) }}
+					</div>
+				</div>
+
+				<div class="span3">	
+					<div>
+					    {{ form_label(form.num_piece, "N° DE PIECE") }}
+					    {{ form_errors(form.num_piece) }}
+					    {{ form_widget(form.num_piece) }}
+					</div>
+				</div>
+
+				<div class="span3">	
+					<div>
+					    {{ form_label(form.libelle, "LIBELLE") }}
+					    {{ form_errors(form.libelle) }}
+					    {{ form_widget(form.libelle) }}
+					</div>
+				</div>
+				<div class="span3">	
+					<div>
+					    {{ form_label(form.montant, "MONTANT") }}
+					    {{ form_errors(form.montant) }}
+					    {{ form_widget(form.montant) }}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span3">	
+					<div>
+					    {{ form_label(form.date_Operation, "DATE OPERATION") }}
+					    {{ form_errors(form.date_Operation) }}
+					    {{ form_widget(form.date_Operation) }}
+					</div>
+				</div>
+				<div class="span3">
+					{% if form.banque is defined %}
+					<div>
+					    {{ form_label(form.banque, "COMPTE") }}
+					    {{ form_errors(form.banque) }}
+					    {{ form_widget(form.banque) }}  
+					</div>
+					{% endif %}
+				</div>
+			</div>
+			{{ form_rest(form) }}
+	</div>
+	<input type="submit" class="btn btn-primary" />
+    </form>
+</div>

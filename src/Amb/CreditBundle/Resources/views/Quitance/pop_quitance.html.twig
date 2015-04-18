@@ -1,0 +1,29 @@
+{% extends "AmbCreditBundle::poplayout.html.twig" %}
+{% block body %}
+<div tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Quitance N° {{ encaissement.NQuitance }}</h3>
+    </div>
+    <div class="modal-body">
+			<dl class="dl-horizontal">
+				<dt>Date Quitance</dt>
+				<dd>{{ encaissement.DateQuitance|date('d/m/Y') }}</dd>
+				<dt>N° Adhesion</dt>
+				<dd>{{ encaissement.Id }}</dd>
+				<dt>Mode de paiment</dt>
+				<dd>{{ encaissement.ModeEncaissement }}</dd>
+				<dt>Designation</dt>
+				<dd>{{ encaissement.TypeEncaissment }}</dd>
+				<dt>Montant</dt>
+				<dd>{{ encaissement.Montant|number_format(2, ',', ' ') }} DH</dd>
+				<dt>Date d'opération</dt>
+				<dd>{{ encaissement.DateOperation|date('d/m/Y') }}</dd>
+			</dl>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true" Onclick="print()">Imprimer</button>
+        <button class="btn btn-primary" Onclick="self.close()">Fermer</button>
+    </div>
+</div>
+{% endblock %}

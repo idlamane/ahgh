@@ -1,0 +1,29 @@
+{% extends "AmbDebitBundle::depense_layout.html.twig" %}
+
+{% block title %}
+    Ajouter - {{ parent() }}
+{% endblock %}
+
+{% block ambdebit_body %}
+{% set typeaction = 'add' %}
+    <h2>Ajouter une dépense</h2>
+    {% include "AmbDebitBundle:Depense:form_depense.html.twig" %}
+
+
+<script type="text/javascript" charset="utf-8">
+	function onsubmitform()
+	{
+	  	switch (document.pressed) {
+		    case 'Enregistrer et Quitter':
+		        document.operation.action = "{{ path('ambdepense_ajouter', {'type': type, 'frs': frs, 'action': 'end'}) }}";
+		        break;
+		    case 'Enregistrer et nouveau':
+		        document.operation.action = "{{ path('ambdepense_ajouter', {'type': type, 'frs': frs, 'action': 'new'}) }}";
+		        break;
+		    default:
+		        document.operation.action = "{{ path('ambdepense_ajouter', {'type': type, 'frs': frs, 'action': 'end'}) }}";
+		}
+		return true;
+	}
+  </script>
+{% endblock %}

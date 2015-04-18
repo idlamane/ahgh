@@ -1,0 +1,75 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+<style>
+table.versement {margin:10px auto; width:700px;border-collapse:collapse;}
+table.versement td,table.versement th{
+    border:solid 1px #000;
+    padding: 0 2mm;
+    font-size:12px;
+}
+table.versement th{
+    text-weight:bold; 
+    background:#EEE;
+    padding: 0 2mm;
+    text-align:center
+}
+.nature{width:130px;}
+.libelle{width:130px;}
+h4{margin:3px 0}
+</style>
+<h3>Situation de caisse : du {{date_debut}} au {{date_fin}} </h3>
+<h4>Solde de la caisse au {{ "now"|date("d/m/Y") }} : {{solde_caisse|number_format(2, ',', ' ')  }} DH</h4>
+<table class="versement" >
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Piece</th>
+            <th>Nature</th>
+            <th>Libellé</th>
+            <th>Justif</th>
+            <th>Décaissement</th>
+            <th>Encaissement</th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr  class="gradeA">
+                <td colspan="5"></td>
+                <td style="text-align:right" colspan="2">{{ (soldeinitial.encaisse-soldeinitial.decaisse)|number_format(2, ',', ' ')  }} DH</td>
+            </tr>
+        {% for caisse in caisses %}
+            <tr  class="gradeA">
+                <td>{{ caisse.date_operation|date('d/m/Y') }}</td>
+                <td>{{ caisse.piece }}</td>
+                <td class="nature">{{ caisse.typedepense }}</td>
+                <td class="libelle">{{ caisse.libelle }}</td>
+                <td>{{ caisse.justif }}</td>
+                <td style="text-align:right">
+                    {%if caisse.decaisse == 0 %}
+                        -
+                    {%else%}
+                        {{ caisse.decaisse|number_format(2, ',', ' ')  }} DH
+                    {%endif%}
+                </td>
+                <td style="text-align:right">
+                    {%if caisse.encaisse == 0 %}
+                        -
+                    {%else%}
+                        {{ caisse.encaisse|number_format(2, ',', ' ')  }} DH
+                    {%endif%}
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="5">TOTAL</td>
+            <td style="text-align:right; background:#EEE">{{ decaisse.total|number_format(2, ',', ' ')  }} DH</td>
+            <td style="text-align:right; background:#EEE">{{ (encaisse.total+(soldeinitial.encaisse-soldeinitial.decaisse))|number_format(2, ',', ' ')  }} DH</td>
+            
+        </tr>
+        <tr>
+            <td colspan="5">SOLDE</td>
+            <td style="text-align:right; background:#EEE" colspan="2">{{ ((encaisse.total+(soldeinitial.encaisse-soldeinitial.decaisse))-decaisse.total)|number_format(2, ',', ' ')  }} DH</td>
+            
+        </tr>  
+    </tbody>
+</table>
+{% endblock %}

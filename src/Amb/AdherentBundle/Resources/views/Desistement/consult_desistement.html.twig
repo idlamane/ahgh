@@ -1,0 +1,175 @@
+{% extends "AmbAdherentBundle::layout.html.twig" %}
+
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ZeroClipboard.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/TableTools.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ColVis.js') }}" type="text/javascript" /></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            oTable = $('#DatatableEncaissement').dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "oColVis": {
+                    "buttonText": "Changer les colonnes"
+                }                 
+            });
+            oTable = $('#DatatableDepense').dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "oColVis": {
+                    "buttonText": "Changer les colonnes"
+                }                 
+            });
+
+            $('[data-toggle="modal"]').click(function(e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                if (url.indexOf('#') == 0) {
+                    $(url).modal('open');
+                } else {
+                    $.get(url, function(data) {
+                        $('<div class="modal hide fade">' + data + '</div>').modal();
+                    }).success(function() { $('input:text:visible:first').focus(); });
+                }
+            });
+            $('.date').datepicker({ dateFormat: 'dd-mm-yy' }) ;
+
+        } );
+    </script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/demo_table_jui.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.8.4.custom.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/TableTools_JUI.css') }}" type="text/css" />
+{% endblock %}
+{% block ambadherent_body %}
+
+<div class="well">
+	<h3>DETAIL D'ADHESION N° {{ desistement.matricule }}</h3>
+		<dl class="dl-horizontal">
+			<dt>DOSSIER N°</dt>
+			<dd>: {{ desistement.matricule}}</dd>
+			<dt>Désistement</dt>
+			<dd>: Oui</dd>
+			<dt>NOM D'ADHERENT </dt>
+			<dd>: {{ adherent.civilite}} {{ adherent.NomPrenom|upper}}</dd>
+			<dt>DATE D'ADHESION </dt>
+			<dd>: {{ desistement.dateAdhesion|date('d/m/Y')}}</dd>
+			<dt>Profession</dt>
+			<dd>: {{ adherent.profession}}</dd>
+			<dt>Tél</dt>
+			<dd>: {{ adherent.tel}} / {{ adherent.tel2}}</dd>
+			<dt>Mobile</dt>
+			<dd>: {{ adherent.mobile}} / {{ adherent.mobile2}}</dd>
+			<dt>Fax</dt>
+			<dd>: {{ adherent.fax}}</dd>
+			<dt>Email</dt>
+			<dd>: <a href="mailto:#">{{ adherent.email}}</a></dd>
+			<dt>Adresse</dt>
+			<dd>: {{ adherent.adress}}</dd>
+
+		</dl>	
+	<div class="well">
+		<div class="row">
+			<div class="span3">
+				<dl class="dl-horizontal">
+					<dt>NOM D'IMMEUBLE </dt>
+					<dd>: {{ desistement.immGroup}}</dd>
+
+					<dt>TYPE D'IMMEUBLE</dt>
+					<dd>: {{ desistement.typeImmeuble}}</dd>
+
+					<dt>IMMEUBLE</dt>
+					<dd>: {{ desistement.immeuble}}</dd>
+
+					<dt>ETAGE</dt>
+					<dd>: {{ desistement.etage}}</dd>
+
+					<dt>APPARTEMENT N°</dt>
+					<dd>: {{ desistement.appartement}}</dd>
+
+					<dt>TYPE D'APPARTEMENT</dt>
+					<dd>: {{ desistement.typeAppartement}}</dd>
+
+					<dt>SURFACE HABITABLE</dt>
+					<dd>: {{ desistement.surfaceAppt}} m²</dd>
+
+					<dt>SURFACE TERRACE</dt>
+					<dd>: {{ desistement.surfaceTerrace}} m²</dd>
+
+					<dt>SURFACE JARDIN</dt>
+					<dd>: {{ desistement.surfaceJardin}} m²</dd>
+
+					<dt>COUT DU m² </dt>
+					<dd>: {{ desistement.cout|number_format(2, ',', ' ') }} DH</dd>
+				</dl>
+			</div>		
+		</div>
+	</div> 
+	<div class="well">
+		<h4>LES VERSEMENTS </h4>
+		<table id="DatatableEncaissement"  class="display">
+			<thead>
+				<th>DATE</th>
+				<th>PIECE N°</th>
+				<th>MODE</th>
+				<th>DESIGNATION</th>
+				<th>MONTANT</th>
+				<th>STATUT</th>
+			</thead>
+			<tbody>
+			{% for encaissement in encaissements %}
+						<tr>
+							<td>{{encaissement.dateOperation|date('Y/m/d')}}</td>
+							<td>{{encaissement.NumPiece}}</td>
+							<td>{{encaissement.ModeEncaissement}}</td>
+							<td>
+								{%if encaissement.TypeEncaissment == 'FRAIS DE GESTION' %}
+	                            {{ encaissement.TypeEncaissment }} {{ encaissement.AnneeGestion }}
+	                            {%else%}{{ encaissement.TypeEncaissment }} {%endif%}
+							</td>
+							<td style="text-align:right">{{encaissement.Montant|number_format(2, ',', ' ') }} DH</td>
+							<td>{{encaissement.Statut}}</td>
+						</tr>
+			{%endfor%}	
+			</tbody>
+		</table>
+	</div> 
+	{%if depenses|length > 0 %}
+		<div class="well">
+			<h4>LES REMBOURSEMENTS </h4>
+			<table id="DatatableDepense"  class="display">
+				<thead>
+					<th>DATE</th>
+					<th>PIECE N°</th>
+					<th>MODE</th>
+					<th>DESIGNATION</th>
+					<th>MONTANT</th>
+				</thead>
+				<tbody>
+				{% for depense in depenses %}
+					<tr>
+						<td>{{depense.dateOperation|date('Y/m/d')}}</td>
+						<td>{{depense.NPiece}}</td>
+						<td>{{depense.ModeRetrait}}</td>
+						<td>
+							{%if depense.TypeRemboursement == 'FRAIS DE GESTION' %}
+	                        {{ depense.TypeRemboursement }} {{ depense.AnneeGestion }}
+	                        {%else%}{{ depense.TypeRemboursement }} {%endif%}
+						</td>
+						<td style="text-align:right">{{depense.Montant|number_format(2, ',', ' ') }} DH</td>
+					</tr>
+				{%endfor%}	
+				</tbody>
+			</table>
+		</div>
+	{%endif%}
+</div>	
+{% endblock %}

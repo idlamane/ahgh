@@ -1,0 +1,12 @@
+dl.quitance dt {
+	font-size: 16px;
+}
+dl.quitance dd {
+	font-size: 16px;
+}
+
+table.table-striped tbody tr, table.table-striped tbody tr td{
+	text-align: center;
+	font-size: 16px;
+	
+}

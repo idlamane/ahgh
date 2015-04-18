@@ -1,0 +1,96 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+<style>
+table.adhesion,table.versement {margin:10px auto; width:700px}
+table.adhesion td,table.versement td,table.versement th{border:solid 1px #000}
+table.adhesion td.titre,table.versement th{text-weight:bold; background:#EEE}
+h4{margin:3px 0}
+</style>
+<h2>SITUATION DE PROJET : du {{ date_debut|date('d/m/Y') }} au {{ date_fin|date('d/m/Y') }} </h2>
+<table>
+	<tr>
+		<td>
+			<table class="adhesion">
+			{% for rcg in RecetteCG %}
+			<tr>
+				<td class="titre">{{rcg.type}}</td>
+				<td style="text-align:right" >{{rcg.montant|number_format(2, ',', ' ')}} DH</td>
+			</tr>
+			{%endfor%}
+			<tr>
+			    <td class="titre">TOTAL Recette CG</td>
+			    <td style="text-align:right" >{{TotRecetteCG.total|number_format(2, ',', ' ')}} DH</td>
+			</tr>
+            <tr >
+                <td class="titre">TOTAL Recette CG Divers</td>
+                <td style="text-align:right">{{TotRecetteDivers.total|number_format(2, ',', ' ')}} DH</td>
+            </tr>
+			<tr >
+			    <td class="titre">TOTAL non-remboursé</td>
+			    <td style="text-align:right">{{ResteDesist.total|number_format(2, ',', ' ')}} DH</td>
+		    </tr>
+			<tr>
+			    <td class="titre">TOTAL Depense  CG</td>
+			    <td style="text-align:right">{{TotDepenseCG.total|number_format(2, ',', ' ')}} DH</td>
+			</tr>
+			<tr>
+			    <td class="titre">SOLDE  CG</td>
+			    <td style="text-align:right;  font-size:16px;">
+			    {{((TotRecetteCG.total+TotRecetteDivers.total+ResteDesist.total)-TotDepenseCG.total)|number_format(2, ',', ' ')}} DH</td>
+			</tr>
+			</table>
+		</td>
+		<td>
+			<table class="adhesion">
+				<tr>
+				    <td class="titre">TOTAL Recette CA Adherent</td>
+				    <td style="text-align:right">{{TotRecetteCA.total|number_format(2, ',', ' ')}} DH</td>
+			    </tr>
+				<tr >
+				    <td class="titre">TOTAL Recette CA Divers</td>
+				    <td style="text-align:right">{{TotRecetteAMDivers.total|number_format(2, ',', ' ')}} DH</td>
+			    </tr>
+                <tr class="titre">
+                    <td>TOTAL des restitutions</td>
+                    <td style="text-align:right">{{TotalRestitution.total|number_format(2, ',', ' ')}} DH</td>
+                </tr>
+				<tr>
+				    <td class="titre">TOTAL Depense  CA</td>
+				    <td style="text-align:right">{{TotDepenseCA.total|number_format(2, ',', ' ')}} DH</td>
+			    </tr>
+
+				<tr>
+				    <td class="titre">SOLDE  CA</td>
+				    <td style="text-align:right;  font-size:16px;">
+				    
+				    {{((TotRecetteCA.total+TotRecetteAMDivers.total)-(TotDepenseCA.total+TotalRestitution.total))|number_format(2, ',', ' ')}} DH</td>
+			    </tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table class="adhesion">
+				<tr>
+				    <td class="titre" style="text-align:center;width:50pt">Total CG</td>
+
+				    <td class="titre" style="text-align:center">Total CA</td>
+				    
+				    <td class="titre" style="text-align:center">SOLDE BQ</td>
+			    </tr>
+				<tr>
+                    <td style="text-align:right; font-size:16px;">
+                    {{((TotRecetteCG.total+TotRecetteDivers.total+ResteDesist.total)-TotDepenseCG.total)|number_format(2, ',', ' ')}} DH
+                    </td>
+                    <td style="text-align:right; font-size:16px;">
+                    {{((TotRecetteCA.total+TotRecetteAMDivers.total)-(TotDepenseCA.total+TotalRestitution.total))|number_format(2, ',', ' ')}} DH
+                    </td>
+                    <td style="text-align:right; font-size:16px;">
+                    {{(((TotRecetteCG.total+TotRecetteDivers.total+ResteDesist.total)-TotDepenseCG.total)+((TotRecetteCA.total+TotRecetteAMDivers.total)-(TotDepenseCA.total+TotalRestitution.total)))|number_format(2, ',', ' ')}} DH
+                    </td>
+			    </tr>
+			</table>
+		</td>
+	</tr>
+</table>
+{% endblock %}

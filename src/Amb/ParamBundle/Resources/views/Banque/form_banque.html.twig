@@ -1,0 +1,99 @@
+<div class="well">
+	<h3>Formulaire du compte bancaire</h3>
+
+	<form method="post" {{ form_enctype(form) }}>
+	{{ form_errors(form) }}
+	<div class="well">
+		<div class="row">
+			<div class="span5">
+				<div>
+				    {{ form_label(form.nom, "LIBELLE") }}
+				    {{ form_errors(form.nom) }}
+				    {{ form_widget(form.nom) }}
+				</div>
+				<div>
+				    {{ form_label(form.banque, "BANQUE") }}
+				    {{ form_errors(form.banque) }}
+				    {{ form_widget(form.banque) }}
+				</div>
+				<div>
+				    {{ form_label(form.agence, "AGENCE") }}
+				    {{ form_errors(form.agence) }}
+				    {{ form_widget(form.agence) }}
+				</div>
+				<div>
+				    {{ form_label(form.n_compte, "COMPTE N°") }}
+				    {{ form_errors(form.n_compte) }}
+				    {{ form_widget(form.n_compte) }}
+				</div>
+				<div>
+				    {{ form_label(form.adress, "ADRESSE D'AGENCE") }}
+				    {{ form_errors(form.adress) }}
+				    {{ form_widget(form.adress) }}
+				</div>
+			</div>
+
+			<div class="span3">
+				<div>
+				    {{ form_label(form.tel1, "TEL 1") }}
+				    {{ form_errors(form.tel1) }}
+				    {{ form_widget(form.tel1) }}
+				</div>
+				<div>
+				    {{ form_label(form.tel2, "TEL 2") }}
+				    {{ form_errors(form.tel2) }}
+				    {{ form_widget(form.tel2) }}
+				</div>
+				<div>
+				    {{ form_label(form.tel3, "TEL 3") }}
+				    {{ form_errors(form.tel3) }}
+				    {{ form_widget(form.tel3) }}
+				</div>
+				<div>
+				    {{ form_label(form.fax, "FAX") }}
+				    {{ form_errors(form.fax) }}
+				    {{ form_widget(form.fax) }}
+				</div>
+				<div>
+				    {{ form_label(form.email, "EMAIL") }}
+				    {{ form_errors(form.email) }}
+				    {{ form_widget(form.email) }}
+				</div>
+			</div>
+			<div class="span3">
+				<div>
+				    {{ form_label(form.consultant, "CONSEILLER") }}
+				    {{ form_errors(form.consultant) }}
+				    {{ form_widget(form.consultant) }}
+				</div>
+				<div>
+				    {{ form_label(form.mobile_consult, "MOBILE") }}
+				    {{ form_errors(form.mobile_consult) }}
+				    {{ form_widget(form.mobile_consult) }}
+				</div>
+				<div>
+				    {{ form_label(form.email_consult, "EMAIL") }}
+				    {{ form_errors(form.email_consult) }}
+				    {{ form_widget(form.email_consult) }}
+				</div>
+			</div>
+		</div>	
+	</div>
+
+	<div class="well">
+		<div class="row">
+			<div class="span11">				
+				<div>
+				    {{ form_label(form.commentaire, "COMMENTAIRE") }}
+				    {{ form_errors(form.commentaire) }}
+				    {{ form_widget(form.commentaire) }}
+				</div>
+				
+					{{ form_rest(form) }}
+			</div>
+		</div>
+	</div>
+
+	<input type="submit" class="btn btn-primary" value="Enregistrer" />	
+    </form>
+</div>

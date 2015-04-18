@@ -1,0 +1,7 @@
+parameters:
+#    amb_contrat.example.class: Amb\ContratBundle\Example
+
+services:
+#    amb_contrat.example:
+#        class: %amb_contrat.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

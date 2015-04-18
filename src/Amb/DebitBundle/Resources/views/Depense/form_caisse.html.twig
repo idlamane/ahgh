@@ -1,0 +1,51 @@
+<div class="well">
+	<h3>Formulaire de caisse</h3>
+
+	<form method="post" {{ form_enctype(form) }}>
+	{{ form_errors(form) }}
+	<div class="well">
+		<div class="row">
+			<div class="span4">
+				<div>
+				    {{ form_label(form.date_Operation, "DATE OPERATION") }}
+				    {{ form_errors(form.date_Operation) }}
+				    {{ form_widget(form.date_Operation) }}
+				</div>
+				<div>
+				    {{ form_label(form.libelle, "LIBELLE") }}
+				    {{ form_errors(form.libelle) }}
+				    {{ form_widget(form.libelle) }}
+				</div>
+			</div>
+
+			<div class="span4">
+				<div>
+				    {{ form_label(form.justif, "PIECE JUSTIFICATIVES") }}
+				    {{ form_errors(form.justif) }}
+				    {{ form_widget(form.justif) }}
+				</div>
+				<div>
+				    {{ form_label(form.montant, "MONTANT") }}
+				    {{ form_errors(form.montant) }}
+				    {{ form_widget(form.montant) }}
+				</div>
+			</div>
+		</div>	
+
+		<div class="row">
+			<div class="span5">	
+				<div>
+				    {{ form_label(form.commentaire, "OSERVATOINS") }}
+				    {{ form_errors(form.commentaire) }}
+				    {{ form_widget(form.commentaire) }}
+				</div>			
+				<div>
+				    {{ form_rest(form) }}
+				</div>
+			</div>
+		</div>	
+	</div>
+
+	<input type="submit" class="btn btn-primary" value="Enregistrer" />	
+    </form>
+</div>

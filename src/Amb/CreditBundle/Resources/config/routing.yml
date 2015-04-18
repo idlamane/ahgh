@@ -1,0 +1,102 @@
+ambcredit_listallencaissement:
+    pattern:  /list-all-encaiss/{print}
+    defaults:  { _controller: AmbCreditBundle:Encaissement:list_all_encaiss, print: 0}
+    requirements:
+        print: print
+
+ambcredit_ajaxlistencaissement:
+    pattern:  /list-all-encaiss-ajax/
+    defaults:  { _controller: AmbCreditBundle:Encaissement:ajax_listencaissement }
+
+ambcredit_listversement:
+    pattern:  /list-versement/{appt}/{type}/{print}
+    defaults:  { _controller: AmbCreditBundle:Encaissement:list_versement, appt:0 ,print: 0, type:nor }
+    requirements:
+        appt: \d*
+        type: nor|desist
+        print: print
+
+ambcredit_addversement:
+    pattern:  /ajouter-versement/{appt}/{action}
+    defaults:  { _controller: AmbCreditBundle:Encaissement:add_encaissement, action:end }
+    requirements:
+        appt: \d*
+        action: new|end|cancel
+
+ambcredit_addotherversement:
+    pattern:  /ajouter-autre
+    defaults:  { _controller: AmbCreditBundle:Encaissement:ajouter_AutrEncaissement }
+
+ambcredit_updateotherversement:
+    pattern:  /update-autre/{id}
+    defaults:  { _controller: AmbCreditBundle:Encaissement:update_AutrEncaissement, id:0}
+    requirements:
+        appt: \d*
+
+ambcredit_deleteotherversement:
+    pattern:  /delete-autre/{id}
+    defaults:  { _controller: AmbCreditBundle:Encaissement:delete_AutrEncaissement, id:0}
+    requirements:
+        appt: \d*
+
+ambcredit_listotherversement:
+    pattern:  /list-autre.{format}
+    defaults:  { _controller: AmbCreditBundle:Encaissement:list_AutrEncaissement, format:html}
+    requirements:
+        print: html|pdf
+
+ambcredit_transferversement:
+    pattern:  /transfer-versement/{id}/{appt}
+    defaults:  { _controller: AmbCreditBundle:Encaissement:transfer_encaissement, appt:0 }
+    requirements:
+        id: \d*
+        appt: \d*
+
+ambcredit_updateversement:
+    pattern:  /update-versement/{id}/{action}
+    defaults:  { _controller: AmbCreditBundle:Encaissement:update_encaissement, action:end  }
+    requirements:
+        id: \d*
+        action: new|end|cancel
+
+ambcredit_deleteversement:
+    pattern:  /delete-versement/{id}
+    defaults:  { _controller: AmbCreditBundle:Encaissement:delete_encaissement }
+    requirements:
+        id: \d*
+
+ambcredit_generatequitance:
+    pattern:  /generate-quitance/{id}
+    defaults:  { _controller: AmbCreditBundle:Quitance:add_quitance }
+    requirements:
+        id: \d*
+
+ambcredit_voirquitance:
+    pattern:  /voir-quitance/{id}
+    defaults:  { _controller: AmbCreditBundle:Encaissement:voir_quitance }
+    requirements:
+        id: \d*
+
+ambcredit_printquitance:
+    pattern:  /print-quitance/{id}
+    defaults:  { _controller: AmbCreditBundle:Quitance:print_quitance}
+    requirements:
+        id: \d*
+
+ambcredit_listquitances:
+    pattern:  /list-quitance/{print}
+    defaults:  { _controller: AmbCreditBundle:Quitance:list_quitance , print: 0}
+    requirements:
+        print: print
+
+ambcredit_unpaidencaissement:
+    pattern:  /encaissement-impayee/{id}
+    defaults:  { _controller: AmbCreditBundle:Encaissement:unpaid_encaissement }
+    requirements:
+        id: \d*
+
+ambcredit_validationencaissement:
+    pattern:  /validation-encaissement/{id}
+    defaults:  { _controller: AmbCreditBundle:Encaissement:validation_encaissement }
+    requirements:
+        id: \d*

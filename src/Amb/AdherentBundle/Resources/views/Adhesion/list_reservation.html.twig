@@ -1,0 +1,157 @@
+{% extends "AmbAdherentBundle::layout.html.twig" %}
+
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ZeroClipboard.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/TableTools.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ColVis.js') }}" type="text/javascript" /></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            oTable = $('#DatatableAdhesions').dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "sDom": '<"H"TCfr>t<"F"ip>',
+                "oTableTools": {
+                    "sSwfPath": "{{ asset('swf/copy_csv_xls_pdf.swf') }}",
+                    "aButtons": [
+                        "copy", "csv", "xls", "pdf",
+                        {
+                            "sExtends":    "collection",
+                            "sButtonText": "Save",
+                            "aButtons":    [ "csv", "xls", "pdf" ]
+                        }
+                    ]
+                },
+                "oColVis": {
+                    "buttonText": "Changer les colonnes"
+                }                   
+            });
+
+            $('.date').datepicker({ dateFormat: 'dd-mm-yy' }) ;
+        } );
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/demo_table_jui.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.8.4.custom.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/TableTools_JUI.css') }}" type="text/css" />
+{% endblock %}
+{% block masthead %}
+    <h2>Gestion des reservations</h2>
+{% endblock %}
+{% block ambadherent_body %}
+{% if form is defined %}
+    <form method="post" {{ form_enctype(form) }} name="searchform" action="{{ path('ambadherent_listreservation') }}"> 
+        {{ form_errors(form) }}
+        <div class="well">
+            <div class="row">
+                <div class="span3">
+                    {{ form_label(form.imm_group, "NOM IMMEUBLE") }}
+                    {{ form_errors(form.imm_group) }}
+                    {{ form_widget(form.imm_group) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.immeuble, "IMMEUBLE") }}
+                    {{ form_errors(form.immeuble) }}
+                    {{ form_widget(form.immeuble) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.etage, "ETAGE") }}
+                    {{ form_errors(form.etage) }}
+                    {{ form_widget(form.etage) }}
+                </div>
+                <div class="span2">
+                    {{ form_label(form.appartement, "APPT") }}
+                    {{ form_errors(form.appartement) }}
+                    {{ form_widget(form.appartement) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.date_finresrvation, "DATE FIN RESERVATION") }}
+                    {{ form_errors(form.date_finresrvation) }}
+                    {{ form_widget(form.date_finresrvation) }}
+                </div>
+            </div>
+        <input type="submit" class="btn" value="Rechercher"  />  
+        </div>
+        {{ form_rest(form) }}
+    </form>
+{% endif %}
+        <table  id="DatatableAdhesions" class="display" >
+            <thead>
+                <tr>
+                    <th>Matricule</th>
+                    <th>Adherent</th>
+                    <th>Nom Imm</th>
+                    <th>Imm</th>
+                    <th>Etage</th>
+                    <th>N° Appt</th>
+                    <th>Surface</th>
+                    <th>Terrace</th>
+                    <th>Jardin</th>
+                    <th>Date fin</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for adhesion in adhesions %}
+                    <tr>
+                        <td>{{ adhesion.matricule }}</td>
+                        <td>{{ adhesion.adherent.NomPrenom }}</td>
+                        <td>{{ adhesion.ImmGroup }}</td>
+                        <td>{{ adhesion.Immeuble }}</td>
+                        <td>{{ adhesion.Etage }}</td>
+                        <td>{{ adhesion.Appartement }}</td>
+                        <td class="align-right" >{{ adhesion.SurfaceAppt }} m²</td>
+                        <td class="align-right" >{{ adhesion.SurfaceTerrace }} m²</td>
+                        <td class="align-right" >{{ adhesion.SurfaceJardin }} m²</td>
+                        <td>{{ adhesion.DateFinresrvation|date('Y/m/d') }}</td>
+                        <td>
+
+                            <div class="btn-group">
+                                <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
+                                Action
+                                <span class="caret"></span>
+                                </a>
+                                {% if is_granted('ROLE_OPERATOR') %}
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                        <a  href="#" onclick="ConfirmAction('{{ path('ambadherent_confirmreservation', {'id': adhesion.id}) }}', 'la reservation de cette appt'); return false;" ><i class="icon-ok icon-small"></i>Confirmer</a></li>
+                                        <li>
+                                        <a  href="#" onclick="ConfirmAction('{{ path('ambadherent_cancelreservation', {'id': adhesion.id}) }}', 'la suppression de cette reservation'); return false;" ><i class="icon-remove icon-small"></i>Annuler</a></li>
+                                        
+                                    </ul>
+                                {%endif%}    
+                            </div> 
+                                        
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td>Pas (encore !) d'appartement libre</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <SCRIPT LANGUAGE="JavaScript">
+        function ConfirmDeleteMessage(URL)
+        {
+           if (confirm("Confirmez-vous la suppression ?"))
+           {
+               window.location = URL;
+           }
+        }
+        function ConfirmAction(URL, action)
+        {
+           if (confirm("Confirmez-vous "+action+" ?"))
+           {
+               window.location = URL;
+           }
+        }
+        </SCRIPT>
+{% endblock %}

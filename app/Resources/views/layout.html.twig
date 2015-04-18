@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+		<title>{% block title %}A.H.G.H{% endblock %}</title>
+
+
+		{% block javascripts %}
+			<script type="text/javascript" src="{{ asset('js/jquery-1.7.2.min.js') }}"></script>
+			<script type="text/javascript" src="{{ asset('js/jquery-ui-1.8.24.custom.min.js') }}"></script>
+			<script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
+			<script type="text/javascript" src="{{ asset('js/modernizr-2.5.3.min.js') }}"></script>
+			<script type="text/javascript" src="{{ asset('js/jquery.ui.touch-punch.min.js') }}"></script>
+			<script type="text/javascript" src="{{ asset('js/Theme.js') }}"></script>
+			<script type="text/javascript" src="{{ asset('js/jquery.msgbox.min.js') }}"></script>
+			<script type="text/javascript" src="{{ asset('js/demo.bonus.js') }}"></script>
+			<script type="text/javascript" src="{{ asset('js/select2.min.js') }}"></script>
+			<script type="text/javascript" src="{{ asset('js/jquery.dataTables.min.min.js') }}"></script>
+			<script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.fr.js') }}"></script>
+		{% endblock %}
+		{% block stylesheets %}
+			<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,800" type="text/css" />
+			<link rel="stylesheet" href="{{ asset('css/font-awesome.css') }}" type="text/css" />
+			<link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}" type="text/css" />
+			<link rel="stylesheet" href="{{ asset('css/jquery-ui-1.8.21.custom.css') }}" type="text/css" />
+			<link rel="stylesheet" href="{{ asset('css/application.css') }}" type="text/css" />
+			<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css" />
+			<link rel="stylesheet" href="{{ asset('css/jquery.msgbox.css') }}" type="text/css" />
+			<link rel="stylesheet" href="{{ asset('css/select2.css') }}" type="text/css">
+			<link rel="stylesheet" href="{{ asset('css/amb.css') }}" type="text/css">
+		{% endblock %}
+    <script>
+        $(document).ready(function() { $("#e1").select2(); });
+    </script>
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<!-- BEGIN topbar -->
+			<div id="topbar">
+				<div class="container">
+					
+					<a data-target="#" data-toggle="dropdown" class="dropdown-toggle" id="menu-trigger" href="javascript:;">
+						<i class="icon-cog"></i>
+					</a>
+				
+					<div id="top-nav">
+						
+						
+						
+						<ul class="pull-right">
+							<li>
+								<i class="icon-user"></i>
+								{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}Connecté en tant que {{ app.user.username }} - <a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
+								{% else %}
+								<a href="{{ path('fos_user_security_login') }}">Connexion</a>
+								{% endif %}
+							</li>
+
+							{% if is_granted('ROLE_OPERATOR') %}
+								<li><a href="{{ path('ambadherent_listreservation') }}"><span class="badge badge-primary">{% render 'AmbAdherentBundle:Adhesion:count_reservation' %}</span> Notifications</a></li>
+							{% endif %}
+							{% if is_granted('ROLE_COMPTA') %}
+							<li class="dropdown">
+								<a data-toggle="dropdown" class="dropdown-toggle" href="./pages/settings.html">
+									Paramétrage						
+									<b class="caret"></b>
+								</a>
+								
+								<ul class="dropdown-menu pull-right">
+									{% if is_granted('ROLE_MANAGER') %}
+									<li class="dropdown-submenu">
+					                  <a href="#" tabindex="-1">Compte bancaire A.M.B</a>
+					                  <ul class="dropdown-menu">
+					                    <li><a href="{{ path('ambbanque_ajouter') }}" tabindex="-1">Ajouter un compte</a></li>
+					                    <li><a href="{{ path('ambbanque_accueil') }}" tabindex="-1">liste des comptes</a></li>
+					                  </ul>
+					                </li>
+					                {%endif%}
+									<li class="dropdown-submenu">
+					                  <a href="#" tabindex="-1">Type des dépenses A.M.B</a>
+					                  <ul class="dropdown-menu">
+					                    <li><a href="{{ path('ambtypedepense_ajouter') }}" tabindex="-1">Ajouter un type</a></li>
+					                    <li><a href="{{ path('ambtypedepense_accueil') }}" tabindex="-1">liste des types</a></li>
+					                  </ul>
+					                </li>
+								</ul> 
+							</li>
+			                {%endif%}
+						</ul>
+						
+					</div> <!-- /#top-nav -->
+				</div> <!-- /.container -->
+			</div><!-- END topbar -->
+			<!-- BEGIN header -->
+			<div id="header">
+				
+				<div class="container">
+					
+					<a class="brand" href="./index.html">Dashboard Admin</a>
+					
+					<a data-target=".nav-collapse" data-toggle="collapse" class="btn-navbar" href="javascript:;">
+			        	<i class="icon-reorder"></i>
+			      	</a>
+				
+					<div class="nav-collapse">
+						<ul class="nav pull-right" id="main-nav">
+							{% if is_granted('ROLE_DASHBOARD') %}
+							<li class="dropdown">					
+								<a data-toggle="dropdown" class="dropdown-toggle" href="javascript:;">
+									<i class="icon-home"></i>
+									<span>Tableau de bord</span> 
+									<b class="caret"></b>
+								</a>	
+							
+								<ul class="dropdown-menu">
+									<li><a href="{{ path('ambglobal_exrecice') }}">Exercice</a></li>
+									<li><a href="{{ path('ambglobal_dashboard') }}">Statistique</a></li>
+									<li class="dropdown-submenu">
+										<a href="#" tabindex="-1">Encaissements/Dépenses</a>
+										<ul class="dropdown-menu">
+											<li><a href="{{ path('ambglobal_dashboard2', {'annee': '2012'}) }}">2012</a></li>
+											<li><a href="{{ path('ambglobal_dashboard2', {'annee': '2013'}) }}">2013</a></li>
+											<li><a href="{{ path('ambglobal_dashboard2', {'annee': '2014'}) }}">2014</a></li>
+											<li><a href="{{ path('ambglobal_dashboard2', {'annee': '2015'}) }}">2015</a></li>
+											<li><a href="{{ path('ambglobal_dashboard2', {'annee': '2016'}) }}">2016</a></li>
+											<li><a href="{{ path('ambglobal_dashboard2', {'annee': '2017'}) }}">2017</a></li>
+											<li><a href="{{ path('ambglobal_dashboard2', {'annee': '2018'}) }}">2018</a></li>
+										</ul>
+					                </li>
+								</ul>    				
+							</li>
+							{%endif%}
+							<li class="dropdown">					
+								<a data-toggle="dropdown" class="dropdown-toggle" href="javascript:;">
+									<i class="icon-th"></i>
+									<span>Adhésion</span> 
+									<b class="caret"></b>
+								</a>	
+							
+								<ul class="dropdown-menu">
+									{% if is_granted('ROLE_COMM') %}
+									<li class="dropdown-submenu">
+										<a href="#" tabindex="-1">Adhérent</a>
+										<ul class="dropdown-menu">
+											<li><a href="{{ path('ambadherent_accueil') }}">Liste des adhérents</a></li>
+											<li><a href="{{ path('ambadherent_contact') }}">liste des contacts</a></li>
+											{% if is_granted('ROLE_OPERATOR') %}
+												<li><a href="{{ path('ambadherent_ajouter') }}">Ajouter un adhérent</a></li>
+											{%endif%}
+										</ul>
+					                </li>
+									{%endif%}
+									{% if is_granted('ROLE_RECOVRING') %}
+									<li class="dropdown-submenu">
+										<a href="#" tabindex="-1">Adhésion</a>
+										<ul class="dropdown-menu">
+											<li class="dropdown-submenu">
+												<a href="#" tabindex="-1">Liste des adhésions</a>
+												<ul class="dropdown-menu">
+													<li><a href="{{ path('ambadherent_listadhesion') }}">Tous</a></li>
+													<li><a href="{{ path('ambadherent_listdossierincomplet') }}">Dossier incomplet</a></li>
+												</ul>
+							                </li>
+										</ul>
+					                </li>
+									{%endif%}
+									{% if is_granted('ROLE_OPERATOR') %}
+										<li><a href="{{ path('ambadherent_listreservation') }}">Liste des reservations</a></li>
+									{%endif%}
+									{% if is_granted('ROLE_CONSULT') %}
+										<li><a href="{{ path('ambadherent_listdesistement') }}">Liste des désistements</a></li>
+									{%endif%}
+									<li><a href="{{ path('ambadherent_listapptlibre') }}">Liste des appts libre</a></li>
+									<li><a href="{{ path('ambadherent_listadhesion', {'type': 'rec'}) }}">Recouvrement</a></li>
+								</ul>    				
+							</li>
+							<li class="dropdown">					
+								<a data-toggle="dropdown" class="dropdown-toggle" href="javascript:;">
+									<i class="icon-copy"></i>
+									<span>Encaissements</span> 
+									<b class="caret"></b>
+								</a>	
+							
+							{% if is_granted('ROLE_CONSULT') %}
+								<ul class="dropdown-menu">
+
+									<li class="dropdown-submenu">
+										<a href="#" tabindex="-1">Adherents</a>
+										<ul class="dropdown-menu">
+											<li><a href="{{ path('ambcredit_listallencaissement') }}">Liste des encaissements</a></li>
+											<li><a href="{{ path('ambcredit_listquitances') }}">Liste des quitances</a></li>
+										</ul>
+					                </li>
+									<li class="dropdown-submenu">
+										<a href="#" tabindex="-1">Autres</a>
+										<ul class="dropdown-menu">
+											{% if is_granted('ROLE_OPERATOR') %}
+											<li><a href="{{ path('ambcredit_addotherversement') }}">Ajouter</a></li>
+											{%endif%}
+											<li><a href="{{ path('ambcredit_listotherversement') }}">Liste des encaissements</a></li>
+										</ul>
+					                </li>
+								</ul>    				
+							</li>
+							{%endif%}
+							{% if is_granted('ROLE_CONSULT') %}
+							<li class="dropdown">					
+								<a data-toggle="dropdown" class="dropdown-toggle" href="javascript:;">
+									<i class="icon-copy"></i>
+									<span>Dépenses</span> 
+									<b class="caret"></b>
+								</a>	
+							
+								<ul class="dropdown-menu">
+									{% if is_granted('ROLE_COMPTA') %}
+									<li class="dropdown-submenu">
+										<a href="#" tabindex="-1">Ajouter une dépense</a>
+										<ul class="dropdown-menu">
+											<li><a href="{{ path('ambdepense_ajouter', {'type': 'gestion'}) }}">Compte de gestion</a></li>
+											<li><a href="{{ path('ambdepense_ajouter', {'type': 'amortissement'}) }}">Compte d'amortissement</a></li>
+											<li><a href="{{ path('ambcontrat_list') }}">Convention</a></li>
+										</ul>
+					                </li>
+					                {%endif%}
+					                <li class="dropdown-submenu">
+										<a href="#" tabindex="-1">La caisse</a>
+										<ul class="dropdown-menu">
+											{% if is_granted('ROLE_COMPTA') %}
+												<li><a href="{{ path('ambcaisse_ajouter') }}">Ajouter dépense caisse</a></li>
+												<li><a href="{{ path('ambdepense_alimentercaisse') }}">Alimenter la caisse</a></li>
+					                		{%endif%}
+											<li><a href="{{ path('ambcaisse_list') }}">Liste Caisse</a></li>
+										</ul>
+					                </li>
+									<li class="dropdown-submenu">
+										<a href="#" tabindex="-1">Liste des dépenses</a>
+										<ul class="dropdown-menu">
+											<li><a href="{{ path('ambdepense_accueil', {'type': 'gestion'}) }}">Gestion</a></li>
+											<li><a href="{{ path('ambdepense_accueil', {'type': 'amortissement'}) }}">Amortissement</a></li>
+											<li><a href="{{ path('ambdepense_accueil') }}">Tous</a></li>
+										</ul>
+									</li>
+								</ul>    				
+							</li>
+							{%endif%}
+							
+							{% if is_granted('ROLE_RECOVRING') %}
+								<li><a href="{{ path('ambglobal_journal') }}">Journal de trésorerie</a></li>
+							{%endif%}
+							{% if is_granted('ROLE_RECOVRING') %}
+							<li class="dropdown">					
+								<a data-toggle="dropdown" class="dropdown-toggle" href="javascript:;">
+									<i class="icon-th"></i>
+									<span>Le Projet</span> 
+									<b class="caret"></b>
+								</a>	
+								<ul class="dropdown-menu">		
+								<li class="dropdown-submenu">
+									<a href="#" tabindex="-1">Liste des scans</a>
+									<ul class="dropdown-menu">
+										<li><a href="{{ path('ambscann_list', {'type': 'adhs'}) }}">Adherents</a></li>
+										<li><a href="{{ path('ambscann_list', {'type': 'frs'}) }}">Fournisseurs</a></li>
+									</ul>
+				                </li>
+								{% if is_granted('ROLE_RECOVRING') %}
+									{% if is_granted('ROLE_CONSULT') %}
+									<li><a href="{{ path('ambglobal_projetbudget') }}">Suivi de projet</a></li>
+									<li class="dropdown-submenu">
+										<a href="#" tabindex="-1">Convention</a>
+										<ul class="dropdown-menu">
+												<li><a href="{{ path('ambcontrat_list') }}">Liste des conventions</a></li>
+												<li><a href="{{ path('ambcontrat_resiliations') }}">Liste des résiliations</a></li>
+											{% if is_granted('ROLE_COMPTA') %}
+												<li><a href="{{ path('ambcontrat_ajouter') }}">Ajouter convention</a></li>
+												<li><a href="{{ path('ambcontrat_dl') }}">Situation HTML</a></li>
+												<li><a href="{{ path('ambcontrat_dl', {'format': 'html'}) }}">Situation PDF</a></li>
+											{%endif%}
+										</ul>
+					                </li>
+					                {%endif%}
+									<li class="dropdown-submenu">
+										<a href="#" tabindex="-1">Fournisseur</a>
+										<ul class="dropdown-menu">
+												<li><a href="{{ path('ambfournisseur_listfournisseur') }}">Liste des fournisseurs</a></li>
+											{% if is_granted('ROLE_COMPTA') %}
+												<li><a href="{{ path('ambfournisseur_addfournisseur') }}">Ajouter un fournisseur</a></li>
+					                		{%endif%}
+										</ul>
+					                </li>	
+									<li><a href="{{ path('ambfournisseur_listintervenant') }}">Liste des intervenants</a></li>
+
+								{%endif%}
+								</ul>    				
+							</li>
+							{%endif%}
+						</ul>
+						
+					</div> <!-- /.nav-collapse -->
+
+				</div> <!-- /.container -->
+				
+			</div>
+			<!-- END header -->
+			<!-- BEGIN masthead -->
+			<div id="masthead">
+				<div class="container">
+					<div class="masthead-pad">
+						<div class="masthead-text">
+							{% block masthead %}
+							{% endblock %}
+						</div><!-- /.masthead-text -->
+					</div>
+				</div> <!-- /.container -->
+			</div>
+			<!-- END masthead -->
+			<!-- BEGIN content -->
+			<div id="content">
+				<div class="container">
+					{% block body %}
+					{% endblock %}
+				</div>	
+			</div>
+			<!-- END content -->
+			<!-- BEGIN footer -->
+			<div id="footer">
+				<div class="container">
+						<div class="row">
+							<div class="span6">
+								&copy; 2013 <a href="#">GROUP HAYANI</a>, tout droit réservé.
+							</div>
+							<div class="span6" id="builtby">
+								<a href="http://www.amarus.ma">By AMARUS Media.</a>				
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- END footer -->
+
+
+	</body>
+</html>

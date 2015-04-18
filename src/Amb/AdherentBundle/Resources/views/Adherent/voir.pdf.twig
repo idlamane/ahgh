@@ -1,0 +1,103 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+
+<style>
+table.adhesion,table.versement {margin:10px auto; width:700px}
+table.adhesion td,table.versement td,table.versement th{border:solid 1px #000}
+table.adhesion td.titre,table.versement th{text-weight:bold; background:#EEE}
+h4{margin:3px 0}
+</style>
+    <h2>SITUATION D'ADHERENT</h2>
+<table>
+	<tr>
+		<td>Nom et Prénom</td>
+		<td>: {{ adherent.Civilite}} {{ adherent.NomPrenom}}</td>
+	</tr>
+	<tr>
+		<td>CIN</td>
+		<td>: {{ adherent.Cin}}</td>
+	</tr>
+	<tr>
+		<td>Date de naissance</td>
+		<td>: {{ adherent.DateN|date('d/m/Y') }}</td>
+	</tr>
+	<tr>
+		<td>Adresse</td>
+		<td>: {{ adherent.adress}}</td>
+	</tr>
+	<tr>
+		<td>Contact</td>
+		<td>: Tél. {{ adherent.tel}}<br>: Gsm. {{ adherent.mobile}}</td>
+	</tr>
+</table>
+
+<h3>Liste des appartements </h3>
+{% for adhesion in adhesions %} 
+<div>
+<h4>Dossier N° : {{adhesion.matricule}}</h4>
+<table class="adhesion">
+<tr>
+	<td class="titre">NOM D'IMMEUBLE</td>
+	<td  style="width:100px">{{adhesion.imm_group}}</td>
+	<td class="titre">COUT DU m² </td>
+	<td style="text-align:right;width:100px">{{adhesion.cout|number_format(2, ',', ' ')}} DH</td>
+</tr>
+<tr>
+	<td class="titre">TYPE D'IMMEUBLE</td>
+	<td>{{adhesion.type_immeuble}}</td>
+	<td class="titre">COUT GLOBAL</td>
+	<td style="text-align:right">{{adhesion.cout_global|number_format(2, ',', ' ')}} DH</td>
+</tr>
+<tr>
+	<td class="titre">IMMEUBLE</td>
+	<td>{{adhesion.immeuble}}</td>
+	<td class="titre">PORTE-FEUILLE</td>
+	<td style="text-align:right">{{adhesion.invalid|number_format(2, ',', ' ')}} DH</td>
+</tr>
+<tr>
+	<td class="titre">ETAGE</td>
+	<td>{{adhesion.etage}}</td>
+	<td class="titre">TOTAL IMPAYEES </td>
+	<td style="text-align:right">{{adhesion.impayee|number_format(2, ',', ' ')}} DH</td>
+</tr>
+<tr>
+	<td class="titre">APPARTEMENT N°</td>
+	<td>{{adhesion.appartement}}</td>
+	<td class="titre">TOTAL DES VERSEMENTS </td>
+	<td style="text-align:right">{{adhesion.versement|number_format(2, ',', ' ')}} DH</td>
+</tr>
+<tr>
+	<td class="titre">TYPE D'APPARTEMENT</td>
+	<td>{{adhesion.type_appartement}}</td>
+	<td class="titre">RESTE A PAYEE</td>
+	<td style="text-align:right">{{ (adhesion.cout_global - adhesion.versement)|number_format(2, ',', ' ') }} DH</td>
+</tr>
+<tr>
+	<td class="titre">SURFACE HABITABLE</td>
+	<td style="text-align:right">{{adhesion.surface_appt}} m²</td>
+	<td class="titre">TYPE D'ECHEANCE </td>
+	<td>{{adhesion.type_echeance }} mois</td>
+</tr>
+<tr>
+	<td class="titre">SURFACE TERRACE</td>
+	<td style="text-align:right">{{adhesion.surface_terrace}} m²</td>
+	<td class="titre">NOMBRE D'ECHEANCE </td>
+	<td>
+		{% if adhesion.nb_mois != null and adhesion.type_echeance != null  %}
+			{{ adhesion.nb_mois/adhesion.type_echeance }}
+		{% endif %}
+	</td>
+</tr>
+<tr>
+	<td class="titre">SURFACE JARDIN</td>
+	<td style="text-align:right">{{adhesion.surface_jardin}} m²</td>
+	<td class="titre">MONTANT/ECHEANCE </td>
+	<td style="text-align:right">{{adhesion.echeance|number_format(2, ',', ' ') }} DH</td>
+</tr>
+</table>
+</div>
+<br> 
+{% else %}
+    <h3>Pas (encore !) d'appartement</h3>
+{% endfor %} 
+{% endblock %}

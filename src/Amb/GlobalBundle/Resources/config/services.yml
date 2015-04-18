@@ -1,0 +1,7 @@
+parameters:
+#    amb_global.example.class: Amb\GlobalBundle\Example
+
+services:
+#    amb_global.example:
+#        class: %amb_global.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,77 @@
+{% extends "AmbCreditBundle::layout.html.twig" %}
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ZeroClipboard.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/TableTools.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ColVis.js') }}" type="text/javascript" /></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            oTable = $('#DatatableEncaissement').dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "oColVis": {
+                    "buttonText": "Changer les colonnes"
+                }                   
+            });
+        } );
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/demo_table_jui.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.8.4.custom.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/TableTools_JUI.css') }}" type="text/css" />
+{% endblock %}
+
+
+{% block ambcredit_body %}
+<h3>Liste des quitances</h3>
+        <table id="DatatableEncaissement"  class="display">
+            <thead>
+                <tr>
+                    <th>id </th>
+                    <th>Quitance N° </th>
+                    <th>Nom et Prenom </th>
+                    <th>Mode de paiment</th>
+                    <th>Piece N°</th>
+                    <th>Montant</th>
+                    <th>Date d'opération</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for quitance in quitances %}
+                    <tr>
+                        <td>{{ quitance.Id }}</td>
+                        <td>{{ quitance.nQuitance }}</td>
+                        <td>{{ quitance.adherent }}</td>
+                        <td>{{ quitance.ModeEncaissement }}</td>
+                        <td>{{ quitance.NumPiece }}</td>
+                        <td class="pull-right">{{ quitance.Montant|number_format(2, ',', ' ')  }} DH</td>
+                        <td>{{ quitance.DateOperation|date('d/m/Y') }}</td>
+                        <td>
+                            {% if is_granted('ROLE_OPERATOR') %}
+                            <div class="btn-group" style="display:inline">
+                                <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
+                                Actions
+                                <span class="caret"></span>
+                                </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('ambcredit_printquitance', {'id': quitance.id}) }}" >Imprimer</a></li>
+                                    </ul>
+                            </div> 
+                            {%endif%} 
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td>Pas (encore !) de quitances</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

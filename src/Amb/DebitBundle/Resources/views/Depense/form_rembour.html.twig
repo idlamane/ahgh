@@ -1,0 +1,79 @@
+<div class="well">
+	<h3>Formulaire de rembouressement</h3>
+
+	<form method="post" name="operation" onsubmit="return onsubmitform();"  {{ form_enctype(form) }}>
+	{{ form_errors(form) }}
+	<div class="well">
+		<div class="row">
+			<div class="span3">
+				<div>
+				    {{ form_label(form.date_Operation, "DATE OPERATION (ex: 01-12-2013)") }}
+				    {{ form_errors(form.date_Operation) }}
+				    {{ form_widget(form.date_Operation) }}
+				</div>
+				<div>
+				    {{ form_label(form.banque, "BANQUE") }}
+				    {{ form_errors(form.banque) }}
+				    {{ form_widget(form.banque) }}
+				</div>
+			</div>
+			<div class="span3">
+				<div>
+				    {{ form_label(form.mode_retrait, "MODE DE RETRAIT") }}
+				    {{ form_errors(form.mode_retrait) }}
+				    {{ form_widget(form.mode_retrait) }}
+				</div>
+				{% if form.type_remboursement is defined %}
+				<div>
+				    {{ form_label(form.type_remboursement, "TYPE DE REMBOURSMNT") }}
+				    {{ form_errors(form.type_remboursement) }}
+				    {{ form_widget(form.type_remboursement) }}
+				</div>
+				{% endif %}
+				{% if form.annee_gestion is defined %}
+				<div>
+				    {{ form_label(form.annee_gestion, "ANNEE GESTION") }}
+				    {{ form_errors(form.annee_gestion) }}
+				    {{ form_widget(form.annee_gestion) }}
+				</div>
+				{% endif %}
+			</div>
+
+			<div class="span3">
+				<div>
+				    {{ form_label(form.n_piece, "PIECE N°") }}
+				    {{ form_errors(form.n_piece) }}
+				    {{ form_widget(form.n_piece) }}
+				</div>
+				<div>
+				    {{ form_label(form.libelle, "LIBELLE") }}
+				    {{ form_errors(form.libelle) }}
+				    {{ form_widget(form.libelle) }}
+				</div>
+				<div>
+				    {{ form_label(form.montant, "MONTANT") }}
+				    {{ form_errors(form.montant) }}
+				    {{ form_widget(form.montant) }}
+				</div>
+			</div>
+		</div>	
+
+		<div class="row">
+			<div class="span5">
+				<div>
+				    {{ form_label(form.commentaire, "COMMENTAIRE") }}
+				    {{ form_errors(form.commentaire) }}
+				    {{ form_widget(form.commentaire) }}
+				</div>				
+				<div>
+				    {{ form_rest(form) }}
+				</div>
+			</div>
+		</div>	
+	</div>
+		<input type="submit" name="operation" class="btn btn-primary" value="Enregistrer et Quitter" />
+    </form>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  </script>

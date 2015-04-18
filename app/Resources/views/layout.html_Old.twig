@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+		<title>{% block title %}A.M.B{% endblock %}</title>
+
+
+		{% block javascripts %}
+			<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+			<script type="text/javascript" src="{{ asset('js/bootstrap.js') }}"></script>
+		{% endblock %}
+		{% block stylesheets %}
+			<link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}" type="text/css" />
+		{% endblock %}
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="navbar">
+			  <div class="navbar-inner">
+			    
+			  </div>
+			</div>
+			<div id="header" class="hero-unit">
+				<h1>Projet AMB</h1>
+				<p></p>
+			</div>
+
+			<div class="row">
+				<div id="content" class="span12">
+					{% block body %}
+					{% endblock %}
+				</div>
+			</div>
+
+			<hr>
+
+			<footer>
+				<p>A.M.B &copy; 2013.</p>
+			</footer>
+		</div>
+
+
+	</body>
+</html>

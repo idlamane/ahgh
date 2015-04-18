@@ -1,0 +1,12 @@
+{% extends "AmbDebitBundle::depense_layout.html.twig" %}
+
+{% block title %}
+    Ajouter - {{ parent() }}
+{% endblock %}
+
+{% block ambdebit_body %}
+
+    <h2>Alimenter la caisse</h2>
+    {% include "AmbDebitBundle:Depense:form_alimenter_caisse.html.twig" %}
+
+{% endblock %}

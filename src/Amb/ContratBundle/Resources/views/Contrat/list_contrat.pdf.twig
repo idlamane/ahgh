@@ -1,0 +1,67 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+<style>
+table.versement {margin:10px auto; width:700px;border-collapse:collapse;}
+table.versement td,table.versement th{
+    border:solid 1px #000;
+    padding: 0 2mm;
+    font-size:11px;
+}
+table.versement th{
+    text-weight:bold; 
+    background:#EEE;
+    padding: 0 2mm;
+    text-align:center
+}
+.date{width:45px;}
+.adh{width:10px}
+.nom{width:200px}
+.mode{width:135px}
+.piece{width:85px}
+.type{width:300px;}
+.libelle{width:170px;}
+.frs{width:130px}
+h4{margin:3px 0}
+</style>
+<h2>{{ titre }}</h2>
+<table class="versement" >
+    <thead>
+        <tr>
+            <th>Intervenant</th>
+            <th>Réf.</th>
+            <th>Date debut</th>
+            <th>Monant</th>
+            <th>Reglement</th>
+            <th>Solde</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contrat in contrats %}
+            <tr  class="gradeA">
+                <td>{{ contrat.detail.fournisseur.RaisonSocial }}</td>
+                <td>{{ contrat.detail.reference }}</td>
+                <td>{{ contrat.detail.DateDebut|date('d/m/Y') }}</td>
+                <td  style="text-align:right">
+                    {{ contrat.detail.montant|number_format(2, ',', ' ') }}
+                </td>
+                <td  style="text-align:right">
+                    {{ contrat.reglement|number_format(2, ',', ' ') }}
+                </td>
+                <td  style="text-align:right">
+                    {{ (contrat.detail.montant-contrat.reglement)|number_format(2, ',', ' ') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr><td>Pas (encore !) de contrats</td></tr>
+        {% endfor %}
+        <tr>
+            <td style="border:none"></td>
+            <td style="border:none;border-right:solid 1px #000;"></td>
+            <td >TOTAL</td>
+            <td style="text-align:right; background:#EEE">{{ total_contrats|number_format(2, ',', ' ')  }}</td>
+            <td style="text-align:right; background:#EEE">{{ total_reglements|number_format(2, ',', ' ')  }}</td>
+            <td style="text-align:right; background:#EEE">{{ (total_contrats-total_reglements)|number_format(2, ',', ' ')  }}</td>
+        </tr> 
+    </tbody>
+</table>
+{% endblock %}

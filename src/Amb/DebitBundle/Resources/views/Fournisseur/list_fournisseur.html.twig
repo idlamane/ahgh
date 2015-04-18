@@ -1,0 +1,108 @@
+{% extends "AmbDebitBundle::layout_fournisseur.html.twig" %}
+
+{% block title %}
+    List des fournisseurs - {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ZeroClipboard.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/TableTools.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ColVis.js') }}" type="text/javascript" /></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            oTable = $('#DatatableAherent').dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "sDom": '<"H"TCfr>t<"F"ip>',
+                "oTableTools": {
+                    "sSwfPath": "{{ asset('swf/copy_csv_xls_pdf.swf') }}",
+                    "aButtons": [
+                        "copy", "csv", "xls", "pdf",
+                        {
+                            "sExtends":    "collection",
+                            "sButtonText": "Save",
+                            "aButtons":    [ "csv", "xls", "pdf" ]
+                        }
+                    ]
+                },
+                "oColVis": {
+                    "buttonText": "Changer les colonnes"
+                }                   
+            });
+        } );
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/demo_table_jui.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.8.4.custom.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/TableTools_JUI.css') }}" type="text/css" />
+{% endblock %}
+
+{% block ambfrs_body %}
+    
+    <h2>Liste des fournisseur</h2>
+        {% if is_granted('ROLE_MANAGER') %}
+        <a href="{{ path('ambfournisseur_addfournisseur') }}"><button class="btn btn-small" type="button">Ajouter nouveau fournisseur</button></a>
+        {%endif%}
+        <table cellpadding="0" cellspacing="0" border="0" id="DatatableAherent" class="display">
+            <thead>
+                <tr>
+                    <th>Raison social</th>
+                    <th>Tél</th>
+                    <th>Fax</th>
+                    <th>E-mail</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fournisseur in fournisseurs %}
+                    <tr  class="gradeA">
+                        <td>{{ fournisseur.RaisonSocial }}</td>
+                        <td>{{ fournisseur.Tel }}</td>
+                        <td>{{ fournisseur.Fax }}</td>
+                        <td>{{ fournisseur.Email }}</td>
+                        <td>
+                        
+                            <div class="btn-group">
+
+                                {% if is_granted('ROLE_CONSULT') %}
+                                <a href="{{ path('ambfournisseur_consultfournisseur', {'id': fournisseur.id}) }}"><button class="btn btn-small" type="button">Fiche fournisseur</button></a>
+                                {%endif%}
+                                <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
+                                Action
+                                <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    {% if is_granted('ROLE_RECOVRING') %}
+                                        <li><a href="{{ path('ambscann_ajouter', {'type': 'frs', 'id': fournisseur.id}) }}"><i class="icon-file icon-small"></i>Joindre un fichier</a></li>
+                                    {%endif%}
+                                    {% if is_granted('ROLE_MANAGER') %}
+                                        <li><a href="{{ path('ambfournisseur_updatefournisseur', {'id': fournisseur.id}) }}">Modifier</a></li>
+                                    {%endif%}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <li><a href="#" onclick="ConfirmDeleteMessage('{{ path('ambfournisseur_deletefournisseur', {'id': fournisseur.Id}) }}'); return false;">Supprimer</a></li>
+                                    {%endif%}
+                                </ul>
+                            </div>
+                        </td>    
+                    </tr>
+                {% else %}
+                    <tr><td>Pas (encore !) de fournisseur</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <SCRIPT LANGUAGE="JavaScript">
+        function ConfirmDeleteMessage(URL)
+        {
+           if (confirm("Confirmez-vous la suppression ?"))
+           {
+               window.location = URL;
+           }
+        }
+        </SCRIPT>
+{% endblock %}

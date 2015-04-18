@@ -1,0 +1,13 @@
+{% extends "AmbDebitBundle::depense_layout.html.twig" %}
+
+{% block title %}
+    Modifier - {{ parent() }}
+{% endblock %}
+
+{% block ambdebit_body %}
+{% set typeaction = 'update' %}
+
+    <h2>Modifier un type de dépense</h2>
+    {% include "AmbDebitBundle:Depense:form_depense.html.twig" %}
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "AmbAdherentBundle::layout.html.twig" %}
+
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block ambadherent_body %}
+
+    <h2>Réserver une appt libre à un nouveau adherent</h2>
+    {% include "AmbAdherentBundle:Adhesion:formulaire_reservation.html.twig" %}
+
+{% endblock %}

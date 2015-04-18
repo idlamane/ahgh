@@ -1,0 +1,26 @@
+{# src/Amb/CreditBundle/Resources/views/layout.html.twig #}
+
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+    Encaissement - {{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<style type="text/css"> 
+	</style>
+{% endblock %}
+
+{% block masthead %}
+    <h2>Gestion des encaissements</h2>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+	<div class="span12">
+	    {% block ambcredit_body %}
+	    {% endblock %}
+    </div>
+</div>
+{% endblock %}

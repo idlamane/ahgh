@@ -1,0 +1,90 @@
+<div class="well">
+	<h3>Formulaire des encaissements</h3>
+
+    <form method="post" name="operation" onsubmit="return onsubmitform();" {{ form_enctype(form) }}>
+	<div class="well">
+			<!-- Les erreurs générales du formulaire. -->
+			{{ form_errors(form) }}
+
+			<div class="row">
+				<div class="span3">
+					<div>
+					    {{ form_label(form.mode_encaissement, "MODE D'ENCAISSEMENT") }}
+					    {{ form_errors(form.mode_encaissement) }}
+					    {{ form_widget(form.mode_encaissement) }}
+					</div>
+				</div>
+				<div class="span3">	
+					<div>
+					    {{ form_label(form.type_encaissment, "TYPE D'ENCAISSEMENT") }}
+					    {{ form_errors(form.type_encaissment) }}
+					    {{ form_widget(form.type_encaissment) }}
+					</div>
+				</div>
+				<div class="span3">
+					<div>
+					    {{ form_label(form.annee_gestion, "ANNEE DE GESTION") }}
+					    {{ form_errors(form.annee_gestion) }}
+					    {{ form_widget(form.annee_gestion) }}
+					</div>
+				</div>
+				<div class="span3">
+					<div>
+					    {{ form_label(form.banque_piece, "BANQUE") }}
+					    {{ form_errors(form.banque_piece) }}
+					    {{ form_widget(form.banque_piece) }}
+					</div>
+				</div>
+
+				<div class="span3">	
+					<div>
+					    {{ form_label(form.num_piece, "N° DE PIECE") }}
+					    {{ form_errors(form.num_piece) }}
+					    {{ form_widget(form.num_piece) }}
+					</div>
+				</div>
+				<div class="span3">	
+					<div>
+					    {{ form_label(form.montant, "MONTANT") }}
+					    {{ form_errors(form.montant) }}
+					    {{ form_widget(form.montant) }}
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span3">	
+					<div>
+					    {{ form_label(form.date_Operation, "DATE OPERATION") }}
+					    {{ form_errors(form.date_Operation) }}
+					    {{ form_widget(form.date_Operation) }}
+					</div>
+				</div>
+				<div class="span3">
+					{% if form.banque is defined %}
+					<div>
+					    {{ form_label(form.banque, "COMPTE") }}
+					    {{ form_errors(form.banque) }}
+					    {{ form_widget(form.banque) }}  
+					</div>
+					{% endif %}
+					{% if form.statut is defined %}
+					<div>
+					    {{ form_label(form.statut, "STATUT") }}
+					    {{ form_errors(form.statut) }}
+					    {{ form_widget(form.statut) }}  
+					</div>
+					{% endif %}
+				</div>
+			</div>
+			{{ form_rest(form) }}
+	</div>
+	{% if operation == "add" %}
+	<input type="submit" name="operation" class="btn btn-primary" value="Enregistrer et Quitter" onclick="document.pressed=this.value" />
+	<input type="submit" name="operation" class="btn btn-primary" value="Enregistrer et nouveau" onclick="document.pressed=this.value" />
+	<input name="operation" class="btn btn-primary" value="Quitter" onclick="window.location.href='{{ path('ambcredit_listversement', {'appt': appt}) }}'"/>
+	<input name="operation" class="btn btn-primary" value="Vider" onclick="document.operation.reset();"/>
+	{% else %}
+	<input type="submit" class="btn btn-primary" value="Enregistrer et Quitter" />	
+	{% endif %}
+    </form>
+</div>

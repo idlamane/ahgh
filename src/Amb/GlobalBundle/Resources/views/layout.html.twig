@@ -1,0 +1,33 @@
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+    Général - {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" charset="utf-8">
+	    $(document).ready(function() {
+	        $('.date').datepicker({ dateFormat: 'dd-mm-yy' }) ;
+	    } );
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<style type="text/css"> 
+	</style>
+{% endblock %}
+
+{% block masthead %}
+    
+{% endblock %}
+
+{% block body %}
+<div class="row">
+	<div class="span12">
+	    {% block ambglobal_body %}
+	    {% endblock %}
+    </div>
+</div>
+{% endblock %}

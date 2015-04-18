@@ -1,0 +1,168 @@
+<div class="well">
+	<h3>FORMULAIRE D'ADHESION</h3>
+
+    <form method="post" {{ form_enctype(form) }}>
+	    {% if adhesion_validation_error is defined %}
+		    <div class="alert alert-error">
+				<h4>{{adhesion_validation_error}}</h4>
+		    </div>
+	    {% endif %}
+		{{ form_errors(form) }}
+		<div class="well">
+			<div class="row">
+				<div class="span5">
+					<div>
+					    {{ form_label(form.adherent, "ADHERENT") }}
+					    {{ form_errors(form.adherent) }}
+					    {{ form_widget(form.adherent) }}
+					</div>
+					<div>
+					    {{ form_label(form.matricule, "MATRICULE") }}
+					    {{ form_errors(form.matricule) }}
+					    {{ form_widget(form.matricule) }}
+					</div>
+					<div>
+					    {{ form_label(form.imm_group, "LE NOM D'IMMEUBLE") }}
+					    {{ form_errors(form.imm_group) }}
+					    {{ form_widget(form.imm_group) }}
+					</div>
+					<div>
+					    {{ form_label(form.type_immeuble, "TYPE D'IMMEUBLE") }}
+					    {{ form_errors(form.type_immeuble) }}
+					    {{ form_widget(form.type_immeuble) }}
+					</div>
+					<div>
+					    {{ form_label(form.immeuble, "IMMEUBLE") }}
+					    {{ form_errors(form.immeuble) }}
+					    {{ form_widget(form.immeuble) }}
+					</div>
+					<div>
+					    {{ form_label(form.etage, "ETAGE") }}
+					    {{ form_errors(form.etage) }}
+					    {{ form_widget(form.etage) }}
+					</div>
+				</div>
+				<div class="span3">
+					<div>
+					    {{ form_label(form.appartement, "APPARTEMENT") }}
+					    {{ form_errors(form.appartement) }}
+					    {{ form_widget(form.appartement) }}
+					</div>
+					<div>
+					    {{ form_label(form.type_appartement, "TYPE APPARTEMENT") }}
+					    {{ form_errors(form.type_appartement) }}
+					    {{ form_widget(form.type_appartement) }}
+					</div>
+					<div>
+					    {{ form_label(form.surface_appt, "SURFACE HABITABLE") }}
+					    {{ form_errors(form.surface_appt) }}
+					    {{ form_widget(form.surface_appt) }}
+					</div>
+				</div>
+				<div class="span3">
+					<div>
+					    {{ form_label(form.surface_terrace, "SURFACE TERRACE") }}
+					    {{ form_errors(form.surface_terrace) }}
+					    {{ form_widget(form.surface_terrace) }}
+					</div>
+					<div>
+					    {{ form_label(form.surface_jardin, "SURFACE JARDIN") }}
+					    {{ form_errors(form.surface_jardin) }}
+					    {{ form_widget(form.surface_jardin) }}
+					</div>
+					<div>
+					    {{ form_label(form.cout, "LE COUT DU 1m²") }}
+					    {{ form_errors(form.cout) }}
+					    {{ form_widget(form.cout) }}
+					</div>
+				</div>
+			</div>	
+		</div>
+
+        <div class="well">
+            <div class="row">
+                <div class="span5">
+                    <div>
+                        {{ form_label(form.date_debut, "DATE DEBUT ECHEANCE") }}
+                        {{ form_errors(form.date_debut) }}
+                        {{ form_widget(form.date_debut) }}
+                    </div>
+                    <div>
+                        {{ form_label(form.type_echeance, "TYPE D'ECHEANCE") }}
+                        {{ form_errors(form.type_echeance) }}
+                        {{ form_widget(form.type_echeance) }}
+                    </div>
+                </div>
+                <div class="span3">
+                    <div>
+                        {{ form_label(form.nb_mois, "NOMBRE DE MOIS") }}
+                        {{ form_errors(form.nb_mois) }}
+                        {{ form_widget(form.nb_mois) }}
+                    </div>
+                </div>
+                <div class="span3">
+                    <div>
+                        {{ form_label(form.avance, "AVANCE OBLIGATOIRE") }}
+                        {{ form_errors(form.avance) }}
+                        {{ form_widget(form.avance) }}
+                    </div>
+                    <div>
+                        {{ form_label(form.echeance, "ECHEANCE") }}
+                        {{ form_errors(form.echeance) }}
+                        {{ form_widget(form.echeance) }}
+                        <button id="calculer" class="btn btn-small btn-primary" type="button">Calculer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+		{{ form_rest(form) }}
+		<input type="submit" class="btn btn-primary" />
+	</form>		
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('#calculer').click(function()
+	{	
+		cout = $('#amb_adherentbundle_adhesiontype_cout').val();
+		avance = $('#amb_adherentbundle_adhesiontype_avance').val();
+		cout=cout.replace(",",".");
+		avance=avance.replace(",",".");
+		cout_appart =  cout * $('#amb_adherentbundle_adhesiontype_surface_appt').val();
+		cout_surface =  cout * $('#amb_adherentbundle_adhesiontype_surface_terrace').val();
+		cout_jardin =  (cout/2) * $('#amb_adherentbundle_adhesiontype_surface_jardin').val();
+		cout_global = cout_appart + cout_surface + cout_jardin;
+		mensualite = (cout_global-avance) / $('#amb_adherentbundle_adhesiontype_nb_mois').val();
+		echeance = mensualite * $('#amb_adherentbundle_adhesiontype_type_echeance').val();
+		$('#amb_adherentbundle_adhesiontype_echeance').attr('value',echeance);
+	    
+	});
+    $('#amb_adherentbundle_adhesiontype_cout').change(function()
+	{	
+		$("#calculer").trigger('click');
+	});
+    $('#amb_adherentbundle_adhesiontype_surface_appt').change(function()
+	{	
+		$("#calculer").trigger('click');
+	});
+    $('#amb_adherentbundle_adhesiontype_surface_terrace').change(function()
+	{	
+		$("#calculer").trigger('click');
+	});
+    $('#amb_adherentbundle_adhesiontype_surface_jardin').change(function()
+	{	
+		$("#calculer").trigger('click');
+	});
+    $('#amb_adherentbundle_adhesiontype_avance').change(function()
+	{	
+		$("#calculer").trigger('click');
+	});
+    $('#amb_adherentbundle_adhesiontype_nb_mois').change(function()
+	{	
+		$("#calculer").trigger('click');
+	});
+    $('#amb_adherentbundle_adhesiontype_type_echeance').change(function()
+	{	
+		$("#calculer").trigger('click');
+	});
+</script>

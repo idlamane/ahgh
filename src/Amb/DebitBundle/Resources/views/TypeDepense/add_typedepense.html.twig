@@ -1,0 +1,12 @@
+{% extends "AmbDebitBundle::layout.html.twig" %}
+
+{% block title %}
+    Ajouter - {{ parent() }}
+{% endblock %}
+
+{% block ambdebit_body %}
+
+    <h2>Ajouter un type de dépense</h2>
+    {% include "AmbDebitBundle:TypeDepense:form_typedepense.html.twig" %}
+
+{% endblock %}

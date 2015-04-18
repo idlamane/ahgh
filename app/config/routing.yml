@@ -1,0 +1,58 @@
+amb_global:
+    resource: "@AmbGlobalBundle/Resources/config/routing.yml"
+    prefix:   /
+
+amb_trace:
+    resource: "@AmbTraceBundle/Resources/config/routing.yml"
+    prefix:   /
+
+amb_contrat:
+    resource: "@AmbContratBundle/Resources/config/routing.yml"
+    prefix:   /
+
+amb_param:
+    resource: "@AmbParamBundle/Resources/config/routing.yml"
+    prefix:   /param
+
+amb_debit:
+    resource: "@AmbDebitBundle/Resources/config/routing.yml"
+    prefix:   /debit
+
+amb_credit:
+    resource: "@AmbCreditBundle/Resources/config/routing.yml"
+    prefix:   /credit
+
+amb_adherent:
+    resource: "@AmbAdherentBundle/Resources/config/routing.yml"
+    prefix:   /adherent
+
+amb_contrat:
+    resource: "@AmbContratBundle/Resources/config/routing.yml"
+    prefix:   /contrat
+
+amb_scann:
+    resource: "@AmbGlobalBundle/Resources/config/routing.yml"
+    prefix:   /Global
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /profile
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /profile
+# Internal routing configuration to handle ESI
+#_internal:
+#    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
+#    prefix:   /_internal

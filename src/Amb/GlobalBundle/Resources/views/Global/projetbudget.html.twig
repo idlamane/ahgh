@@ -1,0 +1,144 @@
+{% extends "AmbGlobalBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            $('.date').datepicker({ dateFormat: 'dd-mm-yy' }) ;
+        } );
+    </script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+    	table.suivi td {font-size:14px;}
+    </style>
+{% endblock %}
+{% block masthead %}
+    <h2>Suivi de projet</h2>
+{% endblock %}
+
+{% block ambglobal_body %}
+	<form method="post" {{ form_enctype(form) }} name="searchform" action="{{ path('ambglobal_projetbudget') }}"> 
+        {{ form_errors(form) }}
+        <div class="well">
+            <div class="row">
+                <div class="span3">
+                    {{ form_label(form.date_debut, "DATE DEBUT") }}
+                    {{ form_errors(form.date_debut) }}
+                    {{ form_widget(form.date_debut) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.date_fin, "DATE FIN") }}
+                    {{ form_errors(form.date_fin) }}
+                    {{ form_widget(form.date_fin) }}
+                </div>
+            </div>
+        <input type="submit" class="btn" value="Rechercher" onclick="search('show')" />  
+        <input type="submit" class="btn" value="Rechercher & Imprimer" onclick="search('print')" /> 
+        </div>
+        {{ form_rest(form) }}
+    </form>
+<div class="row">
+	<div class="span6">
+		<table class="table table-striped suivi">
+				{% for rcg in RecetteCG %}
+				<tr >
+				    <td>{{rcg.type}} </td>
+				    <td style="text-align:right">{{rcg.montant|number_format(2, ',', ' ')}} DH</td>
+			    </tr>
+			    {%endfor%}
+                <tr class="success">
+                    <td>TOTAL Recette CG Adherent</td>
+                    <td style="text-align:right">{{TotRecetteCG.total|number_format(2, ',', ' ')}} DH</td>
+                </tr>
+                <tr class="success">
+                    <td>TOTAL Recette CG Divers</td>
+                    <td style="text-align:right">{{TotRecetteDivers.total|number_format(2, ',', ' ')}} DH</td>
+                </tr>
+				<tr class="success">
+				    <td>TOTAL non-remboursé</td>
+				    <td style="text-align:right">{{ResteDesist.total|number_format(2, ',', ' ')}} DH</td>
+			    </tr>
+				<tr class="info">
+				    <td>TOTAL Depense  CG</td>
+				    <td style="text-align:right">{{TotDepenseCG.total|number_format(2, ',', ' ')}} DH</td>
+			    </tr>
+				<tr class="{%if ((TotRecetteCG.total+TotRecetteDivers.total+ResteDesist.total)-TotDepenseCG.total)<0 %}error{%else%}success{%endif%}">
+				    <td>SOLDE  CG</td>
+				    <td style="text-align:right;  font-size:16px;">
+				    {{((TotRecetteCG.total+TotRecetteDivers.total+ResteDesist.total)-TotDepenseCG.total)|number_format(2, ',', ' ')}} DH</td>
+			    </tr>
+		</table>
+	</div>
+	<div class="span6">
+		<table class="table table-striped suivi">
+                <tr class="success">
+                    <td>TOTAL Recette CA Adherent</td>
+                    <td style="text-align:right">{{TotRecetteCA.total|number_format(2, ',', ' ')}} DH</td>
+                </tr>
+				<tr class="success">
+				    <td>TOTAL Recette CA Divers</td>
+				    <td style="text-align:right">{{TotRecetteAMDivers.total|number_format(2, ',', ' ')}} DH</td>
+			    </tr>
+                <tr class="info">
+                    <td>TOTAL des restitutions</td>
+                    <td style="text-align:right">{{TotalRestitution.total|number_format(2, ',', ' ')}} DH</td>
+                </tr>
+				<tr class="info">
+				    <td>TOTAL Depense  CA</td>
+				    <td style="text-align:right">{{TotDepenseCA.total|number_format(2, ',', ' ')}} DH</td>
+			    </tr>
+
+				<tr class="{%if ((TotRecetteCA.total+TotRecetteAMDivers.total)-(TotDepenseCA.total+TotalRestitution.total))<0 %}error{%else%}success{%endif%}">
+				    <td>SOLDE  CA</td>
+				    <td style="text-align:right;  font-size:16px;">
+				    
+				    {{((TotRecetteCA.total+TotRecetteAMDivers.total)-(TotDepenseCA.total+TotalRestitution.total))|number_format(2, ',', ' ')}} DH</td>
+			    </tr>
+		</table>
+	</div>
+</div>
+<div class="row">
+    <div class="span12">
+
+        <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Total CG</th>
+                <th>Total CA </th>
+                <th>SOLDE BQ</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align:right; font-size:16px;">
+                    {{((TotRecetteCG.total+TotRecetteDivers.total+ResteDesist.total)-TotDepenseCG.total)|number_format(2, ',', ' ')}} DH
+                    </td>
+                    <td style="text-align:right; font-size:16px;">
+                    {{((TotRecetteCA.total+TotRecetteAMDivers.total)-(TotDepenseCA.total+TotalRestitution.total))|number_format(2, ',', ' ')}} DH
+                    </td>
+                    <td style="text-align:right; font-size:16px;">
+                    {{(((TotRecetteCG.total+TotRecetteDivers.total+ResteDesist.total)-TotDepenseCG.total)+((TotRecetteCA.total+TotRecetteAMDivers.total)-(TotDepenseCA.total+TotalRestitution.total)))|number_format(2, ',', ' ')}} DH
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<SCRIPT LANGUAGE="JavaScript">
+        function search(option){
+            if(option == 'print'){
+                document.searchform.action = "{{ path('ambglobal_projetbudget', {'print': 'print'}) }}";
+                document.searchform.submit();
+            }else{
+                document.searchform.action = "{{ path('ambglobal_projetbudget') }}";
+                document.searchform.submit();
+            }
+        }
+        </SCRIPT>
+{% endblock %}

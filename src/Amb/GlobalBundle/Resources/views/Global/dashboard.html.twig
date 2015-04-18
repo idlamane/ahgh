@@ -1,0 +1,169 @@
+{% extends "AmbGlobalBundle::dashboard_layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+	<script type="text/javascript">
+		google.load("visualization", "1", {packages:["corechart"]});
+		google.load('visualization', '1', {packages:['table']});
+		google.setOnLoadCallback(drawChart);
+		google.setOnLoadCallback(drawTable);
+		function drawChart() {
+
+
+			var data2 = google.visualization.arrayToDataTable([
+	          ['libelle',     'Valeur'],
+	          ['Encaissement',     {{situationappt.versement|number_format(2, '.', '')}}],
+	          ['Solde',     {{(situationappt.cout_global-(situationappt.versement+situationappt.invalid))|number_format(2, '.', '')}}],
+	          ['Portefeuille',      {{situationappt.invalid|number_format(2, '.', '')}}],
+	          ['Impayee',  {{situationappt.impayee|number_format(2, '.', '')}}]
+	        ]);
+
+	        var options2 = {
+	          title: 'Situation de {{situationappt.nbr}} appts, le cout global : {{situationappt.cout_global|number_format(2, ',', ' ')}}',
+	          is3D: true
+	        };
+
+	        var chart2 = new google.visualization.PieChart(document.getElementById('chart_div2'));
+	        chart2.draw(data2, options2);
+
+
+			var data3 = google.visualization.arrayToDataTable([
+	          ['Task', 'Hours per Day'],
+	          {% for StC in SituationConventions %}
+			  	['{{StC.fournisseur}}', {{(StC.montant-StC.reglement)|number_format(2, '.', '')}}],
+			  {%endfor%}
+	        ]);
+
+	        var options3 = {
+	          title: 'Situation des conventions : Total des solde {{(SumSituationConvention.montant-SumSituationConvention.reglement)|number_format(2, ',', ' ')}}',
+	          is3D: true
+	        };
+
+	        var chart3 = new google.visualization.PieChart(document.getElementById('chart_div3'));
+	        chart3.draw(data3, options3);
+
+
+			var data4 = google.visualization.arrayToDataTable([
+	          ['Task', 'Hours per Day'],
+	          {% for ApC in AppartsParCout %}
+			  	['OC {{ApC.cout}}', {{ApC.nbr|number_format(2, '.', '')}}],
+			  {%endfor%}
+	          {% for AplC in AppartsLibreParCout %}
+			  	['LIB {{AplC.cout}}', {{AplC.nbr|number_format(2, '.', '')}}],
+			  {%endfor%}
+	        ]);
+
+	        var options4 = {
+	          title: 'Total des appartements grouper par (Cout/M²) ',
+	          is3D: true
+	        };
+
+	        var chart4 = new google.visualization.PieChart(document.getElementById('chart_div4'));
+	        chart4.draw(data4, options4);
+		}
+
+		function drawTable() {
+	        var data = new google.visualization.DataTable();
+	        data.addColumn('string', 'Type');
+	        data.addColumn('number', 'Montant');
+	        data.addRows([
+	          ['Encaissement',  {v: {{situationappt.versement}}, f: '{{situationappt.versement|number_format(2, '.', ' ')}}'}],
+	          ['Portefeuille',   {v:{{situationappt.invalid}},   f: '{{situationappt.invalid|number_format(2, '.', ' ')}}'}],
+	          ['Impayee', {v: {{situationappt.impayee}}, f: '{{situationappt.impayee|number_format(2, '.', ' ')}}'}],
+	          ['Solde',   {v: {{(situationappt.cout_global-(situationappt.versement+situationappt.invalid))}},  f: '{{(situationappt.cout_global-(situationappt.versement+situationappt.invalid))|number_format(2, '.', ' ')}}'}]
+	        ]);
+	        var table = new google.visualization.Table(document.getElementById('table_div'));
+	        table.draw(data, {showRowNumber: true});
+
+
+	        var data2 = new google.visualization.DataTable();
+	        data2.addColumn('string', 'Intervenant');
+	        data2.addColumn('number', 'Montant');
+	        data2.addRows([
+	          {% for StC in SituationConventions %}
+			  	['{{StC.fournisseur}}',  {v: {{StC.montant-StC.reglement}}, f: '{{(StC.montant-StC.reglement)|number_format(2, '.', ' ')}}'}],
+			  {%endfor%}
+	        ]);
+	        var table = new google.visualization.Table(document.getElementById('table_depense'));
+	        table.draw(data2, {showRowNumber: true});
+
+
+	        var data3 = new google.visualization.DataTable();
+	        {% set totappt = 0 %}
+	        {% set totsupapp = 0 %}
+	        {% set totsuptj = 0 %}
+	        {% set totcout = 0 %}
+	        data3.addColumn('string', 'Statut');
+	        data3.addColumn('number', 'Cout/M²');
+	        data3.addColumn('number', 'Total');
+	        data3.addColumn('number', 'Sup appt');
+	        data3.addColumn('number', 'Sup Terr+Jar');
+	        data3.addColumn('number', 'Cout global');
+	        data3.addRows([
+	          {% for ApC in AppartsParCout %}
+	          	{% set totappt = totappt+ApC.nbr %}
+	          	{% set totsupapp = totsupapp+ApC.surface_appt %}
+	          	{% set totsuptj = totsuptj+(ApC.surface_terrace+ApC.surface_jardin) %}
+	          	{% set totcout = totcout+((ApC.surface_appt+ApC.surface_terrace)*ApC.cout) %}
+			  	[ 'OC',
+			  	  {v: {{ApC.cout}}, f: '{{(ApC.cout)|number_format(2, '.', ' ')}}'},
+			  	  {v: {{ApC.nbr}}, f: '{{(ApC.nbr)|number_format(0, '.', ' ')}}'},
+			  	  {v: {{ApC.surface_appt}}, f: '{{(ApC.surface_appt)|number_format(2, '.', ' ')}} m2'},
+			  	  {v: {{(ApC.surface_terrace+ApC.surface_jardin)}}, f: '{{(ApC.surface_terrace+ApC.surface_jardin)|number_format(2, '.', ' ')}} m2'},
+			  	  {v: {{(ApC.surface_appt+ApC.surface_terrace)*ApC.cout}}, f: '{{((ApC.surface_appt+ApC.surface_terrace)*ApC.cout)|number_format(2, '.', ' ')}}'}
+			  	], 
+			  {%endfor%}
+	          {% for AplC in AppartsLibreParCout %}
+	          	{% set totappt = totappt+AplC.nbr %}
+	          	{% set totsupapp = totsupapp+AplC.surface_appt %}
+	          	{% set totsuptj = totsuptj+(AplC.surface_terrace+AplC.surface_jardin) %}
+	          	{% set totcout = totcout+((AplC.surface_appt+AplC.surface_terrace)*AplC.cout) %}
+			  	[ 'LIB',
+			  	  {v: {{AplC.cout}}, f: '{{(AplC.cout)|number_format(2, '.', ' ')}}'},
+			  	  {v: {{AplC.nbr}}, f: '{{(AplC.nbr)|number_format(0, '.', ' ')}}'},
+			  	  {v: {{AplC.surface_appt}}, f: '{{(AplC.surface_appt)|number_format(2, '.', ' ')}} m2'},
+			  	  {v: {{(AplC.surface_terrace+AplC.surface_jardin)}}, f: '{{(AplC.surface_terrace+AplC.surface_jardin)|number_format(2, '.', ' ')}} m2'},
+			  	  {v: {{(AplC.surface_appt+AplC.surface_terrace)*AplC.cout}}, f: '{{((AplC.surface_appt+AplC.surface_terrace)*AplC.cout)|number_format(2, '.', ' ')}}'}
+			  	],
+			  {%endfor%}
+			  	[ '',
+			  	  {v: 0, f: 'TOTAL'},
+			  	  {v: {{totappt}}, f: '{{totappt|number_format(2, '.', ' ')}}'},
+			  	  {v: {{totsupapp}}, f: '{{totsupapp|number_format(2, '.', ' ')}} m2'},
+			  	  {v: {{totsuptj}}, f: '{{totsuptj|number_format(2, '.', ' ')}} m2'},
+			  	  {v: {{totcout}}, f: '{{totcout|number_format(2, '.', ' ')}}'}
+			  	],
+	        ]);
+	        var table = new google.visualization.Table(document.getElementById('table_apc'));
+	        table.draw(data3, {showRowNumber: true});
+      }
+	</script>
+    
+{% endblock %}
+
+{% block ambglobal_body %}
+    <div class="span6"> 
+      	<div id="chart_div2" style="width: 100%; height: 400px;"></div>
+    </div>
+    <div class="span5"> 
+      	<div id="table_div" style="width: 100%;margin-top:20px "></div>
+    </div>
+
+    <div class="span6"> 
+      	<div id="chart_div3" style="width: 100%; height: 400px;"></div>
+    </div>
+    <div class="span5"> 
+      	<div id="table_depense" style="width: 100%;margin-top:20px "></div>
+    </div>
+
+    <div class="span7"> 
+      	<div id="chart_div4" style="width: 100%; height: 400px;"></div>
+    </div>
+    <div class="span8"> 
+      	<div id="table_apc" style="width: 100%;margin-top:20px "></div>
+    </div>
+{% endblock %}

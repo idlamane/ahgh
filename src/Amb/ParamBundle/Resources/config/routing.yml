@@ -1,0 +1,27 @@
+ambbanque_accueil:
+    pattern:  /list-compte.{format}
+    defaults:  { _controller: AmbParamBundle:Banque:index, format: html }
+    requirements:
+        format: html
+
+ambbanque_detail:
+    pattern:  /detail-banque/{id}
+    defaults:  { _controller: AmbParamBundle:Banque:detail_banque }
+    requirements:
+        id: \d*
+
+ambbanque_ajouter:
+    pattern:  /add-banque
+    defaults:  { _controller: AmbParamBundle:Banque:add_banque}
+
+ambbanque_modifier:
+    pattern:  /update-banque/{id}
+    defaults:  { _controller: AmbParamBundle:Banque:update_banque }
+    requirements:
+        id: \d*
+
+ambbanque_delete:
+    pattern:  /delete-banque/{id}
+    defaults:  { _controller: AmbParamBundle:Banque:delete_banque }
+    requirements:
+        id: \d*

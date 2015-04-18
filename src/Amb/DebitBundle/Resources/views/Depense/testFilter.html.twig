@@ -1,0 +1,28 @@
+{% extends "AmbDebitBundle::depense_layout.html.twig" %}
+
+{% block title %}
+    Ajouter - {{ parent() }}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+        	$('.date').datepicker({ dateFormat: 'dd-mm-yy' }) ;
+        	$('.date').datepicker('setValue', new Date()) ;
+
+        } );
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block ambdebit_body %}
+
+    <form method="get" {{ form_enctype(form) }}>
+	{{ form_errors(form) }}
+	    {{ form_rest(form) }}
+	    <input type="submit" name="submit-filter" value="filter" />
+	</form>
+
+{% endblock %}

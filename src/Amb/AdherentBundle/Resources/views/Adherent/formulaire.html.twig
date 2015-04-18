@@ -1,0 +1,172 @@
+<div class="well">
+	<h3>Formulaire d'adhérent</h3>
+
+	<form method="post" {{ form_enctype(form) }}>
+	{{ form_errors(form) }}
+	<div class="well">
+		<div class="row">
+			<div class="span5">
+				<div>
+				    {{ form_label(form.civilite, "CIVILITE") }}
+				    {{ form_errors(form.civilite) }}
+				    {{ form_widget(form.civilite) }}
+				</div>
+				<div>
+				    {{ form_label(form.date_n, "DATE DE NAISSANCE (ex. 31-05-1971)") }}
+				    {{ form_errors(form.date_n) }}
+				    {{ form_widget(form.date_n) }}
+				</div>
+				<div>
+				    {{ form_label(form.etat_civile, "ETAT CIVIL") }}
+				    {{ form_errors(form.etat_civile) }}
+				    {{ form_widget(form.etat_civile) }}
+				</div>
+			</div>
+
+			<div class="span3">
+				<div>
+				    {{ form_label(form.nom_prenom, "NOM ET PRENOM") }}
+				    {{ form_errors(form.nom_prenom) }}
+				    {{ form_widget(form.nom_prenom) }}
+				</div>
+				<div>
+				    {{ form_label(form.cin, "CIN") }}
+				    {{ form_errors(form.cin) }}
+				    {{ form_widget(form.cin) }}
+				</div>
+				<div>
+				    {{ form_label(form.adress, "ADRESSE") }}
+				    {{ form_errors(form.adress) }}
+				    {{ form_widget(form.adress) }}
+				</div>
+			</div>
+			<div class="span3">
+				<div>
+				    {{ form_label(form.tel, "TELEPHONE 1") }}
+				    {{ form_errors(form.tel) }}
+				    {{ form_widget(form.tel) }}
+				</div>
+				<div>
+				    {{ form_label(form.tel2, "TELEPHONE 2") }}
+				    {{ form_errors(form.tel2) }}
+				    {{ form_widget(form.tel2) }}
+				</div>
+				<div>
+				    {{ form_label(form.mobile, "MOBILE 1") }}
+				    {{ form_errors(form.mobile) }}
+				    {{ form_widget(form.mobile) }}
+				</div>
+				<div>
+				    {{ form_label(form.mobile2, "MOBILE 2") }}
+				    {{ form_errors(form.mobile2) }}
+				    {{ form_widget(form.mobile2) }}
+				</div>
+				<div>
+				    {{ form_label(form.fax, "FAX") }}
+				    {{ form_errors(form.fax) }}
+				    {{ form_widget(form.fax) }}
+				</div>
+				<div>
+				    {{ form_label(form.email, "EMAIL") }}
+				    {{ form_errors(form.email) }}
+				    {{ form_widget(form.email) }}
+				</div>
+			</div>
+		</div>	
+	</div>
+	<div class="well">
+		<div class="row">
+			<div class="span5">
+				<div>
+				    {{ form_label(form.profession, "PROFESSION") }}
+				    {{ form_errors(form.profession) }}
+				    {{ form_widget(form.profession) }}
+				</div>
+				<div>
+				    {{ form_label(form.banque, "BANQUE") }}
+				    {{ form_errors(form.banque) }}
+				    {{ form_widget(form.banque) }}
+				</div>
+			</div>
+			<div class="span5">
+				<div>
+				    {{ form_label(form.n_compte_bq, "N° COMPTE BANCAIRE") }}
+				    {{ form_errors(form.n_compte_bq) }}
+				    {{ form_widget(form.n_compte_bq) }}
+				</div>
+				<div>
+				    {{ form_label(form.attest_rib, "ATTESTATION DE RIB") }}
+				    {{ form_errors(form.attest_rib) }}
+				    {{ form_widget(form.attest_rib) }}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="well">
+		<div class="row">
+			<div class="span5">
+				<div>
+				    {{ form_label(form.nom_pere, "NOM PERE") }}
+				    {{ form_errors(form.nom_pere) }}
+				    {{ form_widget(form.nom_pere) }}
+				</div>
+				<div>
+				    {{ form_label(form.nom_mere, "NOM MERE") }}
+				    {{ form_errors(form.nom_mere) }}
+				    {{ form_widget(form.nom_mere) }}
+				</div>
+				<div>
+				    {{ form_label(form.date_mariage, "DATE MARIAGE") }}
+				    {{ form_errors(form.date_mariage) }}
+				    {{ form_widget(form.date_mariage) }}
+				</div>
+				<div>
+				    {{ form_label(form.nb_enfant, "NOMBRE D'ENFANTS") }}
+				    {{ form_errors(form.nb_enfant) }}
+				    {{ form_widget(form.nb_enfant) }}
+				</div>
+			</div>
+			<div class="span5">
+				<div>
+				    {{ form_label(form.nom_conjoint, "NOM ET PRENOM CONJONT") }}
+				    {{ form_errors(form.nom_conjoint) }}
+				    {{ form_widget(form.nom_conjoint) }}
+				</div>
+				<div>
+				    {{ form_label(form.cin_conj, "CIN CONJONT") }}
+				    {{ form_errors(form.cin_conj) }}
+				    {{ form_widget(form.cin_conj) }}
+				</div>
+				<div>
+				    {{ form_label(form.date_n_conj, "DATE DE NAISSANCE DU CONJONT") }}
+				    {{ form_errors(form.date_n_conj) }}
+				    {{ form_widget(form.date_n_conj) }}
+				</div>
+				<div>
+				    {{ form_label(form.prenom_enf, "PRENOM DES ENFANTS") }}
+				    {{ form_errors(form.prenom_enf) }}
+				    {{ form_widget(form.prenom_enf) }}
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="well">
+		<div class="row">
+			<div class="span11">				
+				<div>
+				    {{ form_label(form.commentaire, "COMMENTAIRE") }}
+				    {{ form_errors(form.commentaire) }}
+				    {{ form_widget(form.commentaire) }}
+				</div>
+				
+					{{ form_rest(form) }}
+			</div>
+		</div>
+	</div>
+
+	<input type="submit" class="btn btn-primary" value="Enregistrer" />	
+    </form>
+</div>

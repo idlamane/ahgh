@@ -1,0 +1,10 @@
+parameters:
+#    amb_trace.example.class: Amb\TraceBundle\Example
+
+services:
+#    amb_trace.example:
+#        class: %amb_trace.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]services:
+    amb_trace.traceability:
+        class: Amb\TraceBundle\Service\Traceability
+        arguments: [@service_container, @doctrine.orm.entity_manager]

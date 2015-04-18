@@ -1,0 +1,72 @@
+{% extends "AmbContratBundle:Contrat:gl_contrat.pdf.twig" %}
+
+{% block test %}
+<table class="gl">
+                <tr>
+                    <td class="titre">Date</td>
+                    <td class="titre">Mode</td>
+                    <td class="titre">Piece</td>
+                    <td class="titre">Banque</td>
+                    <td class="titre">Libelle</td>
+                    <td class="titre">Debit</td>
+                    <td class="titre">Crédit</td>
+                    <td class="titre">Solde</td>
+                </tr>
+    {% set grand_total_sum = 0 %}
+    {% set grand_total_contrat = 0 %}
+    {% for fournisseur in fournisseurs %}
+        {% if  fournisseur.contrats.count > 0 %}
+            <tr>
+                <td class="titre" colspan="5" style="text-align:left">{{ fournisseur.RaisonSocial }}</td>
+                        <td class="number"></td>
+                        <td class="number"></td>
+                        <td class="number"></td>
+            </tr> 
+            {% set total_sum = 0 %}
+            {% set total_contrat = 0 %}
+            {% for contrat in fournisseur.contrats %}
+                {% set sum = 0 %}
+                {% for r in contrat.depenses %}            
+                   {% set sum = sum + r.montant %}        
+                {% endfor %} 
+                <tr>
+                    <td  >{{ contrat.dateDebut|date('d/m/Y') }}</td>
+                    <td colspan="4" >{{ contrat.reference }}</td>
+                    <td class="number"></td>
+                    <td class="number">{{ contrat.montant|number_format(2, ',', ' ') }}</td>
+                    <td class="number"></td>
+                </tr>
+                {% for reglement in contrat.depenses %}
+                    <tr>
+                        <td >{{ reglement.dateOperation|date('d/m/Y')  }}</td>
+                        <td >{{ reglement.modeRetrait }}</td>
+                        <td >{{ reglement.NPiece }}</td>
+                        <td >{{ reglement.banque.nom }}</td>
+                        <td >{{ reglement.libelle }}</td>
+                        <td class="number">{{ reglement.montant|number_format(2, ',', ' ') }}</td>
+                        <td class="number"></td>
+                        <td class="number"></td>
+                    </tr>
+                {% endfor %}
+                {% set total_sum = total_sum + sum %}
+                {% set total_contrat = total_contrat + contrat.montant %}
+            {% endfor %}
+                {% set solde_frs = total_contrat - total_sum %} 
+                <tr>
+                    <td class="titre" colspan="5">TOTAL</td>
+                    <td class="number">{{ total_sum|number_format(2, ',', ' ') }}</td>
+                    <td class="number">{{ total_contrat|number_format(2, ',', ' ') }}</td>
+                    <td class="number">{{ solde_frs|number_format(2, ',', ' ') }}</td>
+                </tr>
+                {% set grand_total_sum = grand_total_sum + total_sum %}
+                {% set grand_total_contrat = grand_total_contrat + total_contrat %}
+        {% endif %}
+    {% endfor %}
+        <tr>
+            <td class="titre" colspan="5">TOTAUX</td>
+            <td class="number" style="font-weight:bold">{{ grand_total_sum|number_format(2, ',', ' ') }}</td>
+            <td class="number" style="font-weight:bold">{{ grand_total_contrat|number_format(2, ',', ' ') }}</td>
+            <td class="number" style="font-weight:bold">{{ (grand_total_contrat-grand_total_sum)|number_format(2, ',', ' ') }}</td>
+        </tr>
+</table>
+{% endblock %}

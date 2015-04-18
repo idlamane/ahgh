@@ -1,0 +1,52 @@
+ambglobal_dashboard:
+    pattern:  /dashboard1
+    defaults: { _controller: AmbGlobalBundle:Global:dashboard }
+
+ambglobal_dashboard2:
+    pattern:  /dashboard2/{annee}
+    defaults: { _controller: AmbGlobalBundle:Global:dashboard2 }
+    requirements:
+        annee: \d*
+
+ambglobal_projetbudget:
+    pattern:  /projectbudget/{print}
+    defaults: { _controller: AmbGlobalBundle:Global:ProjetBudget, print: 0 }
+    requirements:
+        print: print
+
+ambglobal_exrecice:
+    pattern:  /exercice/{format}
+    defaults: { _controller: AmbGlobalBundle:Global:exercice, format: html }
+    requirements:
+        format: html|pdf
+
+ambglobal_journal:
+    pattern:  /journal/{print}
+    defaults: { _controller: AmbGlobalBundle:Global:JournalTransaction, print: 0}
+    requirements:
+        print: print
+
+ambscann_ajouter:
+    pattern:  /add-scann/{type}/{id}
+    defaults:  { _controller: AmbGlobalBundle:Scann:add_scann  }
+    requirements:
+        type: adhs|frs
+        id: \d*
+
+ambscann_delete:
+    pattern:  /delete-scann/{type}/{id}
+    defaults:  { _controller: AmbGlobalBundle:Scann:delete_scann  }
+    requirements:
+        type: adhs|frs
+        id: \d*
+
+ambscann_list:
+    pattern:  /list-scann/{type}.{format}
+    defaults:  { _controller: AmbGlobalBundle:Scann:list_scann, format: html  }
+    requirements:
+        type: adhs|frs
+        format: html|pdf
+
+ambscann_download:
+    pattern:  /download-scann/{filename}
+    defaults: { _controller: AmbGlobalBundle:Scann:download_scan }

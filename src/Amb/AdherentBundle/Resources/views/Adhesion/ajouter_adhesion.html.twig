@@ -1,0 +1,12 @@
+{% extends "AmbAdherentBundle::layout.html.twig" %}
+
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block ambadherent_body %}
+
+    <h2>Ajouter une adhésion</h2>
+    {% include "AmbAdherentBundle:Adhesion:formulaire_adhesion.html.twig" %}
+
+{% endblock %}

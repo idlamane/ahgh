@@ -1,0 +1,33 @@
+{# src/Amb/AdherentBundle/Resources/views/Adherent/index.html.twig #}
+
+{% extends "AmbAdherentBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Liste des appartements
+{% endblock %}
+{% block masthead %}
+    <h2>Gestion des désistements</h2>
+{% endblock %}
+{% block ambadherent_body %}
+<div class="well">
+	<h3>Veuillez choisir un adhérent pour lui affecter l'appt N° {{adhesion.matricule}} et ses encaissements</h3>
+
+    <form method="post" {{ form_enctype(form) }} action="{{ path('ambadherent_adddesistement', {'id': adhesion.id, 'type':'transappt'}) }}">
+		{{ form_errors(form) }}
+		<div class="well">
+			<div class="row">
+				<div class="span5">
+					<div>
+					    {{ form_label(form.adherent, "ADHERENT") }}
+					    {{ form_errors(form.adherent) }}
+					    {{ form_widget(form.adherent) }}
+					</div>
+				</div>
+			</div>	
+		</div>
+		
+		{{ form_rest(form) }}
+		<input type="submit" class="btn btn-primary" />
+	</form>			
+</div>
+{% endblock %}

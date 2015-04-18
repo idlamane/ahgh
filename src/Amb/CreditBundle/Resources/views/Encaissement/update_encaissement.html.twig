@@ -1,0 +1,14 @@
+{% extends "AmbCreditBundle::formlayout.html.twig" %}
+
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block ambcredit_body %}
+	{% set operation = 'update' %}
+    <h2>Modifier un encaissement</h2>
+    {% include "AmbCreditBundle:Encaissement:form_encaissement.html.twig" %}
+
+    {{ parent() }}
+
+{% endblock %}

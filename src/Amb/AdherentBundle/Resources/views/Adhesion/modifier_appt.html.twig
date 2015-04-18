@@ -1,0 +1,12 @@
+{% extends "AmbAdherentBundle::layout.html.twig" %}
+
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block ambadherent_body %}
+
+    <h2>Changer l'appartement du dossier N° {{ adhesion.matricule }}, adherent : {{ adhesion.Adherent.NomPrenom }}</h2>
+    {% include "AmbAdherentBundle:Adhesion:formulaire_appt.html.twig" %}
+    
+{% endblock %}

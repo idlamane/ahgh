@@ -1,0 +1,95 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+<style>
+table.versement {margin:10px auto; width:700px}
+table.versement td,table.versement th{
+    border:solid 1px #000;
+    padding: 0 2mm;
+}
+table.versement th{
+    text-weight:bold; 
+    background:#EEE;
+    padding: 0 2mm;
+    text-align:center
+}
+.date{width:45px;}
+.adh{width:10px}
+.nom{width:200px}
+.mode{width:50px}
+.piece{width:85px}
+.type{width:200px;}
+.libelle{width:160px;}
+.enc,.dep{width:100px}
+h4{margin:3px 0}
+</style>
+<h2>Liste des encaissements : du {{date_debut|date('d/m/Y')}} au {{date_fin|date('d/m/Y')}}</h2>
+
+<table class="versement" >
+    <thead>
+          <tr>
+            <th>Date</th>
+            <th>Nom et Prenom</th>
+            <th>Adh</th>
+            <th>Piece N°</th>
+            <th>Mode</th>
+            <th>Type d'encaissement</th>
+            <th>Montant</th>
+            <th>Statut</th>
+          </tr>
+    </thead>
+    <tbody>
+        {% for encaissement in encaissements %}
+            <tr>
+                <td class="date">{{ encaissement.DateOperation|date('d/m/Y') }}</td>
+                <td class="nom">{{ encaissement.adherent.NomPrenom| truncate(25, true, '...') }}</td>
+                <td class="adh" style="text-align:right">
+                    {{ encaissement.matricule }}
+                </td>
+                <td class="piece">{{ encaissement.NumPiece }}</td>
+                <td class="mode">{{ encaissement.ModeEncaissement| truncate(7, true, '') }}</td>
+                <td class="type">
+                    {%if encaissement.TypeEncaissment == 'FRAIS DE GESTION' %}
+                        {{ encaissement.TypeEncaissment }} {{ encaissement.AnneeGestion }}
+                    {%else%}{{ encaissement.TypeEncaissment }} {%endif%}
+                </td>
+                <td style="text-align:right">{{ encaissement.Montant|number_format(2, ',', ' ')  }}</td>
+                <td>{{ encaissement.Statut }}</td>
+            </tr>
+        {% endfor %} 
+
+        <tr>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none">TOTAL (valide)</td>
+            <td style="text-align:right; background:#EEE">{{valid|number_format(2, ',', ' ')  }}</td>
+            <td style="border:none"></td>
+            
+        </tr> 
+        <tr>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none">TOTAL (invalide)</td>
+            <td style="text-align:right; background:#EEE">{{invalid|number_format(2, ',', ' ')  }}</td>
+            <td style="border:none"></td>
+            
+        </tr> 
+        <tr>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none">TOTAL (impayée)</td>
+            <td style="text-align:right; background:#EEE">{{impayee|number_format(2, ',', ' ')  }}</td>
+            <td style="border:none"></td>
+            
+        </tr> 
+    </tbody>
+</table>
+{% endblock %}

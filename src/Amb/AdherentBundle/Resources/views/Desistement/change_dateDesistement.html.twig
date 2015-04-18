@@ -1,0 +1,39 @@
+{# src/Amb/AdherentBundle/Resources/views/Adherent/index.html.twig #}
+
+{% extends "AmbAdherentBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Modifier date de desistement
+{% endblock %}
+{% block masthead %}
+    <h2>Gestion des désistements</h2>
+{% endblock %}
+{% block ambadherent_body %}
+<div class="well">
+	<h3>
+		{%if type == 'new' %}
+			L'opération est effectuer avec succès, veuillez maintenant saisir la date du desistement (Dossier N° {{dossier}} ) :
+		{%else%}
+			Veuillez changer la date du desistement (Dossier N° {{dossier}} ) :
+		{%endif%}
+	</h3>
+
+    <form method="post" {{ form_enctype(form) }} action="{{ path('ambadherent_changedatedesistement', {'id': id}) }}">
+		{{ form_errors(form) }}
+		<div class="well">
+			<div class="row">
+				<div class="span5">
+					<div>
+					    {{ form_label(form.date_desistement, "DATE DESISTEMENT") }}
+					    {{ form_errors(form.date_desistement) }}
+					    {{ form_widget(form.date_desistement) }}
+					</div>
+				</div>
+			</div>	
+		</div>
+		
+		{{ form_rest(form) }}
+		<input type="submit" class="btn btn-primary" />
+	</form>			
+</div>
+{% endblock %}

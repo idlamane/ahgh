@@ -1,0 +1,332 @@
+<?php
+
+namespace Amb\CreditBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+/**
+ * Amb\CreditBundle\Entity\Quitance
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Amb\CreditBundle\Entity\QuitanceRepository")
+ */
+class Quitance
+{
+	/**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var integer $mode_encaissement
+     *
+     * @ORM\Column(name="mode_encaissement", type="string", length=255, nullable=true)
+     * 
+     */
+    private $mode_encaissement;
+
+    /**
+     * @var integer $n_quitance
+     *
+     * @ORM\Column(name="n_quitance", type="string", length=255, nullable=true)
+     * 
+     */
+    private $n_quitance;
+
+    /**
+     * @var integer $num_piece
+     *
+     * @ORM\Column(name="num_piece", type="string", length=255, nullable=true)
+     */
+    private $num_piece;
+
+    /**
+     * @var integer $montant
+     *
+     * @ORM\Column(name="montant", type="float", nullable=true)
+     * 
+     */
+    private $montant;
+    
+    /**
+     * @var \DateTime $date_Operation
+     *
+     * @ORM\Column(name="date_Operation", type="date")
+     * @Assert\NotBlank()
+     */
+    private $date_Operation;
+
+    /**
+     * @var string $commentaire
+     *
+     * @ORM\Column(name="commentaire", type="text", nullable=true)
+     */
+    private $commentaire;
+
+    /**
+     * @var integer $matricule
+     *
+     * @ORM\Column(name="matricule", type="integer", nullable=true)
+     * 
+     */
+    private $matricule;
+
+    /**
+     * @var integer $adherent
+     *
+     * @ORM\Column(name="adherent", type="string", length=255, nullable=true)
+     * 
+     */
+    private $adherent;
+
+    /**
+     * @var integer $appartement
+     *
+     * @ORM\Column(name="appartement", type="string", length=255, nullable=true)
+     * 
+     */
+    private $appartement;
+
+    /**
+     * @var \DateTime $created_at
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created_at", type="datetime", nullable=true)
+     */
+    private $created_at;
+    
+    /**
+     * @var \DateTime $updated_at
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updated_at;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Amb\CreditBundle\Entity\Encaissement", mappedBy="quitance")
+     */
+    private $encaissement;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set mode_encaissement
+     *
+     * @param string $modeEncaissement
+     * @return Quitance
+     */
+    public function setModeEncaissement($modeEncaissement)
+    {
+        $this->mode_encaissement = $modeEncaissement;
+    
+        return $this;
+    }
+
+    /**
+     * Get mode_encaissement
+     *
+     * @return string 
+     */
+    public function getModeEncaissement()
+    {
+        return $this->mode_encaissement;
+    }
+
+    /**
+     * Set num_piece
+     *
+     * @param string $numPiece
+     * @return Quitance
+     */
+    public function setNumPiece($numPiece)
+    {
+        $this->num_piece = $numPiece;
+    
+        return $this;
+    }
+
+    /**
+     * Get num_piece
+     *
+     * @return string 
+     */
+    public function getNumPiece()
+    {
+        return $this->num_piece;
+    }
+
+    /**
+     * Set montant
+     *
+     * @param float $montant
+     * @return Quitance
+     */
+    public function setMontant($montant)
+    {
+        $this->montant = $montant;
+    
+        return $this;
+    }
+
+    /**
+     * Get montant
+     *
+     * @return float 
+     */
+    public function getMontant()
+    {
+        return $this->montant;
+    }
+
+    /**
+     * Set date_Operation
+     *
+     * @param \DateTime $dateOperation
+     * @return Quitance
+     */
+    public function setDateOperation($dateOperation)
+    {
+        $this->date_Operation = $dateOperation;
+    
+        return $this;
+    }
+
+    /**
+     * Get date_Operation
+     *
+     * @return \DateTime 
+     */
+    public function getDateOperation()
+    {
+        return $this->date_Operation;
+    }
+
+    /**
+     * Set commentaire
+     *
+     * @param string $commentaire
+     * @return Quitance
+     */
+    public function setCommentaire($commentaire)
+    {
+        $this->commentaire = $commentaire;
+    
+        return $this;
+    }
+
+    /**
+     * Get commentaire
+     *
+     * @return string 
+     */
+    public function getCommentaire()
+    {
+        return $this->commentaire;
+    }
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Quitance
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Set updated_at
+     *
+     * @param \DateTime $updatedAt
+     * @return Quitance
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updated_at = $updatedAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get updated_at
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * Set encaissement
+     *
+     * @param \Amb\CreditBundle\Entity\Encaissement $encaissement
+     * @return Quitance
+     */
+    public function setEncaissement(\Amb\CreditBundle\Entity\Encaissement $encaissement = null)
+    {
+        $this->encaissement = $encaissement;
+    
+        return $this;
+    }
+
+    /**
+     * Get encaissement
+     *
+     * @return \Amb\CreditBundle\Entity\Encaissement 
+     */
+    public function getEncaissement()
+    {
+        return $this->encaissement;
+    }
+
+    /**
+     * Set n_quitance
+     *
+     * @param string $nQuitance
+     * @return Quitance
+     */
+    public function setNQuitance($nQuitance)
+    {
+        $this->n_quitance = $nQuitance;
+    
+        return $this;
+    }
+
+    /**
+     * Get n_quitance
+     *
+     * @return string 
+     */
+    public function getNQuitance()
+    {
+        return $this->n_quitance;
+    }
+}

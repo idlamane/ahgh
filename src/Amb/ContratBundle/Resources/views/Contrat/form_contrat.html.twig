@@ -1,0 +1,58 @@
+<div class="well">
+	<h3>Formulaire des contrats</h3>
+
+	<form method="post" {{ form_enctype(form) }}>
+	{{ form_errors(form) }}
+	<div class="well">
+		<div class="row">
+			<div class="span3">
+				<div>
+				    {{ form_label(form.reference, "REFERENCE") }}
+				    {{ form_errors(form.reference) }}
+				    {{ form_widget(form.reference) }}
+				</div>
+				<div>
+				    {{ form_label(form.date_debut, "CONVENTION DU") }}
+				    {{ form_errors(form.date_debut) }}
+				    {{ form_widget(form.date_debut) }}
+				</div>
+				<div>
+				    {{ form_label(form.date_resiliation, "DATE DE RESILIATION") }}
+				    {{ form_errors(form.date_resiliation) }}
+				    {{ form_widget(form.date_resiliation) }}
+				</div>
+			</div>
+			<div class="span3">
+				<div>
+				    {{ form_label(form.montant, "MONTANT") }}
+				    {{ form_errors(form.montant) }}
+				    {{ form_widget(form.montant) }}
+				</div>
+			</div>
+
+			<div class="span3">
+				<div>
+				    {{ form_label(form.fournisseur, "INTERVENANT") }}
+				    {{ form_errors(form.fournisseur) }}
+				    {{ form_widget(form.fournisseur) }}
+				</div>
+			</div>
+		</div>	
+
+		<div class="row">
+			<div class="span5">
+				<div>
+				    {{ form_label(form.commentaire, "COMMENTAIRE") }}
+				    {{ form_errors(form.commentaire) }}
+				    {{ form_widget(form.commentaire) }}
+				</div>				
+				<div>
+				    {{ form_rest(form) }}
+				</div>
+			</div>
+		</div>	
+	</div>
+
+	<input type="submit" class="btn btn-primary" value="Enregistrer" />	
+    </form>
+</div>

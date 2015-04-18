@@ -1,0 +1,36 @@
+{% extends "AmbCreditBundle::formlayout.html.twig" %}
+
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+{% block ambcredit_body %}
+	{% set operation = 'add' %}
+    <h2>Ajouter un encaissement</h2>
+    <p>Adhérent : {{ adhesion.adherent.NomPrenom}}<br>	
+    Dossier : {{ adhesion.matricule}}<br>
+    Appt : {{ adhesion.ImmGroup}} {{ adhesion.Immeuble}} {{ adhesion.Appartement}}</p>
+    {% include "AmbCreditBundle:Encaissement:form_encaissement.html.twig" %}
+
+<script type="text/javascript">
+function onsubmitform()
+{
+  	switch (document.pressed) {
+	    case 'Enregistrer et Quitter':
+	        document.operation.action = "{{ path('ambcredit_addversement', {'appt': appt, 'action': 'end'}) }}";
+	        break;
+	    case 'Enregistrer et nouveau':
+	        document.operation.action = "{{ path('ambcredit_addversement', {'appt': appt, 'action': 'new'}) }}";
+	        break;
+	    default:
+	        document.operation.action = "{{ path('ambcredit_addversement', {'appt': appt, 'action': 'end'}) }}";
+	}
+	return true;
+}
+</script>
+    {{ parent() }}
+{% endblock %}

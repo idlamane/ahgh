@@ -1,0 +1,12 @@
+{% extends "AmbDebitBundle::depense_layout.html.twig" %}
+
+{% block title %}
+    Ajouter - {{ parent() }}
+{% endblock %}
+
+{% block ambdebit_body %}
+
+    <h2>Ajouter une dépense de caisse</h2>
+    {% include "AmbDebitBundle:Caisse:form_caisse.html.twig" %}
+
+{% endblock %}

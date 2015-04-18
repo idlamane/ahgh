@@ -1,0 +1,129 @@
+{% extends "AmbDebitBundle::layout_fournisseur.html.twig" %}
+
+{% block title %}
+    Voir - {{ parent() }}
+{% endblock %}
+
+{% block ambfrs_body %}
+
+    <h2>Consultation du fournisseur : {{ fournisseur.RaisonSocial}} </h2>
+
+<div class="well">
+    <div class="row">
+		<div class="span5">
+			<dl class="dl-horizontal">
+				<dt>Raison social </dt>
+				<dd>: {{ fournisseur.RaisonSocial}} </dd>
+
+				<dt>Patente</dt>
+				<dd>: {{ fournisseur.Patente}}</dd>
+
+				<dt>RC</dt>
+				<dd>: {{ fournisseur.Rc}}</dd>
+
+				<dt>IF</dt>
+				<dd>: {{ fournisseur.IdentifiantFiscal}}</dd>
+
+				<dt>RIB</dt>
+				<dd>: {{ fournisseur.Rib}}</dd>
+
+				<dt>Intervenant</dt>
+				<dd>: {%if fournisseur.IsIntervenant == 1 %}Oui{%else%}Non{%endif%}</dd>
+			</dl>
+		</div>
+		<div class="span5">
+			<dl class="dl-horizontal">
+
+				<dt>Tél</dt>
+				<dd>: {{ fournisseur.tel}}</dd>
+
+				<dt>Fax</dt>
+				<dd>: {{ fournisseur.fax}}</dd>
+
+				<dt>Adresse</dt>
+				<dd>: {{ fournisseur.adress}}</dd>
+
+				<dt>Ville</dt>
+				<dd>: {{ fournisseur.ville}}</dd>
+
+				<dt>Email</dt>
+				<dd>: <a href="mailto:#">{{ fournisseur.email}}</a></dd>
+			</dl>	
+		</div>	
+	</div>
+	<blockquote>
+		<small>Mission</small>
+		<p>{{ fournisseur.mission}}</p>
+	</blockquote>
+	<blockquote>
+		<small>Commentaire</small>
+		<p>{{ fournisseur.commentaire}}</p>
+	</blockquote>
+</div>
+<div class="well">
+    <div class="row">
+		<div class="span4">
+			<dl class="dl-horizontal">
+				<dt>Contact </dt>
+				<dd>{{ fournisseur.Contact1}} </dd>
+
+				<dt>Fonction</dt>
+				<dd>{{ fournisseur.Fonction1}}</dd>
+
+				<dt>Mobile</dt>
+				<dd>{{ fournisseur.Mobile1}}</dd>
+
+				<dt>E-mail</dt>
+				<dd>{{ fournisseur.Email1}}</dd>
+			</dl>
+		</div>
+		<div class="span4">
+			<dl class="dl-horizontal">
+				<dt>Contact </dt>
+				<dd>{{ fournisseur.Contact2}} </dd>
+
+				<dt>Fonction</dt>
+				<dd>{{ fournisseur.Fonction2}}</dd>
+
+				<dt>Mobile</dt>
+				<dd>{{ fournisseur.Mobile2}}</dd>
+
+				<dt>E-mail</dt>
+				<dd>{{ fournisseur.Email2}}</dd>
+			</dl>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span4">
+			<dl class="dl-horizontal">
+				<dt>Contact </dt>
+				<dd>{{ fournisseur.Contact3}} </dd>
+
+				<dt>Fonction</dt>
+				<dd>{{ fournisseur.Fonction3}}</dd>
+
+				<dt>Mobile</dt>
+				<dd>{{ fournisseur.Mobile3}}</dd>
+
+				<dt>E-mail</dt>
+				<dd>{{ fournisseur.Email3}}</dd>
+			</dl>
+		</div>
+		<div class="span4">
+			<dl class="dl-horizontal">
+				<dt>Contact </dt>
+				<dd>{{ fournisseur.Contact4}} </dd>
+
+				<dt>Fonction</dt>
+				<dd>{{ fournisseur.Fonction4}}</dd>
+
+				<dt>Mobile</dt>
+				<dd>{{ fournisseur.Mobile4}}</dd>
+
+				<dt>E-mail</dt>
+				<dd>{{ fournisseur.Email4}}</dd>
+			</dl>
+		</div>
+	</div>
+</div>
+{% endblock %}

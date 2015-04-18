@@ -1,0 +1,98 @@
+{# src/Amb/AdherentBundle/Resources/views/Adherent/index.html.twig #}
+{% extends "AmbAdherentBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Liste des appartements
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ZeroClipboard.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/TableTools.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ColVis.js') }}" type="text/javascript" /></script>
+    <script type="text/javascript" charset="utf-8">
+
+        $(document).ready(function() {
+            oTable = $('#DatatableAdhesions').dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "sDom": '<"H"TCfr>t<"F"ip>',
+                "oTableTools": {
+                    "sSwfPath": "{{ asset('swf/copy_csv_xls_pdf.swf') }}",
+                    "aButtons": [
+                        "copy", "csv", "xls", "pdf",
+                        {
+                            "sExtends":    "collection",
+                            "sButtonText": "Save",
+                            "aButtons":    [ "csv", "xls", "pdf" ]
+                        }
+                    ]
+                },
+                "oColVis": {
+                    "buttonText": "Changer les colonnes"
+                }                   
+            });
+
+        } );
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/demo_table_jui.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.8.4.custom.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/TableTools_JUI.css') }}" type="text/css" />
+{% endblock %}
+{% block masthead %}
+    <h2>Gestion des désistements</h2>
+{% endblock %}
+{% block ambadherent_body %}
+            <h3>Veuillez choisir l'appartement où vous voulez transmettre le montant [ {{ encaiss.montant|number_format(2, ',', ' ')  }} DH ] de l'appartement [ {{encaiss.matricule}} ] : </h3>
+        <table  id="DatatableAdhesions" class="display" >
+            <thead>
+                <tr>
+                    <th >Mat.</th>
+                    <th >Adherent</th>
+                    <th >Nom Imm.</th>
+                    <th >Imm.</th>
+                    <th >Etage</th>
+                    <th >Appt</th>
+                    <th >Surface</th>
+                    <th >Terrace</th>
+                    <th >Jardin</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for adhs in adhesions %}
+                    <tr>
+                        <td>{{ adhs.matricule }}</td>
+                        <td >{{ adhs.nom_prenom }}</td>
+                        <td >{{ adhs.imm_group }}</td>
+                        <td >{{ adhs.immeuble }}</td>
+                        <td >{{ adhs.etage }}</td>
+                        <td >{{ adhs.appartement }}</td>
+                        <td style="text-align:right" >{{ adhs.surface_appt }} m²</td>
+                        <td style="text-align:right" >{{ adhs.surface_terrace }} m²</td>
+                        <td style="text-align:right" >{{ adhs.surface_jardin }} m²</td>
+                        <td>
+                            <a href="#" onclick="ConfirmAction('{{ path('ambcredit_transferversement', {'id': encaiss.id, 'appt':adhs.id}) }}', 'le transfère de la somme {{ encaiss.montant|number_format(2, ',', ' ')  }} DH vers l\'appt N° {{ adhs.matricule }}'); return false;" ><button class="btn btn-small btn-primary" type="button">Confirmer</button></a>  
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td>Pas (encore !) d'appartements</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <SCRIPT LANGUAGE="JavaScript">
+        function ConfirmAction(URL, action)
+        {
+           if (confirm("Confirmez-vous "+action+" ?"))
+           {
+               window.location = URL;
+           }
+        }
+        </SCRIPT>
+{% endblock %}

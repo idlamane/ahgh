@@ -1,0 +1,81 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+<style>
+table.adhesion,table.versement {margin:10px auto; width:700px;border-collapse:collapse;}
+table.adhesion td,table.versement td,table.versement th{border:solid 1px #000}
+table.adhesion td.titre,table.versement th{text-weight:bold; background:#EEE}
+th{text-align:center}
+h4{margin:3px 0}
+</style>
+<h2>SITUATION CONTRAT</h2>
+<table>
+	<tr>
+		<td><h4>Référence</h4></td>
+		<td><h4>: {{ contrat.reference}}</h4></td>
+	</tr>
+	<tr>
+		<td><h4>Intervenant</h4></td>
+		<td><h4>: {{ contrat.Fournisseur.RaisonSocial}}</h4></td>
+	</tr>
+	<tr>
+		<td><h4>Convention du</h4></td>
+		<td><h4>: {{ contrat.DateDebut|date('d/m/Y')}}</h4></td>
+	</tr>
+	{%if contrat.DateResiliation is not null %}
+	<tr>
+		<td><h4>Date de résiliation</h4></td>
+		<td><h4>: {{ contrat.DateResiliation|date('d/m/Y')}}</h4></td>
+	</tr>
+	{%endif%}
+	<tr>
+		<td><h4>Montant</h4></td>
+		<td><h4>: {{ contrat.Montant|number_format(2, ',', ' ') }}</h4></td>
+	</tr>
+</table>
+
+<h2>LES REGLEMENTS </h2>
+<table class="versement" >
+	<thead>
+	<tr>
+        <th>Date</th>
+        <th>Mode</th>
+        <th>Piece N°</th>
+        <th>Banque</th>
+        <th>Libelle</th>
+        <th colspan="2">Montant</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for reglement in reglements %}
+      <tr>
+        <td>{{reglement.dateOperation|date('d/m/Y')}}</td>
+        <td>{{reglement.ModeRetrait}}</td>
+        <td>{{reglement.NPiece}}</td>
+        <td>{{reglement.Banque.Banque}}</td>
+        <td>{{reglement.libelle}}</td>
+        <td style="text-align:right">{{reglement.Montant|number_format(2, ',', ' ') }}</td>
+        <td style="text-align:right">{{(reglement.Montant/contrat.Montant*100)|number_format(2, ',', ' ') }}%</td>
+      </tr>
+    {% endfor %}
+      <tr>
+        <td style="border:none"></td>
+        <td style="border:none"></td>
+        <td style="border:none"></td>
+        <td style="border:none;border-right:solid 1px #000;"></td>
+        <td style="background:#EEE">TOTAL</td>
+        <td style="text-align:right; background:#EEE">{{total_reglement|number_format(2, ',', ' ') }}</td>
+        <td style="text-align:right; background:#EEE">{{(total_reglement/contrat.Montant*100)|number_format(2, ',', ' ') }}%</td>
+      </tr>	
+      <tr>
+        <td style="border:none"></td>
+        <td style="border:none"></td>
+        <td style="border:none"></td>
+        <td style="border:none;border-right:solid 1px #000;"></td>
+        <td style="background:#EEE">SOLDE</td>
+        <td style="text-align:right; background:#EEE">{{(contrat.Montant-total_reglement)|number_format(2, ',', ' ') }}</td>
+        <td style="text-align:right; background:#EEE">
+        {{((contrat.Montant-total_reglement)/contrat.Montant*100)|number_format(2, ',', ' ') }}%</td>
+      </tr>	
+	</tbody>
+</table>
+{% endblock %}

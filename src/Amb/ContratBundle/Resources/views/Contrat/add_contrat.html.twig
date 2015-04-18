@@ -1,0 +1,12 @@
+{% extends "AmbContratBundle::layout.html.twig" %}
+
+{% block title %}
+    Ajouter - {{ parent() }}
+{% endblock %}
+
+{% block ambcontrat_body %}
+
+    <h2>Ajouter un contrat</h2>
+    {% include "AmbContratBundle:Contrat:form_contrat.html.twig" %}
+
+{% endblock %}

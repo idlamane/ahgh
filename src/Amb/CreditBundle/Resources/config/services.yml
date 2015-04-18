@@ -1,0 +1,11 @@
+parameters:
+#    amb_credit.example.class: Amb\CreditBundle\Example
+
+services:
+    amb_credit.ambexceldb:
+        class: Amb\CreditBundle\Service\AmbExceldb
+    amb_credit.chiffrenlettre:
+        class: Amb\CreditBundle\Service\ChiffreEnLettre
+#    amb_credit.example:
+#        class: %amb_credit.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

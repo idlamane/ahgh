@@ -1,0 +1,15 @@
+{% extends "AmbGlobalBundle::scann_layout.html.twig" %}
+
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block ambscann_body %}
+
+    <h2>Ajouter un scan 
+    	{%if adhesion is defined%} pour l'adherent : {{adhesion.adherent.NomPrenom}}, Mat:{{adhesion.Matricule}} {%endif%}  
+    	{%if fournisseur is defined%} pour le fournisseur : {{fournisseur.RaisonSocial}} {%endif%} 
+	</h2>
+    {% include "AmbGlobalBundle:Scann:formulaire.html.twig" %}
+
+{% endblock %}

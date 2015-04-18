@@ -1,0 +1,150 @@
+<div class="well">
+	<h3>Formulaire des dépenses</h3>
+
+	<form method="post" name="operation" onsubmit="return onsubmitform();"  {{ form_enctype(form) }}>
+	{{ form_errors(form) }}
+	<div class="well">
+		<div class="row">
+			<div class="span3">
+				<div>
+				    {{ form_label(form.date_Operation, "DATE OPERATION (ex: 01-12-2013)") }}
+				    {{ form_errors(form.date_Operation) }}
+				    {{ form_widget(form.date_Operation) }}
+				</div>
+				<div>
+				    {{ form_label(form.banque, "BANQUE") }}
+				    {{ form_errors(form.banque) }}
+				    {{ form_widget(form.banque) }}
+				</div>
+				<div>
+				{% if form.fournisseur is defined %}
+				    {{ form_label(form.fournisseur, "FOURNISSEUR") }}
+				    {{ form_errors(form.fournisseur) }}
+				    {{ form_widget(form.fournisseur) }}
+				{% endif %}    
+				</div>
+
+				{% if form.typedepense is defined %}
+				<div>
+				    {{ form_label(form.typedepense, "TYPE DE DEPENSE") }}
+				    {{ form_errors(form.typedepense) }}
+				    {{ form_widget(form.typedepense) }}
+				</div>
+				{% endif %}
+
+				{% if form.contrat is defined %}
+				<div>
+				    {{ form_label(form.contrat, "CONTRAT") }}
+				    {{ form_errors(form.contrat) }}
+				    {{ form_widget(form.contrat) }}
+				</div>
+				{% endif %}
+			</div>
+			<div class="span3">
+				<div>
+				    {{ form_label(form.mode_retrait, "MODE DE RETRAIT") }}
+				    {{ form_errors(form.mode_retrait) }}
+				    {{ form_widget(form.mode_retrait) }}
+				</div>
+				{% if form.type_remboursement is defined %}
+				<div>
+				    {{ form_label(form.type_remboursement, "TYPE DE REMBOURSMNT") }}
+				    {{ form_errors(form.type_remboursement) }}
+				    {{ form_widget(form.type_remboursement) }}
+				</div>
+				{% endif %}
+				{% if form.annee_gestion is defined %}
+				<div>
+				    {{ form_label(form.annee_gestion, "ANNEE GESTION") }}
+				    {{ form_errors(form.annee_gestion) }}
+				    {{ form_widget(form.annee_gestion) }}
+				</div>
+				{% endif %}
+				{% if form.FACTURE is defined %}
+				<div>
+				    {{ form_label(form.facture, "FACTURE N°") }}
+				    {{ form_errors(form.facture) }}
+				    {{ form_widget(form.facture) }}
+				</div>
+				{% endif %}
+			</div>
+
+			<div class="span3">
+				<div>
+				    {{ form_label(form.n_piece, "PIECE N°") }}
+				    {{ form_errors(form.n_piece) }}
+				    {{ form_widget(form.n_piece) }}
+				</div>
+				<div>
+				    {{ form_label(form.libelle, "LIBELLE") }}
+				    {{ form_errors(form.libelle) }}
+				    {{ form_widget(form.libelle) }}
+				</div>
+				<div>
+				    {{ form_label(form.montant, "MONTANT") }}
+				    {{ form_errors(form.montant) }}
+				    {{ form_widget(form.montant) }}
+				</div>
+			</div>
+		</div>	
+
+		<div class="row">
+			<div class="span5">
+				<div>
+				    {{ form_label(form.commentaire, "COMMENTAIRE") }}
+				    {{ form_errors(form.commentaire) }}
+				    {{ form_widget(form.commentaire) }}
+				</div>				
+				<div>
+				    {{ form_rest(form) }}
+				</div>
+			</div>
+		</div>	
+	</div>
+	{% if typeaction == 'add' %}
+		<input type="submit" name="operation" class="btn btn-primary" value="Enregistrer et Quitter" onclick="document.pressed=this.value" />
+		<input type="submit" name="operation" class="btn btn-primary" value="Enregistrer et nouveau" onclick="document.pressed=this.value" />
+		<input name="operation" class="btn btn-primary" value="Quitter" onclick="window.location.href='{{ path('ambdepense_accueil', {'type': type}) }}'"/>
+		<input name="operation" class="btn btn-primary" value="Vider" onclick="document.operation.reset();"/>
+	{%else%}
+		<input type="submit" name="operation" class="btn btn-primary" value="Enregistrer et Quitter" />
+	{%endif%}
+    </form>
+    {% if intervenant is defined %}{{dump(intervenant)}}{%endif%}
+</div>
+
+<script type="text/javascript" charset="utf-8">
+	  $("#amarusmedia").change(function(){
+		 var motrech = $("#amb_debitbundle_depensetype_fournisseur").val();
+		 var DATA = 'id=' +motrech;
+		 $.ajax({
+		    type: "POST",
+			url: "{{ path('ambfournisseur_isintervenant') }}",
+			data: DATA,
+			cache: false,
+			success: function(data){
+			   if(data != 'false'){
+			   		window.location.replace(data);
+			   }
+			}
+	     });
+		 return false;
+	});
+
+	{% if typeaction == 'add' %}
+		function onsubmitform()
+		{
+		  	switch (document.pressed) {
+			    case 'Enregistrer et Quitter':
+			        document.operation.action = "{{ path('ambdepense_ajouter', {'type': type, 'frs': frs, 'action': 'end'}) }}";
+			        break;
+			    case 'Enregistrer et nouveau':
+			        document.operation.action = "{{ path('ambdepense_ajouter', {'type': type, 'frs': frs, 'action': 'new'}) }}";
+			        break;
+			    default:
+			        document.operation.action = "{{ path('ambdepense_ajouter', {'type': type, 'frs': frs, 'action': 'end'}) }}";
+			}
+			return true;
+		}
+	{%endif%}
+  </script>

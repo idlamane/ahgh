@@ -1,0 +1,241 @@
+{# src/Amb/AdherentBundle/Resources/views/Adherent/index.html.twig #}
+
+{% extends "AmbAdherentBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - Liste des adhésions
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ZeroClipboard.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/TableTools.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ColVis.js') }}" type="text/javascript" /></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            oTable = $('#DatatableAdhesions').dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "sDom": '<"H"TCfr>t<"F"ip>',
+                "oTableTools": {
+                    "sSwfPath": "{{ asset('swf/copy_csv_xls_pdf.swf') }}",
+                    "aButtons": [
+                        "copy", "csv", "xls", "pdf",
+                        {
+                            "sExtends":    "collection",
+                            "sButtonText": "Save",
+                            "aButtons":    [ "csv", "xls", "pdf" ]
+                        }
+                    ]
+                },
+                "oColVis": {
+                    "buttonText": "Changer les colonnes"
+                }                   
+            });
+        } );
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/demo_table_jui.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.8.4.custom.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/TableTools_JUI.css') }}" type="text/css" />
+{% endblock %}
+{% block masthead %}
+    <h2>Gestion des adhésions</h2>
+{% endblock %}
+{% block ambadherent_body %}
+{% if form is defined %}
+    <form method="post" {{ form_enctype(form) }} name="searchform" action="{{ path('ambadherent_listadhesion') }}"> 
+        {{ form_errors(form) }}
+        <div class="well">
+            <div class="row">
+                <div class="span3">
+                    {{ form_label(form.type_immeuble, "TYPE IMMEUBLE") }}
+                    {{ form_errors(form.type_immeuble) }}
+                    {{ form_widget(form.type_immeuble) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.imm_group, "NOM IMMEUBLE") }}
+                    {{ form_errors(form.imm_group) }}
+                    {{ form_widget(form.imm_group) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.immeuble, "IMMEUBLE") }}
+                    {{ form_errors(form.immeuble) }}
+                    {{ form_widget(form.immeuble) }}
+                </div>
+                <div class="span2">
+                    {{ form_label(form.etage, "ETAGE") }}
+                    {{ form_errors(form.etage) }}
+                    {{ form_widget(form.etage) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.type_appartement, "TYPE APPT") }}
+                    {{ form_errors(form.type_appartement) }}
+                    {{ form_widget(form.type_appartement) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.appartement, "APPT N°") }}
+                    {{ form_errors(form.appartement) }}
+                    {{ form_widget(form.appartement) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.matricule, "N° D'ADHESION") }}
+                    {{ form_errors(form.matricule) }}
+                    {{ form_widget(form.matricule) }}
+                </div>
+                <div class="span2">
+                    {{ form_label(form.dossier, "DOSSIER") }}
+                    {{ form_errors(form.dossier) }}
+                    {{ form_widget(form.dossier) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.surface_appt, "SURFACE APPT") }}
+                    {{ form_errors(form.surface_appt) }}
+                    {{ form_widget(form.surface_appt) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.adh_solde, "SOLDE") }}
+                    {{ form_errors(form.adh_solde) }}
+                    {{ form_widget(form.adh_solde) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.pourcent_vers_port, "VERSEMENT + PF") }}
+                    {{ form_errors(form.pourcent_vers_port) }}
+                    {{ form_widget(form.pourcent_vers_port) }}
+                </div>
+                <div class="span2">
+                    {{ form_label(form.versement, "TOTAL VERSEMENT INF A") }}
+                    {{ form_errors(form.versement) }}
+                    {{ form_widget(form.versement) }}
+                </div>
+            </div>
+        <input type="submit" class="btn" value="Rechercher" onclick="search('show')" />  
+        <input type="submit" class="btn" value="Rechercher & Imprimer" onclick="search('print')" /> 
+        </div>
+        {{ form_rest(form) }}
+    </form>
+{% endif %}
+        {% if adherent is defined %}
+            <h3>Liste des appartements de l'adhérent : {{ adherent.civilite }} {{ adherent.NomPrenom|upper }} </h3>
+            {% if is_granted('ROLE_OPERATOR') %}
+            {%endif%}
+        {% else %}
+            <h3>{{ titre }} </h3>   
+        {% endif %}
+        <table  id="DatatableAdhesions" class="display" >
+            <thead>
+                <tr>
+                    {% if adherent is not defined %}<th  style="width:220px">Adhérent</th>{% endif %}
+                    <th style="width:35px">N°</th>
+                    <th style="width:50px">Surface</th>
+                    <th style="width:50px">Terrace</th>
+                    <th style="width:50px">Jardin</th>
+                    <th style="width:85px">Cout M²</th>
+                    <th style="width:105px">Cout Global</th>
+                    <th style="width:105px">Versement</th>
+                    <th style="width:105px">Solde</th>
+                    <th style="width:105px">V+PF</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for adhesion in adhesions %}
+                    <tr>
+                        {% if adherent is not defined %}<td>{{adhesion.nom_prenom}}</td>{% endif %}
+                        <td>{{ adhesion.matricule }}</td>
+                        <td style="text-align:right" >{{ adhesion.surface_appt }} m²</td>
+                        <td style="text-align:right" >{{ adhesion.surface_terrace }} m²</td>
+                        <td style="text-align:right" >{{ adhesion.surface_jardin }} m²</td>
+                        <td style="text-align:right" >{{ adhesion.cout|number_format(2, ',', ' ') }} DH</td>
+                        <td style="text-align:right" >{{ adhesion.cout_global|number_format(2, ',', ' ') }} DH</td>
+                        <td style="text-align:right" >{{ adhesion.versement|number_format(2, ',', ' ') }} DH</td>
+                        <td style="text-align:right" >{{ adhesion.solde|number_format(2, ',', ' ') }} DH</td>
+                        <td style="text-align:right" >{{ adhesion.pourcent_vers_port|number_format(2, ',', ' ') }} %</td>
+                        <td>
+                            {% if is_granted('ROLE_CONSULT') %}
+                            <div class="btn-group">
+
+                                <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
+                                Situation
+                                <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ path('ambadherent_detailadhesion', {'id': adhesion.id}) }}" target="_blank"><i class="icon-eye-open icon-small"></i>Consultation</a></li>
+                                    <li><a href="{{ path('ambadherent_detailadhesion', {'id': adhesion.id, 'format':'pdf'}) }}" target="_blank"><i class="icon-print icon-small"></i>Etat</a></li>
+                                </ul>
+                            </div> 
+                            {%endif%}  
+                            <div class="btn-group">
+                                <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
+                                Action
+                                <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+
+                                    {% if is_granted('ROLE_CONSULT') %}
+                                        <li><a href="{{ path('ambcredit_listversement', {'appt': adhesion.id}) }}"><i class="icon-pencil icon-small"></i>Versement</a></li>
+                                        <li><a  href="{{ path('ambremboursement_list', {'id': adhesion.id, 'type':'adh'}) }}" ><i class="icon-hand-right icon-small"></i>List remboursements</a></li>
+                                    {%endif%}
+                                    {% if is_granted('ROLE_OPERATOR') %}
+                                        <li><a href="{{ path('ambadherent_updateadhesion', {'id_adhesion': adhesion.id}) }}"><i class="icon-pencil icon-small"></i>Modifier</a></li>
+                                    {%endif%}
+                                    {% if is_granted('ROLE_RECOVRING') %}
+                                        <li><a href="{{ path('ambscann_ajouter', {'type': 'adhs', 'id': adhesion.id}) }}"><i class="icon-file icon-small"></i>Joindre un fichier</a></li>
+                                    {%endif%}
+                                </ul>
+                            </div> 
+                            {% if is_granted('ROLE_OPERATOR') %}
+                            <div class="btn-group">
+                                <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
+                                Désistement
+                                <span class="caret"></span>
+                                </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                        <a  href="#" onclick="ConfirmAction('{{ path('ambadherent_adddesistement', {'id': adhesion.id, 'type':'amb'}) }}', 'le désistement de cette appt'); return false;" ><i class="icon-hand-right icon-small"></i>Désistement</a></li>
+                                        <li>
+                                        <a  href="#" onclick="ConfirmAction('{{ path('ambadherent_adddesistement', {'id': adhesion.id, 'type':'transarg'}) }}', 'ce désistement et transfère d\'argent vers une autre appt'); return false;" ><i class="icon-hand-right icon-small"></i>Désistement et transfère d'argent</a></li>
+                                        <li>
+                                        <a  href="#" onclick="ConfirmAction('{{ path('ambadherent_adddesistement', {'id': adhesion.id, 'type':'transappt'}) }}', 'le transfère de cette appt et les encaissements pour un autre adhérent'); return false;" ><i class="icon-hand-right icon-small"></i>Transfère d'appt et d'argents</a></li>
+                                    </ul>
+                            </div> 
+                            {%endif%}             
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td>Pas (encore !) d'appartement</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <SCRIPT LANGUAGE="JavaScript">
+        function ConfirmDeleteMessage(URL)
+        {
+           if (confirm("Confirmez-vous la suppression ?"))
+           {
+               window.location = URL;
+           }
+        }
+        function ConfirmAction(URL, action)
+        {
+           if (confirm("Confirmez-vous "+action+" ?"))
+           {
+               window.location = URL;
+           }
+        }
+
+        function search(option){
+            if(option == 'print'){
+                document.searchform.action = "{{ path('ambadherent_listprintadhesion', {'print': 'print'}) }}";
+                document.searchform.submit();
+            }else{
+                document.searchform.action = "{{ path('ambadherent_listadhesion') }}";
+                document.searchform.submit();
+            }
+        }
+        </SCRIPT>
+{% endblock %}

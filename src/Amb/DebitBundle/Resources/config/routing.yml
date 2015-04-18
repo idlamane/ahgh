@@ -1,0 +1,152 @@
+ambtypedepense_accueil:
+    pattern:  /list-type-depense.{format}
+    defaults:  { _controller: AmbDebitBundle:TypeDepense:list_typedepense, format: html }
+    requirements:
+        format: html
+
+ambtypedepense_ajouter:
+    pattern:  /add-type-depense
+    defaults:  { _controller: AmbDebitBundle:TypeDepense:add_typedepense}
+
+ambtypedepense_modifier:
+    pattern:  /update-type-depense/{id}
+    defaults:  { _controller: AmbDebitBundle:TypeDepense:update_typedepense }
+    requirements:
+        id: \d*
+
+ambtypedepense_delete:
+    pattern:  /delete-type-depense/{id}
+    defaults:  { _controller: AmbDebitBundle:TypeDepense:delete_typedepense }
+    requirements:
+        id: \d*
+
+ambdepense_consulter:
+    pattern:  /consult-depense/{id}
+    defaults:  { _controller: AmbDebitBundle:Depense:consult_depense }
+    requirements:
+        id: \d*
+
+ambdepense_accueil:
+    pattern:  /list-depense/{type}/{print}
+    defaults:  { _controller: AmbDebitBundle:Depense:list_depense, print: 0, type:all }
+    requirements:
+        print: print
+        type: all|gestion|amortissement
+
+ambdepense_ajouter:
+    pattern:  /add-depense/{type}/{action}/{frs}
+    defaults:  { _controller: AmbDebitBundle:Depense:add_depense, type: null, frs: null, action:end  }
+    requirements:
+        type: gestion|amortissement|contrat
+        action: new|end|cancel
+
+ambremboursement_ajouter:
+    pattern:  /add-rembours/{type}/{id}
+    defaults:  { _controller: AmbDebitBundle:Depense:add_remboursement  }
+    requirements:
+        type: desist|adh
+        id: \d*
+
+ambremboursement_modifier:
+    pattern:  /update-rembours/{id}
+    defaults:  { _controller: AmbDebitBundle:Depense:update_remboursement  }
+    requirements:
+        id: \d*
+
+ambremboursement_delete:
+    pattern:  /delete-rembours/{id}
+    defaults:  { _controller: AmbDebitBundle:Depense:delete_remboursement  }
+    requirements:
+        id: \d*
+
+ambremboursement_list:
+    pattern:  /list-remboursement-{type}/{id}.{format}
+    defaults:  { _controller: AmbDebitBundle:Depense:list_remboursement, format: html, type: desist }
+    requirements:
+        format: html|pdf
+        type: desist|adh
+        id: \d*
+
+ambdepense_alimentercaisse:
+    pattern:  /add-depense/caisse
+    defaults:  { _controller: AmbDebitBundle:Depense:alimenter_caisse}
+
+ambdepense_modifier:
+    pattern:  /update-depense/{id}
+    defaults:  { _controller: AmbDebitBundle:Depense:update_depense }
+    requirements:
+        id: \d*
+
+ambdepense_delete:
+    pattern:  /delete-depense/{id}
+    defaults:  { _controller: AmbDebitBundle:Depense:delete_depense }
+    requirements:
+        id: \d*
+
+ambdepense_filter:
+    pattern:  /filter
+    defaults:  { _controller: AmbDebitBundle:Depense:filter }
+
+ambdepense_ajax:
+    pattern:  /ajax
+    defaults:  { _controller: AmbDebitBundle:Ajax:depensesList }
+
+ambfournisseur_addfournisseur:
+    pattern:  /add-fournisseur/
+    defaults:  { _controller: AmbDebitBundle:Fournisseur:add_fournisseur }
+
+ambfournisseur_updatefournisseur:
+    pattern:  /update-fournisseur/{id}
+    defaults:  { _controller: AmbDebitBundle:Fournisseur:update_fournisseur }
+    requirements:
+        id: \d*
+
+ambfournisseur_deletefournisseur:
+    pattern:  /delete-fournisseur/{id}
+    defaults:  { _controller: AmbDebitBundle:Fournisseur:delete_fournisseur }
+    requirements:
+        id: \d*
+
+ambfournisseur_consultfournisseur:
+    pattern:  /consult-fournisseur/{id}
+    defaults:  { _controller: AmbDebitBundle:Fournisseur:consult_fournisseur }
+    requirements:
+        id: \d*
+
+ambfournisseur_listfournisseur:
+    pattern:  /list-fournisseur.{format}
+    defaults:  { _controller: AmbDebitBundle:Fournisseur:list_fournisseur, format: html }
+    requirements:
+        format: html
+
+ambfournisseur_listintervenant:
+    pattern:  /list-intervenant.{format}
+    defaults:  { _controller: AmbDebitBundle:Fournisseur:list_intervenant, format: html }
+    requirements:
+        format: html
+
+ambfournisseur_isintervenant:
+    pattern:  /isintervenant/
+    defaults:  { _controller: AmbDebitBundle:Fournisseur:is_intervenant }
+
+ambcaisse_list:
+    pattern:  /list-caisse/{print}
+    defaults:  { _controller: AmbDebitBundle:Caisse:list_caisse, print: 0}
+    requirements:
+        print: print
+
+ambcaisse_ajouter:
+    pattern:  /add-caisse
+    defaults:  { _controller: AmbDebitBundle:Caisse:add_caisse}
+
+ambcaisse_update:
+    pattern:  /update-caisse/{id}
+    defaults:  { _controller: AmbDebitBundle:Caisse:update_caisse }
+    requirements:
+        id: \d*
+
+ambcaisse_delete:
+    pattern:  /delete-caisse/{id}
+    defaults:  { _controller: AmbDebitBundle:Caisse:delete_caisse }
+    requirements:
+        id: \d*

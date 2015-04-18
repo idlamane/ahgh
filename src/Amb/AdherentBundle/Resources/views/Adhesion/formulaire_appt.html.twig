@@ -1,0 +1,65 @@
+<div class="well">
+	<h3>FORMULAIRE D'APPARTEMENT</h3>
+
+    <form method="post" {{ form_enctype(form) }}>
+	    {% if adhesion_validation_error is defined %}
+		    <div class="alert alert-error">
+				<h4>{{adhesion_validation_error}}</h4>
+		    </div>
+	    {% endif %}
+		{{ form_errors(form) }}
+		<div class="well">
+			<div class="row">
+					<div class="span3">
+					    {{ form_label(form.imm_group, "LE NOM D'IMMEUBLE") }}
+					    {{ form_errors(form.imm_group) }}
+					    {{ form_widget(form.imm_group) }}
+					</div>
+					<div class="span3">
+					    {{ form_label(form.type_immeuble, "TYPE D'IMMEUBLE") }}
+					    {{ form_errors(form.type_immeuble) }}
+					    {{ form_widget(form.type_immeuble) }}
+					</div>
+					<div class="span3">
+					    {{ form_label(form.immeuble, "IMMEUBLE") }}
+					    {{ form_errors(form.immeuble) }}
+					    {{ form_widget(form.immeuble) }}
+					</div>
+					<div class="span3">
+					    {{ form_label(form.etage, "ETAGE") }}
+					    {{ form_errors(form.etage) }}
+					    {{ form_widget(form.etage) }}
+					</div>
+					<div class="span3">
+					    {{ form_label(form.appartement, "APPARTEMENT") }}
+					    {{ form_errors(form.appartement) }}
+					    {{ form_widget(form.appartement) }}
+					</div>
+					<div class="span3">
+					    {{ form_label(form.type_appartement, "TYPE APPARTEMENT") }}
+					    {{ form_errors(form.type_appartement) }}
+					    {{ form_widget(form.type_appartement) }}
+					</div>
+					<div class="span3">
+					    {{ form_label(form.surface_appt, "SURFACE HABITABLE") }}
+					    {{ form_errors(form.surface_appt) }}
+					    {{ form_widget(form.surface_appt) }}
+					</div>
+					<div class="span3">
+					    {{ form_label(form.surface_terrace, "SURFACE TERRACE") }}
+					    {{ form_errors(form.surface_terrace) }}
+					    {{ form_widget(form.surface_terrace) }}
+					</div>
+					<div class="span3">
+					    {{ form_label(form.surface_jardin, "SURFACE JARDIN") }}
+					    {{ form_errors(form.surface_jardin) }}
+					    {{ form_widget(form.surface_jardin) }}
+					</div>
+
+			</div>	
+		</div>
+		
+		{{ form_rest(form) }}
+		<input type="submit" class="btn btn-primary" />
+	</form>			
+</div>

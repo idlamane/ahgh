@@ -1,0 +1,82 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+<style>
+table.adhesion,table.versement {border-collapse:collapse;}
+table.adhesion td,table.versement td,table.versement th{border:solid 1px #000}
+table.adhesion td.titre,table.versement th{text-weight:bold; background:#EEE}
+h4{margin:3px 0}
+</style>
+<h2>Exercice : du {{ date_debut|date('d/m/Y') }} au {{ date_fin|date('d/m/Y') }} </h2>
+<table class="adhesion">
+    <tr >
+        <td class="titre" colspan="2" style="text-align:center;font-size:16px;">REPARTITION DES DEPENSES</td>
+    </tr>
+	{% for DepG in DepensesGestion %}
+    <tr >
+        <td >{%if DepG.caisse is not null%}
+                CAISSE
+            {%else%}
+                {{DepG.typedepense|upper}}
+            {%endif%}
+        </td>
+        <td style="text-align:right">{{DepG.montant|number_format(2, ',', ' ')}} DH</td>
+    </tr>
+    {%endfor%}
+
+    <tr class="success">
+        <td class="titre">TOTAL DEPENSES GESTION</td>
+        <td class="titre" style="text-align:right">{{TotDepenseCG.total|number_format(2, ',', ' ')}} DH</td>
+    </tr>
+
+    {% for DepA in DepensesAmort %}
+    <tr >
+        <td >{{DepA.typedepense|upper}} </td>
+        <td style="text-align:right">{{DepA.montant|number_format(2, ',', ' ')}} DH</td>
+    </tr>
+    {%endfor%}
+
+    <tr class="success">
+        <td class="titre">TOTAL DEPENSES AMORTISSMENT</td>
+        <td class="titre" style="text-align:right">{{TotDepenseCA.total|number_format(2, ',', ' ')}} DH</td>
+    </tr>
+
+    <tr class="success">
+        <td class="titre">TOTAL GENERAL</td>
+        <td class="titre" style="text-align:right">{{(TotDepenseCG.total+TotDepenseCA.total)|number_format(2, ',', ' ')}} DH</td>
+    </tr>
+
+
+    <tr >
+    	<td colspan="2" style="height:25px;border-left:none;border-right:none"></td>
+    </tr>
+    <tr >
+        <td >CAPITAL SOCIAL LIBERE </td>
+        <td style="text-align:right">{{TotRecetteCA.total|number_format(2, ',', ' ')}} DH</td>
+    </tr>
+    <tr >
+        <td >TOTAL RECETTE CG DIVERS </td>
+        <td style="text-align:right">{{TotRecetteDivers.total|number_format(2, ',', ' ')}} DH</td>
+    </tr>
+    {% for rcg in RecetteCG %}
+    <tr >
+        <td>{{rcg.type}} </td>
+        <td style="text-align:right">{{rcg.montant|number_format(2, ',', ' ')}} DH</td>
+    </tr>
+    {%endfor%}
+
+    <tr class="success">
+        <td class="titre">TOTAL RECETTE AMORTISSMENT</td>
+        <td class="titre" style="text-align:right"> {{(TotRecetteCG.total+TotRecetteCA.total+TotRecetteDivers.total)|number_format(2, ',', ' ')}}DH</td>
+    </tr>
+
+    <tr >
+    	<td colspan="2" style="height:25px;border-left:none;border-right:none"></td>
+    </tr>
+
+    <tr >
+        <td class="titre">SOLDE EXERCICE</td>
+        <td class="titre" style="text-align:right"> {{((TotRecetteCG.total+TotRecetteCA.total+TotRecetteDivers.total)-(TotDepenseCG.total+TotDepenseCA.total))|number_format(2, ',', ' ')}}DH</td>
+    </tr>
+</table>
+
+{% endblock %}

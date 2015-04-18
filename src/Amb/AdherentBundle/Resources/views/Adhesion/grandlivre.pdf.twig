@@ -1,0 +1,92 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+<style>
+table.gl {margin:10px auto; width:700px;border-collapse:collapse;}
+table.gl td{
+    border:solid 1px #000;
+    padding: 0 2mm;
+    font-size:11px;
+}
+table.gl td.titre{
+    text-weight:bold; 
+    background:#EEE;
+    padding: 0 2mm;
+    text-align:center
+}
+td.center{
+    text-align:center
+}
+table.gl td.number{
+    text-align:right
+}
+
+h4{margin:3px 0}
+</style>
+<h2>{{ titre }}</h2>
+<table class="gl">
+
+    <tr>
+        <td class="titre" colspan="6">Nom Prenom</td>
+    </tr>
+
+    <tr>
+        <td class="titre">N° adh</td>
+        <td class="titre" >Appt</td>
+        <td class="titre" colspan="2">Montant</td>
+        <td class="titre" colspan="2">A nouveau</td>
+    </tr>
+
+    <tr>
+        <td class="titre">Date Op</td>
+        <td class="titre">Mode</td>
+        <td class="titre">N° piece</td>
+        <td class="titre">Type</td>
+        <td class="titre">Statut</td>
+        <td class="titre">Montant</td>
+    </tr>
+        
+    {% for adherent in adherents %}
+        {% for adhesion in adherent.adhesions %}
+            {% set totalenc = 0 %}
+            {% set novo = 0 %}
+            {% set CoutAppt = (CoutGlobal(adhesion.surfaceAppt, adhesion.surfaceTerrace, adhesion.surfaceJardin,adhesion.cout )) %}
+                {% for enc in adhesion.encaissements %}
+                    {% if enc.dateOperation < start %}
+                        {% set novo = novo+enc.montant %}
+                    {% else %}
+                        {% set totalenc = totalenc+enc.montant %}
+                    {% endif %}
+                {% endfor %}
+                <tr>
+                    <td class="titre" colspan="6">{{ adhesion.adherent.NomPrenom}}</td>
+                </tr> 
+                <tr>
+                    <td >{{ adhesion.matricule}}</td>
+                    <td >{{ adhesion.immGroup }} | {{ adhesion.immeuble }} | {{ adhesion.etage }} | N°{{ adhesion.appartement }} </td>
+                    <td colspan="2"  class="number"> {{ CoutAppt|number_format(2, ',', ' ') }}</td>
+                    <td colspan="2"  class="number"> {{novo|number_format(2, ',', ' ')}} </td>
+                </tr> 
+                {% for encaissement in adhesion.encaissements %}
+                    {% if encaissement.dateOperation >= start %}
+                        <tr>
+                            <td >{{ encaissement.dateOperation|date('d/m/Y') }}</td>
+                            <td >{{ encaissement.modeEncaissement }}</td>
+                            <td >{{ encaissement.numPiece }}</td>
+                            <td >{{ encaissement.typeEncaissment }}</td>
+                            <td >{{ encaissement.statut }}</td>
+                            <td class="number" >{{ encaissement.montant|number_format(2, ',', ' ') }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                <tr>
+                    <td  class="titre" colspan="5">TOTAL ENCAISSEMENT</td>
+                    <td class="number" >{{ totalenc|number_format(2, ',', ' ') }} </td>
+                </tr> 
+                <tr>
+                    <td  class="titre" colspan="5" >RESTE A PAYER</td>
+                    <td class="number" >{{ (CoutAppt-(totalenc+novo))|number_format(2, ',', ' ') }} </td>
+                </tr> 
+        {% endfor %} 
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "AmbGlobalBundle::dashboard_layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+	<script type="text/javascript">
+		google.load("visualization", "1", {packages:["corechart"]});
+		google.load('visualization', '1', {packages:['table']});
+		google.setOnLoadCallback(drawChart);
+		google.setOnLoadCallback(drawTable);
+		function drawChart() {
+			var data = google.visualization.arrayToDataTable([
+			  ['Mois', 'Encaissement', 'Depenses'],
+			  {% for StF in SituationFinanciere %}
+			  	['{{StF.mois}}', {{StF.encaiss|number_format(2, '.', '')}}, {{StF.depense|number_format(2, '.', '')}}],
+			  {%endfor%}
+			]);
+
+			var options = {
+			  title: 'Historique des recettes/depenses {{annee}}'
+			};
+
+			var chart = new google.visualization.AreaChart(document.getElementById('chart_div1'));
+			chart.draw(data, options);
+
+
+	        var data4 = google.visualization.arrayToDataTable([
+	          ['Mois', 'Encaissements', 'Portefeuille'],
+	          {% for SpM in EncaissementParMois %}
+			  	['{{SpM.mois}}', {{SpM.valid|number_format(2, '.', '')}}, {{SpM.invalid|number_format(2, '.', '')}}],
+			  {%endfor%}
+	        ]);
+
+	        var options4 = {
+	          title: 'Les encaissements (Cotisation et frais de gestion) des adherents pour {{annee}}',
+	        };
+	        var chart4 = new google.visualization.ColumnChart(document.getElementById('chart_div4'));
+        	chart4.draw(data4, options4);
+		}
+
+		function drawTable() {
+	        var data = new google.visualization.DataTable();
+	        data.addColumn('number', 'Mois');
+	        data.addColumn('number', 'Encaissements');
+	        data.addColumn('number', 'Portefeuille');
+	        data.addRows([
+	          {% for SpM in EncaissementParMois %}
+			  	[
+			  		{{SpM.mois}},
+			  		{v: {{SpM.valid}}, f: '{{SpM.valid|number_format(2, '.', ' ')}}'},
+			  		{v: {{SpM.invalid}}, f: '{{SpM.invalid|number_format(2, '.', ' ')}}'}
+			  	],
+			  {%endfor%}
+	        ]);
+	        var table = new google.visualization.Table(document.getElementById('table_div'));
+	        table.draw(data, {showRowNumber: false});
+      	}
+
+	</script>
+    
+{% endblock %}
+
+{% block ambglobal_body %}
+    <div class="span12">
+    	<div id="chart_div1" style="width: 100%; height: 500px;"></div>
+    </div>
+    <div class="span12">
+    	<div id="chart_div4" style="width: 100%; height: 500px;"></div>
+    </div>
+
+    <div class="span12"> 
+      	<div id="table_div" style="width: 100%;margin-top:20px "></div>
+    </div>
+{% endblock %}

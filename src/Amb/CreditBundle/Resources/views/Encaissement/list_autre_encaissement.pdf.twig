@@ -1,0 +1,65 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+<style>
+table.versement {margin:10px auto; width:700px}
+table.versement td,table.versement th{
+    border:solid 1px #000;
+    padding: 0 2mm;
+}
+table.versement th{
+    text-weight:bold; 
+    background:#EEE;
+    padding: 0 2mm;
+    text-align:center
+}
+.date{width:45px;}
+.adh{width:10px}
+.nom{width:200px}
+.mode{width:50px}
+.piece{width:85px}
+.type{width:200px;}
+.libelle{width:160px;}
+.enc,.dep{width:100px}
+h4{margin:3px 0}
+</style>
+<h3>Recette diverses : du {{date_debut|date('d/m/Y')}} au {{date_fin|date('d/m/Y')}}</h3>
+
+<table class="versement" >
+    <thead>
+          <tr>
+            <th>Date</th>
+            <th>Compte</th>
+            <th>Source</th>
+            <th>Banque</th>
+            <th>N° Piece</th>
+            <th>Mode </th>
+            <th>Montant</th>
+          </tr>
+    </thead>
+    <tbody>
+        {% for encaissement in encaissements %}
+            <tr>
+                <td class="date">{{ encaissement.DateOperation|date('Y/m/d') }}</td>
+                <td >{{ encaissement.compte }}</td>
+                <td>{{ encaissement.Source }}</td>
+                <td>{{ encaissement.banque.Nom }}</td>
+                <td>{{ encaissement.NumPiece }}</td>
+                <td>{{ encaissement.ModeEncaissement }}</td>
+                <td style="text-align:right">{{ encaissement.Montant|number_format(2, ',', ' ')  }}</td>  
+            </tr>
+        {% endfor %} 
+
+        <tr>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none"></td>
+            <td style="border:none">TOTAL</td>
+            <td style="text-align:right; background:#EEE">{{sum_encaiss|number_format(2, ',', ' ')  }}</td>
+            <td style="border:none"></td>
+            
+        </tr> 
+    </tbody>
+</table>
+{% endblock %}

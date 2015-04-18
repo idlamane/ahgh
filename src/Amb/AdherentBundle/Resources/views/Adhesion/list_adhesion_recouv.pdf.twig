@@ -1,0 +1,60 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+
+<h3>Liste des appartements </h3>
+<div>
+
+<style>
+    table.content {margin:10px auto; border-collapse:collapse;}
+    td,th {font-size:10px}
+    table.content td{
+    	vertical-align: top;
+    	padding: 0 15px;
+    	text-align: left;
+    	border:1px solid #000000;
+    }
+    table.content td.right{
+    	text-align: right;
+    }
+    table.content th{
+    	vertical-align: top;
+    	padding: 0 15px;
+	    	text-align: center;
+    	border:1px solid #000000;
+    }
+</style>
+<table class="content" style="width:200mm;">
+	<thead>
+        <tr>
+            <th >Adhérent</th>
+            <th >N°</th>
+            <th >Appt</th>
+            <th >Cout M²</th>
+            <th  >Cout Global</th>
+            <th  >Versement</th>
+            <th  >Solde</th>
+            <th >Tél</th>
+            <th >Gsm</th>
+            <th >Fax</th>
+        </tr>
+    </thead>
+	<tbody>
+		{% for adhesion in adhesions %}
+		<tr> 
+            <td>{{adhesion.nom_prenom|truncate(30, true, '..')}}</td>
+            <td>{{ adhesion.matricule }}</td>
+            <td >{{ adhesion.imm_group }} | {{ adhesion.immeuble }} | {{ adhesion.etage }} | {{ adhesion.appartement }}</td>
+            <td style="text-align:right" >{{ adhesion.cout|number_format(2, ',', ' ') }}</td>
+            <td style="text-align:right" >{{ adhesion.cout_global|number_format(2, ',', ' ') }}</td>
+            <td style="text-align:right" >{{ adhesion.versement|number_format(2, ',', ' ') }}</td>
+            <td style="text-align:right;" >{{ adhesion.solde|number_format(2, ',', ' ') }}</td>
+            <td style=" word-wrap: break-word;width:50px;">{{ adhesion.tel }}{%if adhesion.tel2 is not null%}<br>{{ adhesion.tel2 }}{%endif%}</td>
+            <td style=" word-wrap: break-word;width:50px;">{{ adhesion.mobile }}{%if adhesion.mobile2 is not null%}<br>{{ adhesion.mobile2 }}{%endif%}</td>
+            <td>{{ adhesion.fax }}</td>
+        </tr>
+		{% endfor %} 
+	</tbody>
+</table>
+</div>
+<br> 
+{% endblock %}

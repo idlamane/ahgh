@@ -1,0 +1,38 @@
+<div class="well">
+	<h3>Formulaire du type de dépense</h3>
+
+	<form method="post" {{ form_enctype(form) }}>
+	{{ form_errors(form) }}
+	<div class="well">
+		<div class="row">
+			<div class="span3">
+				<div>
+				    {{ form_label(form.libelle, "LIBELLE") }}
+				    {{ form_errors(form.libelle) }}
+				    {{ form_widget(form.libelle) }}
+				</div>
+			</div>
+
+			<div class="span3">
+				<div>
+				    {{ form_label(form.compte, "COMPTE") }}
+				    {{ form_errors(form.compte) }}
+				    {{ form_widget(form.compte) }}
+				</div>
+			</div>
+			<div class="span5">
+				<div>
+				    {{ form_label(form.commentaire, "COMMENTAIRE") }}
+				    {{ form_errors(form.commentaire) }}
+				    {{ form_widget(form.commentaire) }}
+				</div>				
+				<div>
+				    {{ form_rest(form) }}
+				</div>
+			</div>
+		</div>	
+	</div>
+
+	<input type="submit" class="btn btn-primary" value="Enregistrer" />	
+    </form>
+</div>

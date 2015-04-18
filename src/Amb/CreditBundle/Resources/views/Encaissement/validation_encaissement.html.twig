@@ -1,0 +1,22 @@
+
+<div class="modal-header">
+	<a class="close" data-dismiss="modal">&times;</a>
+	<h3>Modal header 2</h3>
+</div>
+<div class="modal-body">
+	<form method="post" {{ form_enctype(form) }} action="{{ path('ambcredit_validationencaissement', {'id': id}) }}">
+	{{ form_errors(form) }}
+
+	{{ form_label(form.banque, "CHOIX BANQUE") }}
+	{{ form_errors(form.banque) }}
+	{{ form_widget(form.banque) }}
+
+	{{ form_rest(form) }}
+	<input type="submit" class="btn btn-primary" />
+	</form>
+</div>
+<div class="modal-footer">
+	<a class="btn" data-dismiss="modal">Close</a>
+</div>
+
+    

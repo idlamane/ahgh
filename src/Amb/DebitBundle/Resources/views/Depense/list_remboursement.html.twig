@@ -1,0 +1,124 @@
+{% extends "AmbDebitBundle::remboursement_layout.html.twig" %}
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ZeroClipboard.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/TableTools.js') }}" type="text/javascript" /></script>
+    <script src="{{ asset('js/ColVis.js') }}" type="text/javascript" /></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            oTable = $('#DatatableEncaissement').dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "sDom": '<"H"TCfr>t<"F"ip>',
+                "oTableTools": {
+                    "sSwfPath": "{{ asset('swf/copy_csv_xls_pdf.swf') }}",
+                    "aButtons": [
+                        "copy", "csv", "xls", "pdf",
+                        {
+                            "sExtends":    "collection",
+                            "sButtonText": "Save",
+                            "aButtons":    [ "csv", "xls", "pdf" ]
+                        }
+                    ]
+                },
+                "oColVis": {
+                    "buttonText": "Changer les colonnes"
+                }                   
+            });
+        } );
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/demo_table_jui.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.8.4.custom.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/TableTools_JUI.css') }}" type="text/css" />
+{% endblock %}
+
+
+{% block ambdebit_body %}
+
+    {% if desistement is defined %}
+    <h3>Liste des remboursements de l'adhérent : {{ adherent.NomPrenom }}, Appt : {{ desistement.ImmGroup }} | {{ desistement.Immeuble }} | N°{{ desistement.Appartement }}, matricule : {{ desistement.Matricule }}. </h3>
+        {% if is_granted('ROLE_OPERATOR') %}
+        <a href="{{ path('ambremboursement_ajouter', {'id': desistement.id, 'type':'desist'}) }}"><button class="btn btn-small" type="button">Nouveau remboursement</button></a>
+        {%endif%}
+    {% endif %} 
+
+    {% if adhesion is defined %}
+    <h3>Liste des remboursements de l'adhérent : {{ adherent.NomPrenom }}, Appt : {{ adhesion.ImmGroup }} | {{ adhesion.Immeuble }} | N°{{ adhesion.Appartement }}, matricule : {{ adhesion.Matricule }}. </h3>
+        {% if is_granted('ROLE_OPERATOR') %}
+        <a href="{{ path('ambremboursement_ajouter', {'id': adhesion.id, 'type':'adh'}) }}"><button class="btn btn-small" type="button">Nouveau remboursement</button></a>
+        {%endif%}
+    {% endif %} 
+
+        <table id="DatatableEncaissement"  class="display">
+            <thead>
+                <tr>
+                    <th>Mode</th>
+                    <th>Piece N°</th>
+                    <th>Type</th>
+                    <th>Montant</th>
+                    <th>Date d'opération</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for depense in depenses %}
+                    <tr>
+                        <td>{{ depense.ModeRetrait }}</td>
+                        <td>{{ depense.NPiece }}</td>
+                        <td>{%if depense.TypeRemboursement == 'FRAIS DE GESTION' %}
+                            {{ depense.TypeRemboursement }} {{ depense.AnneeGestion }}
+                            {%else%}{{ depense.TypeRemboursement }} {%endif%}
+                        </td>
+                        <td class="pull-right">{{ depense.Montant|number_format(2, ',', ' ')  }} DH</td>
+                        <td>{{ depense.DateOperation|date('d/m/Y') }}</td>
+                        <td>
+                        {% if is_granted('ROLE_OPERATOR') %} 
+                            
+                            <div class="btn-group" style="display:inline">
+                                <a class="btn dropdown-toggle btn-small" data-toggle="dropdown" href="#">
+                                Actions
+                                <span class="caret"></span>
+                                </a>
+                                    <ul class="dropdown-menu">
+                                            <li>
+                                                <a href="{{ path('ambremboursement_modifier', {'id': depense.id}) }}">Modifier</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" onclick="ConfirmDeleteMessage('{{ path('ambremboursement_delete', {'id': depense.id}) }}'); return false;">Supprimer</a>
+                                            </li>
+                                    </ul>
+                            </div> 
+                        {%endif%}    
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td>Pas (encore !) de remboursements</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <SCRIPT LANGUAGE="JavaScript">
+        function ConfirmDeleteMessage(URL)
+        {
+           if (confirm("Confirmez-vous la suppression ?"))
+           {
+               window.location = URL;
+           }
+        }
+        function ConfirmAction(URL, action)
+        {
+           if (confirm("Confirmez-vous "+action+" ?"))
+           {
+               window.location = URL;
+           }
+        }
+        </SCRIPT>
+{% endblock %}

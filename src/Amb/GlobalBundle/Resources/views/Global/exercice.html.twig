@@ -1,0 +1,145 @@
+{% extends "AmbGlobalBundle::layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            $('.date').datepicker({ dateFormat: 'dd-mm-yy' }) ;
+        } );
+    </script>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+    	table.suivi td {font-size:14px;}
+    </style>
+{% endblock %}
+{% block masthead %}
+    <h2>Exercice</h2>
+{% endblock %}
+
+{% block ambglobal_body %}
+	<form method="post" {{ form_enctype(form) }} name="searchform" action="{{ path('ambglobal_exrecice') }}"> 
+        {{ form_errors(form) }}
+        <div class="well">
+            <div class="row">
+                <div class="span3">
+                    {{ form_label(form.date_debut, "DATE DEBUT") }}
+                    {{ form_errors(form.date_debut) }}
+                    {{ form_widget(form.date_debut) }}
+                </div>
+                <div class="span3">
+                    {{ form_label(form.date_fin, "DATE FIN") }}
+                    {{ form_errors(form.date_fin) }}
+                    {{ form_widget(form.date_fin) }}
+                </div>
+            </div>
+        <input type="submit" class="btn" value="Rechercher" onclick="search('show')" />  
+        <input type="submit" class="btn" value="Rechercher & Imprimer" onclick="search('print')" /> 
+        </div>
+        {{ form_rest(form) }}
+    </form>
+<div class="row">
+    <div class="span2" >
+    </div>
+    <div class="span8" >
+        <table class="table table-striped suivi">
+                {% for DepG in DepensesGestion %}
+                <tr >
+                    <td>{%if DepG.caisse is not null%}
+                            CAISSE
+                        {%else%}
+                            {{DepG.typedepense|upper}}
+                        {%endif%}
+                    </td>
+                    <td style="text-align:right">{{DepG.montant|number_format(2, ',', ' ')}} DH</td>
+                </tr>
+                {%endfor%}
+
+                <tr class="success">
+                    <td>TOTAL DEPENSES GESTION</td>
+                    <td style="text-align:right">{{TotDepenseCG.total|number_format(2, ',', ' ')}} DH</td>
+                </tr>
+
+                {% for DepA in DepensesAmort %}
+                <tr >
+                    <td>{{DepA.typedepense|upper}} </td>
+                    <td style="text-align:right">{{DepA.montant|number_format(2, ',', ' ')}} DH</td>
+                </tr>
+                {%endfor%}
+
+                <tr class="success">
+                    <td>TOTAL DEPENSES AMORTISSMENT</td>
+                    <td style="text-align:right">{{TotDepenseCA.total|number_format(2, ',', ' ')}} DH</td>
+                </tr>
+
+                <tr class="success">
+                    <td>TOTAL GENERAL</td>
+                    <td style="text-align:right">{{(TotDepenseCG.total+TotDepenseCA.total)|number_format(2, ',', ' ')}} DH</td>
+                </tr>
+        </table>
+    </div>
+    <div class="span2" >
+    </div>
+</div>
+
+<div class="row">
+    <div class="span2" >
+    </div>
+    <div class="span8" >
+        <table class="table table-striped suivi">
+                <tr >
+                    <td>CAPITAL SOCIAL LIBERE </td>
+                    <td style="text-align:right">{{TotRecetteCA.total|number_format(2, ',', ' ')}} DH</td>
+                </tr>
+                <tr >
+                    <td>TOTAL Recette CG Divers </td>
+                    <td style="text-align:right">{{TotRecetteDivers.total|number_format(2, ',', ' ')}} DH</td>
+                </tr>
+                {% for rcg in RecetteCG %}
+                <tr >
+                    <td>{{rcg.type}} </td>
+                    <td style="text-align:right">{{rcg.montant|number_format(2, ',', ' ')}} DH</td>
+                </tr>
+                {%endfor%}
+
+                <tr class="success">
+                    <td>TOTAL RECETTE AMORTISSMENT</td>
+                    <td style="text-align:right"> {{(TotRecetteCG.total+TotRecetteCA.total+TotRecetteDivers.total)|number_format(2, ',', ' ')}}DH</td>
+                </tr>
+        </table>
+    </div>
+    <div class="span2" >
+    </div>
+</div>
+
+<div class="row">
+    <div class="span2" >
+    </div>
+    <div class="span8" >
+        <table class="table table-striped suivi">
+                <tr class="success">
+                    <td>SOLDE EXERCICE</td>
+                    <td style="text-align:right"> {{((TotRecetteCG.total+TotRecetteCA.total+TotRecetteDivers.total)-(TotDepenseCG.total+TotDepenseCA.total))|number_format(2, ',', ' ')}}DH</td>
+                </tr>
+        </table>
+    </div>
+    <div class="span2" >
+    </div>
+</div>
+<SCRIPT LANGUAGE="JavaScript">
+        function search(option){
+            if(option == 'print'){
+                document.searchform.action = "{{ path('ambglobal_exrecice', {'format': 'pdf'}) }}";
+                document.searchform.submit();
+            }else{
+                document.searchform.action = "{{ path('ambglobal_exrecice') }}";
+                document.searchform.submit();
+            }
+        }
+        </SCRIPT>
+{% endblock %}

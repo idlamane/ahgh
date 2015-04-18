@@ -1,0 +1,47 @@
+jms_security_extra:
+    secure_all_services: false
+    expressions: true
+
+security:
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+        Amb\UserBundle\Entity\User: sha512
+
+    role_hierarchy:
+        ROLE_DASHBOARD: ROLE_USER
+        ROLE_COMM: ROLE_USER
+        ROLE_RECOVRING: ROLE_COMM
+        ROLE_CONSULT: ROLE_RECOVRING
+        ROLE_OPERATOR: ROLE_CONSULT
+        ROLE_COMPTA: [ROLE_USER, ROLE_CONSULT]
+        ROLE_MANAGER: [ROLE_OPERATOR, ROLE_COMPTA, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_MANAGERSUP: [ROLE_MANAGER, ROLE_DASHBOARD, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_ADMIN: ROLE_MANAGERSUP
+
+    providers:
+        main:
+            id: fos_user.user_provider.username
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            pattern:        ^/
+            anonymous:      true
+            provider:       main
+            form_login:
+                login_path: fos_user_security_login
+                check_path: fos_user_security_check
+                default_target_path: /adherent/index.html
+            logout:
+                path:       fos_user_security_logout
+                target:     /adherent/index.html
+            remember_me:
+                key:        %secret% # %secret% est un parametre de parameters.yml
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: ROLE_USER }
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        #- { path: ^/_internal/secure, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }

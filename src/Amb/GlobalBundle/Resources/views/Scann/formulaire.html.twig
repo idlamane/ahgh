@@ -1,0 +1,63 @@
+<div class="well">
+	<h3>Formulaire de scan</h3>
+
+	<form method="post" {{ form_enctype(form) }}>
+	{{ form_errors(form) }}
+	<div class="well">
+		<div class="row">
+			<div class="span5">
+				<div>
+				    {{ form_label(form.libelle, "LIBELLE") }}
+				    {{ form_errors(form.libelle) }}
+				    {{ form_widget(form.libelle) }}
+				</div>
+			</div>
+			{%if form.type is defined%}
+			<div class="span3">
+				<div>
+				    {{ form_label(form.type, "TYPE SCAN") }}
+				    {{ form_errors(form.type) }}
+				    {{ form_widget(form.type) }}
+				</div>
+			</div>
+			{%endif%}
+			{%if form.imm_group is defined%}
+			<div class="span3">
+				<div>
+				    {{ form_label(form.imm_group, "NOM IMMEUBLE") }}
+				    {{ form_errors(form.imm_group) }}
+				    {{ form_widget(form.imm_group) }}
+				</div>
+			</div>
+			{%endif%}
+		</div>
+		<div class="row">
+			{%if form.immeuble is defined%}
+			<div class="span3 offset8">
+				<div>
+				    {{ form_label(form.immeuble, "IMMEUBLE") }}
+				    {{ form_errors(form.immeuble) }}
+				    {{ form_widget(form.immeuble) }}
+				</div>
+			</div>
+			{%endif%}
+		</div>	
+	</div>
+
+	<div class="well">
+		<div class="row">
+			<div class="span11">				
+				<div>
+				    {{ form_label(form.commentaire, "COMMENTAIRE") }}
+				    {{ form_errors(form.commentaire) }}
+				    {{ form_widget(form.commentaire) }}
+				</div>
+				
+					{{ form_rest(form) }}
+			</div>
+		</div>
+	</div>
+
+	<input type="submit" class="btn btn-primary" value="Enregistrer" />	
+    </form>
+</div>

@@ -1,0 +1,20 @@
+{% extends "AmbAdherentBundle::layout.html.twig" %}
+
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block ambadherent_body %}
+
+    <h2>Modifier une adhésion</h2>
+    {% include "AmbAdherentBundle:Adhesion:formulaire_adhesion.html.twig" %}
+    
+    {%if matricule_locked == true%}
+	    <script type="text/javascript" charset="utf-8">
+	    $(document).ready(function()
+		{	
+			$("#amb_adherentbundle_adhesiontype_matricule").prop('readonly', true);
+		});
+		</script>
+	{%endif%}
+{% endblock %}

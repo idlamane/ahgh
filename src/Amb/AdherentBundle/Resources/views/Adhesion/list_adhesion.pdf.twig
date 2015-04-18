@@ -1,0 +1,62 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+
+<h3>Liste des appartements </h3>
+<div>
+
+<style>
+    table.content {margin:10px auto;border-collapse:collapse;}
+    td,th {font-size:11px}
+    table.content td{
+    	vertical-align: top;
+    	padding: 0 15px;
+    	text-align: left;
+    	border:1px solid #000000;
+    }
+    table.content td.right{
+    	text-align: right;
+    }
+    table.content th{
+    	vertical-align: top;
+    	padding: 0 15px;
+	    	text-align: center;
+    	border:1px solid #000000;
+    }
+</style>
+<table class="content">
+	<thead>
+        <tr>
+            {% if adherent is not defined %}<th  style="width:100px">Adhérent</th>{% endif %}
+            <th >N°</th>
+            <th >Appt</th>
+            <th >Surface</th>
+            <th >Terrace</th>
+            <th >Jardin</th>
+            <th >Cout M²</th>
+            <th >Cout Global</th>
+            <th >Versement</th>
+            <th >Solde</th>
+        </tr>
+    </thead>
+	<tbody>
+		{% for adhesion in adhesions %}
+		<tr> 
+            {% if adherent is not defined %}<td  style="width:100px">{{adhesion.nom_prenom|truncate(30, true, '..')}}</td>{% endif %}
+            <td >{{ adhesion.matricule }}</td>
+            <td style="width:100px">{{ adhesion.imm_group }} | {{ adhesion.immeuble }} | {{ adhesion.etage }} | N°{{ adhesion.appartement }}  </td>
+            <td style="text-align:right" >{{ adhesion.surface_appt }} m²</td>
+            <td style="text-align:right" >{{ adhesion.surface_terrace }} m²</td>
+            <td style="text-align:right" >{{ adhesion.surface_jardin }} m²</td>
+            <td style="text-align:right" >{{ adhesion.cout|number_format(2, ',', ' ') }}</td>
+            <td style="text-align:right" >{{ adhesion.cout_global|number_format(2, ',', ' ') }}</td>
+            <td style="text-align:right" >{{ adhesion.versement|number_format(2, ',', ' ') }}</td>
+            <td style="text-align:right" >{{ adhesion.solde|number_format(2, ',', ' ') }}</td>
+        </tr>
+		{% else %}
+		    <h3>Pas d'appartement</h3>
+		{% endfor %} 
+	</tbody>
+</table>
+</div>
+<br> 
+{% endblock %}

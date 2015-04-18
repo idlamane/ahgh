@@ -1,0 +1,63 @@
+{# src/Amb/ParamBundle/Resources/views/Banque/index.html.twig #}
+
+{% extends "AmbParamBundle::layout.html.twig" %}
+
+{% block title %}
+    Détail Compte {{ banque.NCompte }} - {{ parent() }}
+{% endblock %}
+
+{% block ambparam_body %}
+
+    <h2>Detail du compte bancaire A.M.B N° {{ banque.NCompte}} </h2>
+
+    <div class="row">
+		<div class="span6">
+			<dl class="dl-horizontal">
+				<dt>BANQUE </dt>
+				<dd>{{ banque.banque}}</dd>
+
+				<dt>AGENCE</dt>
+				<dd>{{ banque.agence}}</dd>
+
+				<dt>COMPTE N°</dt>
+				<dd>{{ banque.NCompte }}</dd>
+
+				<dt>TEL 1</dt>
+				<dd>{{ banque.tel1}}</dd>
+
+				<dt>TEL 2</dt>
+				<dd>{{ banque.tel2}}</dd>
+
+				<dt>TEL 3</dt>
+				<dd>{{ banque.tel3}}</dd>
+
+				<dt>FAX</dt>
+				<dd>{{ banque.fax}}</dd>
+
+				<dt>EMAIL</dt>
+				<dd><a href="mailto:#">{{ banque.email}}</a></dd>
+
+				<dt>ADRESSE</dt>
+				<dd>{{ banque.adress}}</dd>
+			</dl>
+		</div>
+		<div class="span6">
+			<dl class="dl-horizontal">
+
+				<dt>CONSEILLER</dt>
+				<dd>{{ banque.Consultant}}</dd>
+
+				<dt>EMAIL</dt>
+				<dd>{{ banque.EmailConsult}}</dd>
+
+				<dt>MOBILE</dt>
+				<dd>{{ banque.MobileConsult}}</dd>
+			</dl>	
+		</div>
+	</div>
+	<blockquote>
+		<small>Commentaire</small>
+		<p>{{ banque.commentaire}}</p>
+	</blockquote>
+
+{% endblock %}

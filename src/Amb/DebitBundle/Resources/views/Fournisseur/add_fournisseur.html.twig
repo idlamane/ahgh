@@ -1,0 +1,12 @@
+{% extends "AmbDebitBundle::layout_fournisseur.html.twig" %}
+
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block ambfrs_body %}
+
+    <h2>Ajouter un fournisseur</h2>
+    {% include "AmbDebitBundle:Fournisseur:form_fournisseur.html.twig" %}
+
+{% endblock %}

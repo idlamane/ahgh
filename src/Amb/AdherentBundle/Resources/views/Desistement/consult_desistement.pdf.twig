@@ -1,0 +1,87 @@
+{% extends "::html2pdf_layout.html.twig" %}
+{% block body %}
+<style>
+table.adhesion,table.versement {margin:10px auto; width:700px}
+table.adhesion td,table.versement td,table.versement th{border:solid 1px #000}
+table.adhesion td.titre,table.versement th{text-weight:bold; background:#EEE}
+h4{margin:3px 0}
+</style>
+<h2>SITUATION D'APPARTEMENT</h2>
+<table>
+	<tr>
+		<td><h4>Dossier N°</h4></td>
+		<td><h4>: {{ desistement.matricule}}</h4></td>
+	</tr>
+	<tr>
+		<td><h4>Appartement</h4></td>
+		<td><h4>: {{desistement.immGroup}} | {{desistement.immeuble}} | N° {{desistement.Appartement}}</h4></td>
+	</tr>
+	<tr>
+		<td><h4>Nom et Prénom</h4></td>
+		<td><h4>: {{ adherent.nomPrenom}}</h4></td>
+	</tr>
+	<tr>
+		<td><h4>Désistement </h4></td>
+		<td><h4>: Oui</h4></td>
+	</tr>
+</table>
+
+<h2>LES VERSEMENTS </h2>
+<table class="versement" >
+	<thead>
+	<tr>
+		<th>DATE</th>
+		<th style="width:150px">PIECE N°</th>
+		<th style="width:150px">MODE</th>
+		<th style="width:150px">DESIGNATION</th>
+		<th style="width:150px">MONTANT</th>
+		<th>STATUT</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for encaissement in encaissements %}
+				<tr>
+					<td>{{encaissement.dateOperation|date('d/m/Y')}}</td>
+					<td>{{encaissement.NumPiece}}</td>
+					<td>{{encaissement.ModeEncaissement}}</td>
+					<td>
+						{%if encaissement.TypeEncaissment == 'FRAIS DE GESTION' %}
+                            {{ encaissement.TypeEncaissment }} {{ encaissement.AnneeGestion }}
+                            {%else%}{{ encaissement.TypeEncaissment }} {%endif%}
+					</td>
+					<td style="text-align:right">{{encaissement.Montant|number_format(2, ',', ' ') }} DH</td>
+					<td>{{encaissement.Statut}}</td>
+				</tr>
+	{%endfor%}	
+	</tbody>
+</table>
+
+
+<h2>LES REMBOURSEMENTS </h2>
+<table class="versement" >
+	<thead>
+	<tr>
+		<th>DATE</th>
+		<th style="width:150px">PIECE N°</th>
+		<th style="width:150px">MODE</th>
+		<th style="width:150px">DESIGNATION</th>
+		<th style="width:150px">MONTANT</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for depense in depenses %}
+				<tr>
+					<td>{{depense.dateOperation|date('d/m/Y')}}</td>
+					<td>{{depense.NPiece}}</td>
+					<td>{{depense.ModeRetrait}}</td>
+					<td>
+						{%if depense.TypeRemboursement == 'FRAIS DE GESTION' %}
+                            {{ depense.TypeRemboursement }} {{ depense.AnneeGestion }}
+                            {%else%}{{ depense.TypeRemboursement }} {%endif%}
+					</td>
+					<td style="text-align:right">{{depense.Montant|number_format(2, ',', ' ') }} DH</td>
+				</tr>
+	{%endfor%}	
+	</tbody>
+</table>
+{% endblock %}

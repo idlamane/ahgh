@@ -1,0 +1,42 @@
+ambcontrat_list:
+    pattern:  /list-contrat.{format}
+    defaults:  { _controller: AmbContratBundle:Contrat:list_contrat, format: html }
+    requirements:
+        format: html|pdf
+
+ambcontrat_dl:
+    pattern:  /gl-contrat.{format}
+    defaults:  { _controller: AmbContratBundle:Contrat:gl_contrat, format: html }
+    requirements:
+        format: html|pdf
+
+ambcontrat_resiliations:
+    pattern:  /list-resiliations
+    defaults:  { _controller: AmbContratBundle:Contrat:list_resiliation}
+
+ambcontrat_contratsbyfrsajax:
+    pattern:  /contratsbyfrs/
+    defaults:  { _controller: AmbContratBundle:Contrat:contratsbyfrs }
+
+ambcontrat_ajouter:
+    pattern:  /add-contrat
+    defaults:  { _controller: AmbContratBundle:Contrat:add_contrat}
+
+ambcontrat_consultation:
+    pattern:  /consult/{id}.{format}
+    defaults:  { _controller: AmbContratBundle:Contrat:consult_contrat, format: html }
+    requirements:
+        id: \d*
+        format: html|pdf
+
+ambcontrat_modifier:
+    pattern:  /update/{id}
+    defaults:  { _controller: AmbContratBundle:Contrat:update_contrat }
+    requirements:
+        id: \d*
+
+ambcontrat_delete:
+    pattern:  /delete/{id}
+    defaults:  { _controller: AmbContratBundle:Contrat:delete_contrat }
+    requirements:
+        id: \d*

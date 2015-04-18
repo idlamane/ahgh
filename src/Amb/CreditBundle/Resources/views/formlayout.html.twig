@@ -1,0 +1,46 @@
+{# src/Amb/CreditBundle/Resources/views/layout.html.twig #}
+
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+    Encaissement - {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" charset="utf-8">
+	    $(document).ready(function() {
+	        $('.date').datepicker({ dateFormat: 'dd-mm-yy' }) ;
+	    } );
+    </script>
+{% endblock %}
+
+{% block masthead %}
+    <h2>Gestion des encaissements</h2>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+	<div class="span12">
+	    <h1>Gestion des encaissement</h1>
+	    <hr>
+	    {% block ambcredit_body %}
+
+	    	<script type="text/javascript" charset="utf-8">
+			    $('#amb_creditbundle_encaissementtype_type_encaissment').change(function()
+				{	
+					selectvalue = $('#amb_creditbundle_encaissementtype_type_encaissment').val();
+				    if(selectvalue != 'FRAIS DE GESTION'){
+				    	$('#amb_creditbundle_encaissementtype_annee_gestion').attr('disabled',true);
+				    	$('#amb_creditbundle_encaissementtype_annee_gestion').attr('value','');
+				    }
+				    else $('#amb_creditbundle_encaissementtype_annee_gestion').attr('disabled',false);
+				});
+				$(document).ready(function() {
+					$('#amb_creditbundle_encaissementtype_type_encaissment').trigger('change');
+				});
+	    	</script>
+	    {% endblock %}
+    </div>
+</div>
+{% endblock %}
